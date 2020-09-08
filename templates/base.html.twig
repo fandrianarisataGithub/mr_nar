@@ -2,11 +2,253 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <title>{% block title %}{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.7/css/fixedHeader.bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.4/css/responsive.bootstrap.min.css">
+        <link rel="stylesheet" href="{{ asset('css/dash.css') }}">
     </head>
     <body>
-        {% block body %}{% endblock %}
+    {# load #}
+        <div class="se-pre-con"></div>
+        <!-- Ends -->
+
+    {# / load #}
+
+        <section class="vbox">
+                    <header class="bg-dark dk header navbar navbar-fixed-top-xs">
+                        <div class="navbar-header aside-md">
+                            <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen,open" data-target="#nav,html">
+                                <i class="fa fa-bars"></i>
+                            </a>
+                            <a href="#" class="navbar-brand" data-toggle="fullscreen">Groupe</a>
+
+                            <a class="btn btn-link visible-xs" id="deconnexion_resp" data-toggle="dropdown" data-target=".nav-user" href="#">
+                                <i class="fa fa-power-off"></i>
+                            </a>
+                        </div>
+                        <ul class="nav navbar-nav navbar-right m-n hidden-xs nav-user">
+                            <li class="dropdown">
+                                <a href="#" id="deconnexion">
+                                    <span>Se déconnecter</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </header>
+                <section>
+                    <section class="hbox stretch">
+                        <!-- .aside -->
+                       
+                            <aside class="bg-dark lter aside-md hidden-print" id="nav">
+                            <section class="vbox">
+                                <section class="w-f scrollable">
+                                    <div class="slim-scroll" data-height="auto" data-disable-fade-out="true" data-distance="0" data-size="5px" data-color="#333333">
+                                        <!-- nav -->
+                                        <nav class="nav-primary hidden-xs">
+                                            <ul class="nav">
+                                                <li class="active">
+                                                    <a href="#" class="active">
+                                                        <i class="fa fa-user icon">
+                                                        </i> <span>Nom du user</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#layout">
+                                                        <i class="fa  fa-users icon">
+                                                            
+                                                        </i>
+                                                        <span class="pull-right">
+                                                            <i class="fa fa-angle-down text"></i>
+                                                            <i class="fa fa-angle-up text-active"></i>
+                                                        </span>
+                                                        <span>Les éditeurs</span>
+                                                    </a>
+                                                    <ul class="nav lt">
+                                                        <li>
+                                                            <a href="#">
+                                                                <i class="fa fa-angle-right"></i>
+                                                                <span>Editeur 1</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">
+                                                                <i class="fa fa-angle-right"></i>
+                                                                <span>Editeur 2</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">
+                                                                <i class="fa fa-angle-right"></i>
+                                                                <span>Liste</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    <a href="#layout">
+                                                        <i class="fa fa-pencil icon">
+                                                            
+                                                        </i>
+                                                        <span class="pull-right">
+                                                            <i class="fa fa-angle-down text"></i>
+                                                            <i class="fa fa-angle-up text-active"></i>
+                                                        </span>
+                                                        <span>Editer</span>
+                                                    </a>
+                                                    <ul class="nav lt">
+                                                        <li>
+                                                            <a href="#">
+                                                                <i class="fa fa-angle-right"></i>
+                                                                <span>Ajouter</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">
+                                                                <i class="fa fa-angle-right"></i>
+                                                                <span>Lister</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    <a href="#uikit">
+                                                        <i class="fa fa-check icon"></i>
+                                                        <span class="pull-right">
+                                                            <i class="fa fa-angle-down text"></i>
+                                                            <i class="fa fa-angle-up text-active"></i>
+                                                        </span>
+                                                        <span>Control</span>
+                                                    </a>
+                                                    <ul class="nav lt">
+                                                        <li>
+                                                            <a href="{{ path('client_present') }}">
+                                                                <b class="badge bg-info pull-right">369</b>
+                                                                <i class="fa fa-angle-right"></i> <span>Client présent</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{ path('client_paye') }}">
+                                                                <b class="badge bg-info pull-right">369</b>
+                                                                <i class="fa fa-angle-right"></i> <span>Client (payé)</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{ path('client_suspendu') }}">
+                                                                <b class="badge bg-info pull-right">369</b>
+                                                                <i class="fa fa-angle-right"></i> <span>Client (suspendu)</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li>
+                                                    <a href="#">
+                                                        <i class="fa fa-paperclip icon">
+                                                        
+                                                        </i> <span>Fichier</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ path('pointage') }}">
+                                                        <i class="fa  fa-pied-piper-alt icon">
+                                                        
+                                                        </i> <span>Pointage</span>
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+                                        </nav>
+                                        <!-- / nav -->
+                                    </div>
+                                </section>
+
+
+                            </section>
+                        </aside>
+                        <!-- /.aside -->
+                        <section id="content">
+                            <section class="vbox">
+
+                                <section class="scrollable padder">
+
+
+                                    <div style="height:800px;">
+                                            {% block body %}
+                                                
+                                            {% endblock %}
+                                    </div>
+
+                                </section>
+                            </section>
+                            <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a>
+                        </section>
+
+                    </section>
+                </section>
+            </section>
+        
+    
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script src="{{ asset('js/dash.js') }}"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.4/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.4/js/responsive.bootstrap.min.js"></script>
+    <script>
+    $(window).load(function() {
+		// Animate loader off screen
+		$(".se-pre-con").fadeOut("slow");;
+	});
+        $(document).ready(function() {
+            var table = $('#tab_client_heb').DataTable({
+                "language": {
+                    "sEmptyTable": "Aucune donnée disponible dans le tableau",
+                    "sInfo": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
+                    "sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
+                    "sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ",",
+                    "sLengthMenu": "Afficher _MENU_ éléments",
+                    "sLoadingRecords": "Chargement...",
+                    "sProcessing": "Traitement...",
+                    "sSearch": "Rechercher :",
+                    "sZeroRecords": "Aucun élément correspondant trouvé",
+                    "oPaginate": {
+                        "sFirst": "Premier",
+                        "sLast": "Dernier",
+                        "sNext": "Suivant",
+                        "sPrevious": "Précédent"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": activer pour trier la colonne par ordre croissant",
+                        "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
+                    },
+                    "select": {
+                        "rows": {
+                            "_": "%d lignes sélectionnées",
+                            "0": "Aucune ligne sélectionnée",
+                            "1": "1 ligne sélectionnée"
+                        }
+                    }
+                },
+                responsive: true,
+                scrollY: false, // raha scrollena de asina val ex 400
+                scrollX: true,
+                scrollCollapse: true,
+                paging: true,
+                autoFill: true
+            });
+
+            new $.fn.dataTable.FixedHeader(table);
+        });
+    </script>
         {% block javascripts %}{% endblock %}
     </body>
 </html>

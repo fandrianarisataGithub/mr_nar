@@ -1,0 +1,118 @@
+{% extends "base.html.twig" %}
+{% block title %}
+    Afficher client
+{% endblock %}
+{% block body %}
+<div class="titre_page">
+	<h2>Details du client</h2>
+</div>
+
+<div class="container single_content">
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="nom_client">
+				<p>Nom du client</p>
+			</div>
+			<div class="adresse_client">
+				<p>
+					adresse client
+				</p>
+			</div>
+			<div class="cin">
+				<a href="#" class="link_cin">
+					<img src="{{ asset('images/image1.jpg') }}" class="img-responsive img-thumbnail" width="90%" height="250" alt="cin 1">
+				</a>
+				<a href="#" class="link_cin">
+					<img src="{{ asset('images/image2.jpg') }}" class="img-responsive img-thumbnail" width="90%" height="250" alt="cin 1">
+				</a>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="matricule_client">
+				<p>
+					<label for="">Matricule :</label>
+					<span>
+						1255</span>
+				</p>
+			</div>
+			<div class="montant_client">
+				<p>
+					<label for="">Montant :</label>
+					<span>1231</span>
+					<span>
+						Ar</span>
+				</p>
+			</div>
+			<div class="mois_client">
+				<p>
+					<label for="">Nombre de mois du paiement :</label>
+					<span>12</span>
+					<span>
+						mois</span>
+				</p>
+			</div>
+			<div class="montant_client_payé">
+				<p>
+					<label for="">Montant payé :</label>
+					<span>1231</span>
+					<span>
+						Ar</span>
+				</p>
+			</div>
+			<div class="montant_client_restant">
+				<p>
+					<label for="">Montant restant :</label>
+					<span>1231</span>
+					<span>
+						Ar</span>
+				</p>
+			</div>
+			<div class="mos_client_restant">
+				<p>
+					<label for="">Nombre de mois restant du paiement :</label>
+					<span>11</span>
+					<span>
+						mois</span>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container">
+	<div class="titre_page">
+		<h2>Etat actuel du paiement effectué</h2>
+	</div>
+	<div class="tableau_etat">
+
+		<ul>
+			<li>
+				<span>nom du mois</span>
+				<span>
+					<i class="fa fa-check"></i>
+				</span>
+			</li>
+			<li>
+				<span>nom du mois</span>
+				<span>
+					<i class="fa fa-check"></i>
+				</span>
+			</li>
+		</ul>
+		<ul>
+			<li>
+				<span>nom du mois</span>
+				<span>
+					<i class="fa fa-check"></i>
+				</span>
+			</li>
+			<li>
+				<span>nom du mois</span>
+				<span>
+					<i class="fa fa-check"></i>
+				</span>
+			</li>
+		</ul>
+	</div>
+</div>
+
+{% endblock %}
