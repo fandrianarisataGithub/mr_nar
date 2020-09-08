@@ -38,7 +38,7 @@ class AppUserAuthenticator extends AbstractFormLoginAuthenticator implements Pas
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
     }
-
+    
     public function supports(Request $request)
     {
         return self::LOGIN_ROUTE === $request->attributes->get('_route')
@@ -95,6 +95,21 @@ class AppUserAuthenticator extends AbstractFormLoginAuthenticator implements Pas
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }
+        // on va initialiser une variable de session 
+
+        $session  = $request->getSession();
+
+        // le nom de l'hotel qui va s'ouvrir pour les admin seulement
+
+        $user = $session->get('user', []);
+
+        // initialisation de la variable session hotel
+
+        $user['id'] = "";
+        // on stock ça dans la variable de session 
+
+        $session->set("user", $user);
+        dd($user);
 
         return new RedirectResponse($this->urlGenerator->generate('client_present'));
         //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
