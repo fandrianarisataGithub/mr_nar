@@ -2,13 +2,22 @@
 
 namespace App\Entity;
 
-use App\Repository\ClientRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Column;
+use App\Repository\ClientRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
+ *  @UniqueEntity("matricule", message = "Ce matricule est déjà utilisé")
+ * @UniqueEntity("cin",message = "Ce numéro CIN est déjà utilisé")
+ * 
+ * 
  */
 class Client
 {
@@ -21,6 +30,7 @@ class Client
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $nom;
 
@@ -30,37 +40,51 @@ class Client
     private $prenom;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 12,
+     *      max = 12,
+     *      minMessage = "ça mandue de chiffre(s)",
+     *      maxMessage = "trop de chiffres",
+     *      allowEmptyString = false
+     * )
      */
     private $cin;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank
      */
     private $image_1;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\NotBlank
      */
     private $image_2;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $adresse;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank
      */
     private $montant;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank
      */
     private $montant_mensuel;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank
      */
     private $nbr_versement;
 
@@ -84,6 +108,16 @@ class Client
      * @ORM\OneToMany(targetEntity=Pointage::class, mappedBy="client")
      */
     private $pointages;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(
+     * 
+     * message="Il faut mettre le matricule"
+     * 
+     * )
+     */
+    private $matricule;
 
     public function __construct()
     {
@@ -266,6 +300,18 @@ class Client
                 $pointage->setClient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getMatricule(): ?string
+    {
+        return $this->matricule;
+    }
+
+    public function setMatricule(string $matricule): self
+    {
+        $this->matricule = $matricule;
 
         return $this;
     }

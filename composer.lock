@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "943fa83d48f9000a9cc2f28f6aa72b2e",
+    "content-hash": "e05c83a51a8934b285929a527f3b81c6",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -6223,16 +6223,16 @@
         },
         {
             "name": "symfony/validator",
-            "version": "v4.4.11",
+            "version": "v4.4.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/validator.git",
-                "reference": "f2b1e1d0c731987f15268816bc9cd998bd50a468"
+                "reference": "cee2f13ddc3fc0cfa2f5b115eaae860cef9c056f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/validator/zipball/f2b1e1d0c731987f15268816bc9cd998bd50a468",
-                "reference": "f2b1e1d0c731987f15268816bc9cd998bd50a468",
+                "url": "https://api.github.com/repos/symfony/validator/zipball/cee2f13ddc3fc0cfa2f5b115eaae860cef9c056f",
+                "reference": "cee2f13ddc3fc0cfa2f5b115eaae860cef9c056f",
                 "shasum": ""
             },
             "require": {
@@ -6326,7 +6326,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-06-30T17:40:09+00:00"
+            "time": "2020-08-21T09:47:32+00:00"
         },
         {
             "name": "symfony/var-dumper",
@@ -7119,6 +7119,56 @@
                 }
             ],
             "time": "2020-04-02T16:40:37+00:00"
+        },
+        {
+            "name": "fzaninotto/faker",
+            "version": "v1.9.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fzaninotto/Faker.git",
+                "reference": "fc10d778e4b84d5bd315dad194661e091d307c6f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/fc10d778e4b84d5bd315dad194661e091d307c6f",
+                "reference": "fc10d778e4b84d5bd315dad194661e091d307c6f",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.3 || ^7.0"
+            },
+            "require-dev": {
+                "ext-intl": "*",
+                "phpunit/phpunit": "^4.8.35 || ^5.7",
+                "squizlabs/php_codesniffer": "^2.9.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.9-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Faker\\": "src/Faker/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "François Zaninotto"
+                }
+            ],
+            "description": "Faker is a PHP library that generates fake data for you.",
+            "keywords": [
+                "data",
+                "faker",
+                "fixtures"
+            ],
+            "time": "2019-12-12T13:22:17+00:00"
         },
         {
             "name": "nikic/php-parser",

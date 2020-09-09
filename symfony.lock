@@ -99,6 +99,9 @@
     "egulias/email-validator": {
         "version": "2.1.19"
     },
+    "fzaninotto/faker": {
+        "version": "v1.9.1"
+    },
     "monolog/monolog": {
         "version": "1.25.5"
     },
@@ -109,7 +112,7 @@
         "version": "2.1.1"
     },
     "php": {
-        "version": "7.1"
+        "version": "7.2"
     },
     "phpdocumentor/reflection-common": {
         "version": "2.1.0"

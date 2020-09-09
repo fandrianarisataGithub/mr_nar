@@ -1,87 +1,13 @@
 {% extends "base.html.twig" %}
 {% block title %}
-    Register client
+    Mes clients
 {% endblock %}
 {% block body %}
 <div class="titre_page">
-	<h2>Enregistrement de client</h2>
+	<h2>Liste de mes clients</h2>
 </div>
-    {{ form_start(form) }}
-    <div class ="row">
-        <div class="col-md-4">
-		<div class="form-group">
-                {{ form_row(form.matricule, {
-                    'label':"Matricule du client:"
-                }) }}
-            </div>
-            <div class="form-group">
-                {{ form_row(form.nom, {
-                    'label':"Nom du client:"
-                }) }}
-            </div>
-            <div class="form-group">
-                {{ form_row(form.prenom, {
-                    'label':"Prénom du client (facultatif):"
-                }) }}
-            </div>
-            <div class="form-group">
-                {{ form_row(form.adresse , {
-                    'label':"Adresse exacte du client:"
-                }) }}
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                {{ form_row(form.cin, {
-                    'label':"Numéro CIN:"
-                }) }}
-            </div>
-            <div class="form-group">
-                {{ form_row(form.image_1, {
-                    'label':"Face avant du CIN:"
-                }) }}
-                 
-            </div>
-             <div class="form-group">
-                  {{ form_row(form.image_2, {
-                    'label':"Face arrière du CIN:"
-                }) }}
-            </div>
-        </div>
-         <div class="col-md-4">
-            <div class="form-group">
-                {{ form_row(form.montant, {
-                    "label" : "Montant total:"
-                }) }}
-            </div>
-            <div class="form-group">
-                {{ form_row(form.montant_mensuel, {
-                    "label" : "Montant mensuel:"
-                }) }}
-            </div>
-            <div class="form-group">
-                {{ form_row(form.nbr_versement, {
-                    "label" : "Nombre de versement:"
-                }) }}
-            </div>
-			 <div class="form-group">
-                {{ form_row(form.date_debut, {
-                    "label" : "Date de début:"
-                }) }}
-            </div>
-            <div class="form-group">
-                 {{ form_row(form.date_fin, {
-                    "label" : "Date de fin(variable):"
-                }) }}
-            </div>
-        </div>
-    </div>
-    {{ form_end(form) }}
 
-    <div class="titre_page">
-        <h2>Liste des derniers clients enregistrer</h2>
-    </div>
-<div class="tableau tab_historique" style="margin-bottom:50px;">
+<div class="tableau tab_historique">
 	<table class="display" id="tab_client_heb" style="width:100%">
 		<thead>
 			<tr>
@@ -189,10 +115,8 @@
 
 				</tr>
 			{% endfor %} 
-
 		</tbody>
 	</table>
 </div>
-
 
 {% endblock %}

@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Client;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Client|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,20 @@ class ClientRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Client::class);
+    }
+   /**
+    * @return Client[] Returns an array of Client objects
+    */
+    public function chercherTous(User $user)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.user = :val')
+            ->setParameter('val', $user)
+            ->orderBy('c.id', 'DESC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     // /**

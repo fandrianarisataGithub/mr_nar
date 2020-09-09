@@ -33,7 +33,7 @@
                         </div>
                         <ul class="nav navbar-nav navbar-right m-n hidden-xs nav-user">
                             <li class="dropdown">
-                                <a href="#" id="deconnexion">
+                                <a href="{{ path('app_logout') }}" id="deconnexion">
                                     <span>Se déconnecter</span>
                                 </a>
                             </li>
@@ -56,7 +56,13 @@
                                                         </i> <span>Nom du user</span>
                                                     </a>
                                                 </li>
-                                                <li>
+                                                <li {% if is_granted('ROLE_ADMIN') %}
+                                                    style = "display:block;"
+                                                    
+                                                    {% else %}
+                                                    style = "display:none;"
+
+                                                {% endif %}>
                                                     <a href="#layout">
                                                         <i class="fa  fa-users icon">
                                                             
@@ -87,7 +93,7 @@
                                                             </a>
                                                         </li>
                                                     </ul>
-                                                </li>
+                                                </>
                                                 <li>
                                                     <a href="#layout">
                                                         <i class="fa fa-pencil icon">
@@ -107,14 +113,21 @@
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a href="#">
+                                                            <a href="{{ path('liste_client_de_user', {'user_id': app.user.id }) }}">
                                                                 <i class="fa fa-angle-right"></i>
                                                                 <span>Lister</span>
                                                             </a>
                                                         </li>
                                                     </ul>
                                                 </li>
-                                                <li>
+                                                <li {% if is_granted('ROLE_ADMIN') %}
+                                                    style = "display:block;"
+                                                    
+                                                    {% else %}
+                                                    style = "display:none;"
+
+                                                {% endif %}
+                                                >
                                                     <a href="#uikit">
                                                         <i class="fa fa-check icon"></i>
                                                         <span class="pull-right">
@@ -144,14 +157,28 @@
                                                         </li>
                                                     </ul>
                                                 </li>
-                                                <li>
+                                                <li {% if is_granted('ROLE_ADMIN') %}
+                                                    style = "display:block;"
+                                                    
+                                                    {% else %}
+                                                    style = "display:none;"
+
+                                                {% endif %}
+                                                >
                                                     <a href="#">
                                                         <i class="fa fa-paperclip icon">
                                                         
                                                         </i> <span>Fichier</span>
                                                     </a>
                                                 </li>
-                                                <li>
+                                                <li {% if is_granted('ROLE_ADMIN') %}
+                                                    style = "display:block;"
+                                                    
+                                                    {% else %}
+                                                    style = "display:none;"
+
+                                                {% endif %}
+                                                >
                                                     <a href="{{ path('pointage') }}">
                                                         <i class="fa  fa-pied-piper-alt icon">
                                                         

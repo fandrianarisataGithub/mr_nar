@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
@@ -30,13 +31,15 @@ class AppUserAuthenticator extends AbstractFormLoginAuthenticator implements Pas
     private $urlGenerator;
     private $csrfTokenManager;
     private $passwordEncoder;
+    private $repoUser;
 
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserRepository $repoUser,EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
+        $this->reopUser = $repoUser;
     }
     
     public function supports(Request $request)
@@ -89,6 +92,12 @@ class AppUserAuthenticator extends AbstractFormLoginAuthenticator implements Pas
     {
         return $credentials['password'];
     }
+    public function getIdUser($credentials): ?int
+    {
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['usernmane' => $credentials['usernmane']]);
+        $id = $user->getId();
+        return $id;
+    }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
@@ -99,17 +108,13 @@ class AppUserAuthenticator extends AbstractFormLoginAuthenticator implements Pas
 
         $session  = $request->getSession();
 
-        // le nom de l'hotel qui va s'ouvrir pour les admin seulement
+        $session_user = $session->get('session_user', []);
 
-        $user = $session->get('user', []);
 
-        // initialisation de la variable session hotel
+        $session_user['id'] = $this->getIdUser($this->getCredentials($request));
 
-        $user['id'] = "";
-        // on stock ça dans la variable de session 
-
-        $session->set("user", $user);
-        dd($user);
+        $session->set("session_user", $session_user);
+        //dd($session_user);
 
         return new RedirectResponse($this->urlGenerator->generate('client_present'));
         //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
