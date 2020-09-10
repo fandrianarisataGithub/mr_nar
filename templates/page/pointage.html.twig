@@ -7,165 +7,88 @@
 	<h2>Espace pointage</h2>
 </div>
 
-<div class="tableau tab_historique">
+<div class="tableau tab_historique" data="x">
 	<table class="display" id="tab_client_heb" style="width:100%">
-		<thead>
-			<tr>
-				<td>
-					<span>MATRICULE</span>
-				</td>
-				<td>
-					<span>NOM ET PRENOM</span>
-				</td>
-				<td>
-					<span>CIN</span>
-				</td>
-				<td>
-					<span>ADRESSE</span>
-				</td>
-				<td>
-					<span>MONTANT</span>
-				</td>
-				<td>
-					<span>MONTANT
-						<br>
-						MENSUEL</span>
-				</td>
-				<td>
-					<span>NBR VERSEMENT</span>
-				</td>
-				<td>
-					<span>DATE DE DEBUT</span>
-				</td>
-				<td>
-					<span>DATE DE FIN</span>
-				</td>
-				<td>
-					<span>ACTIONS</span>
-				</td>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>
-					<span>Matricule</span>
-				</td>
-				<td>
-					<span>Rakoto</span><br>
-					<span>Jean</span>
-				</td>
-				<td>
-					<span>numero cin</span>
-					<a href="#">image cin</a>
-				</td>
-				<td>
-					<span>Lot adresse</span>
-				</td>
-				<td>
-					<span>600</span>
-					<span>Ar</span>
-				</td>
-				<td>
-					<span>600</span>
-					<span>Ar</span>
-				</td>
-				<td>
-					<span>60</span>
-					<span>Ar</span>
-				</td>
-				<td>
-					<span>13/02/2020</span>
-				</td>
-				<td>
-					<span>14/02/2020</span>
-				</td>
-				<td>
-					<a href="#" class="pointer btn btn-primary btn-xs">
-						<span>Pointer</span>
-					</a>
-				</td>
+			<thead>
+				<tr>
+					<td>
+						<span>MATRICULE</span>
+					</td>
+					<td>
+						<span>NOM ET PRENOM</span>
+					</td>
+					<td>
+						<span>CIN</span>
+					</td>
+					<td>
+						<span>ADRESSE</span>
+					</td>
+					<td>
+						<span>MONTANT</span>
+					</td>
+					<td>
+						<span>MONTANT
+							<br>
+							MENSUEL</span>
+					</td>
+					<td>
+						<span>NBR VERSEMENT</span>
+					</td>
+					<td>
+						<span>DATE DE DEBUT</span>
+					</td>
+					<td>
+						<span>DATE DE FIN</span>
+					</td>
+					<td>
+						<span>ACTIONS</span>
+					</td>
+				</tr>
+			</thead>
+			<tbody>
+			{% for item in items %}
+					<tr>
+						<td>
+							<span>{{ item.matricule }}</span>
+						</td>
+						<td>
+							<span>{{ item.nom }}</span><br>
+							<span>{{  item.prenom }}</span>
+						</td>
+						<td>
+							<span>{{ item.cin }}</span>
+							<a href="#">image cin</a>
+						</td>
+						<td>
+							<span>{{ item.adresse }}</span>
+						</td>
+						<td>
+							<span>{{ item.montant }}</span>
+							<span>Ar</span>
+						</td>
+						<td>
+							<span>{{ item.getMontantMensuel() }}</span>
+							<span>Ar</span>
+						</td>
+						<td>
+							<span>{{ item.getNbrVersement() }}</span>
+							<span>Ar</span>
+						</td>
+						<td>
+							<span>{{ item.getDateDebut() | date('Y,m,d') }}</span>
+						</td>
+						<td>
+							<span>{{ item.getDatefin() | date('Y,m,d') }}</span>
+						</td>
+						<td>
+							<a href="#" data-id-client="{{ item.id }}" class="pointer btn btn-primary btn-xs">
+								<span>Pointer</span>
+								<span class="fa fa-check"></span>
+							</a>
+						</td>
 
-			</tr>
-			<tr>
-				<td>
-					<span>Matricule</span>
-				</td>
-				<td>
-					<span>Rakoto</span><br>
-					<span>Jean</span>
-				</td>
-				<td>
-					<span>numero cin</span>
-					<a href="#">image cin</a>
-				</td>
-				<td>
-					<span>Lot adresse</span>
-				</td>
-				<td>
-					<span>600</span>
-					<span>Ar</span>
-				</td>
-				<td>
-					<span>600</span>
-					<span>Ar</span>
-				</td>
-				<td>
-					<span>60</span>
-					<span>Ar</span>
-				</td>
-				<td>
-					<span>13/02/2020</span>
-				</td>
-				<td>
-					<span>14/02/2020</span>
-				</td>
-				<td>
-					<a href="#" class="pointer btn btn-primary btn-xs">
-						<span>Pointer</span>
-					</a>
-				</td>
-
-			</tr>
-			<tr>
-				<td>
-					<span>Matricule</span>
-				</td>
-				<td>
-					<span>Rakoto</span><br>
-					<span>Jean</span>
-				</td>
-				<td>
-					<span>numero cin</span>
-					<a href="#">image cin</a>
-				</td>
-				<td>
-					<span>Lot adresse</span>
-				</td>
-				<td>
-					<span>600</span>
-					<span>Ar</span>
-				</td>
-				<td>
-					<span>600</span>
-					<span>Ar</span>
-				</td>
-				<td>
-					<span>60</span>
-					<span>Ar</span>
-				</td>
-				<td>
-					<span>13/02/2020</span>
-				</td>
-				<td>
-					<span>14/02/2020</span>
-				</td>
-				<td>
-					<a href="#" class="pointer btn btn-primary btn-xs">
-						<span>Pointer</span>
-					</a>
-				</td>
-
-			</tr>
+					</tr>
+				{% endfor %}
 		</tbody>
 	</table>
 </div>
@@ -195,28 +118,31 @@
 				</div>
 				<div class="col-sm-6">
 					<label for="annee">Mois:</label>
-					<select name="annee_pointage" id="" class="form-control">
-						<option value="janvier">Janvier</option>
-						<option value="janvier">Février</option>
-						<option value="janvier">Mars</option>
-						<option value="janvier">Avril</option>
-						<option value="janvier">Mais</option>
-						<option value="janvier">Juin</option>
-						<option value="janvier">Juillet</option>
-						<option value="janvier">Août</option>
-						<option value="janvier">Septembre</option>
-						<option value="janvier">Octobre</option>
-						<option value="janvier">Novembre</option>
-						<option value="janvier">décembre</option>
+					<select name="mois_pointage" id="mois_pointage" class="form-control">
+						<option value="1">Janvier</option>
+						<option value="2">Février</option>
+						<option value="3">Mars</option>
+						<option value="4">Avril</option>
+						<option value="5">Mais</option>
+						<option value="6">Juin</option>
+						<option value="7">Juillet</option>
+						<option value="8">Août</option>
+						<option value="9">Septembre</option>
+						<option value="10">Octobre</option>
+						<option value="11">Novembre</option>
+						<option value="12">décembre</option>
 					</select>
 				</div>
 				<div class="form-group btn_action">
 					<div class="form-group">
 						<label>Montant (ariary):</label>
-						<input type="number" class="form-control montant">
+						<input type="number" class="form-control montant" name="montant" id="montant">
+					</div>
+					<div id="info">
+						<p>Lorem ipsum dolor sit amet consectetur adipis</p>
 					</div>
 					<div class="form-group">
-						<button type="sumbit" class="btn btn-primary btn-sm">Enregistrer</button>
+						<button type="sumbit" data-id-client = "0" id="add_pointage" class="btn btn-primary btn-sm">Enregistrer</button>
 					</div>
 				</div>
 			</div>
@@ -268,15 +194,64 @@
                 $('.inner_modal').css('transform' , 'scale(1)');
             }
              function hide_modal(){
+				 $(".clicked").removeClass('clicked');
                 $('#modal_pointage').css('display', 'none');
                 $('.inner_modal').css('transform' , 'scale(0)');
+				$('#info p').slideUp();
             }
 
             // activation du modal 
             $('.pointer').click(function(e){
-                e.preventDefault();
-                show_modal();
+				e.preventDefault();
+				$(this).addClass('clicked');
+				$('#add_pointage').attr('data-id-client',$(this).attr('data-id-client'));
+				show_modal();
             })
+			$('#add_pointage').click(function(e){
+				e.preventDefault();
+				var id_client = $(this).attr('data-id-client');
+				var annee = $('#annee_pointage').val();
+				var mois = $('#mois_pointage').val();
+				var montant = $('#montant').val();
+
+				//alert('id:'+id_client+'a:'+annee+'m:'+mois+'montant:'+montant)
+				var data = {
+					'client_id' : id_client,
+					'p_mois' : mois,
+					'p_annee' : annee,
+					'montant_mensuel' : montant
+				}
+				// ajax
+				$.ajax({
+					url : "/admin/pointer",
+					type : "POST",
+					data : data,
+					beforeSend: function(){
+						$('#info p').text("patienter...");
+					},
+					success : function(response){
+						if(response != "0"){
+							$('#info p').slideDown();
+							$('#info p').text(response);
+						}
+						else{
+
+							$('#info p').slideDown();
+							$('#info p').css('background', "#65bd77");
+							$('#info p').text("pointage réussi");
+							setTimeout(() => {
+								hide_modal();
+								window.location.href = "/profile/single_page/"+id_client;
+							}, 2000);
+							
+						}
+					},
+					error : function(){
+						alert('erreur ajax');
+					}
+				})
+
+			})
 
             // hide modal 
 

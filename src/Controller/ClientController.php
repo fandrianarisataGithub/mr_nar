@@ -101,6 +101,21 @@ class ClientController extends AbstractController
             "items" => $items
         ]);
     }
+
+    /**
+     * @Route("/admin/count", name="count")
+     */
+    public function count(ClientRepository $repoClient)
+    {
+        // nombre de client présent 
+        $client_presents = $repoClient->findAll();
+        $nbr_client_present  = count($client_presents);
+        //dd($nbr_client_present);
+
+        
+
+        return $this->render('base.html.twig');
+    }
     
     
 }

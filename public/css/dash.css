@@ -13939,32 +13939,35 @@ fieldset[disabled] .btn-gplus.active {
         padding: 15px;
     }
 }
+
+
 /* Mes css */
-.titre_page{
+
+.titre_page {
     margin-top: 25px;
     margin-bottom: 25px;
 }
 
-.titre_page h2{
+.titre_page h2 {
     color: #41586e;
 }
-#modal_pointage{
-    background: rgba(61,61,63,0.8) ;
+
+#modal_pointage {
+    background: rgba(61, 61, 63, 0.8);
     width: 100%;
     height: 100%;
     position: absolute;
-   /* display: flex;*/
+    /* display: flex;*/
     display: none;
     top: 0;
     left: 0;
     justify-content: center;
     align-items: flex-start;
     transition: display 1.5s;
-    transition-timing-function: cubic-bezier(0,0.1,0.7,1);
-    
+    transition-timing-function: cubic-bezier(0, 0.1, 0.7, 1);
 }
 
-#modal_pointage .inner_modal{
+#modal_pointage .inner_modal {
     width: 50%;
     position: relative;
     top: 10%;
@@ -13973,10 +13976,10 @@ fieldset[disabled] .btn-gplus.active {
     box-shadow: 0px 1px 3px #41586e;
     transform: scale(0);
     transition: transform 1.5s;
-    transition-timing-function: cubic-bezier(0,0.1,0.7,1);
-
+    transition-timing-function: cubic-bezier(0, 0.1, 0.7, 1);
 }
-.modal_head button{
+
+.modal_head button {
     float: right;
     margin-top: -15px;
     margin-right: 5px;
@@ -13986,48 +13989,65 @@ fieldset[disabled] .btn-gplus.active {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0, 0, 0, 0.8);
     border-color: transparent;
 }
-.modal_head h3{
+
+.modal_head h3 {
     text-align: center;
     color: #41586e;
 }
-.inner_modal form{
+
+.inner_modal form {
     padding: 15px;
 }
-.block_details{
+
+.block_details {
     display: block;
     margin-left: auto;
     margin-right: auto;
     width: 95%;
 }
-.inner_modal label{
+
+.inner_modal label {
     color: #5e5f61 !important;
 }
 
-.btn_action{
+.btn_action {
     text-align: center;
 }
-.btn_action div.form-group label{
+
+.btn_action div.form-group label {
     margin-top: 15px;
 }
-.montant{
+
+.montant {
     width: 200px;
     margin-left: auto;
     margin-right: auto;
 }
-.btn_action button{
-     background: #41586e;
+
+.btn_action button {
+    background: #41586e;
     border-color: transparent;
 }
+
+span.fa-check {
+    display: none;
+}
+
+
+/* .clicked span.fa-check {
+    display: inline-block !important;
+} */
+
 .btn_action button:hover,
-.btn_action button:focus
-{
+.btn_action button:focus {
     background: #455f78;
     border-color: transparent;
 }
-.block_details p{
+
+.block_details p {
     background: #41586e;
     height: 50px;
     display: flex;
@@ -14035,36 +14055,57 @@ fieldset[disabled] .btn-gplus.active {
     align-items: center;
     padding-left: 15px;
     color: #fff;
-   font-weight: bold;
+    font-weight: bold;
 }
-.last_etat{
+
+#info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#info p {
+    background: red;
+    width: 50%;
+    display: none;
+    color: #fff;
+    font-size: 12px;
+    padding: 5px;
+}
+
+.last_etat {
     padding-left: 15px;
 }
-.block_details p span{
+
+.block_details p span {
     color: #fff;
     position: relative;
     left: 5px;
 }
 
-.container.single_content{
-   background: #f1f2f6; 
+.container.single_content {
+    background: #f1f2f6;
     box-shadow: 0px 1px 3px #41586e;
 }
-.container.single_content .col-sm-6{
+
+.container.single_content .col-sm-6 {
     padding-top: 15px;
-    padding-bottom:15px;
-}
-.cin > a.link_cin:not(:first-child){
-    display: block;
-}
-.cin > a.link_cin:not(:first-child){
-  margin-top: 15px;
+    padding-bottom: 15px;
 }
 
-.cin a img{
+.cin>a.link_cin:not(:first-child) {
+    display: block;
+}
+
+.cin>a.link_cin:not(:first-child) {
+    margin-top: 15px;
+}
+
+.cin a img {
     height: 275px;
 }
-.container.single_content .col-sm-6:last-child p{
+
+.container.single_content .col-sm-6:last-child p {
     background: #41586e;
     height: 50px;
     display: flex;
@@ -14073,37 +14114,42 @@ fieldset[disabled] .btn-gplus.active {
     padding-left: 15px;
     color: #fff;
 }
-.container.single_content .col-sm-6:last-child p span{
+
+.container.single_content .col-sm-6:last-child p span {
     position: relative;
     left: 5px;
     bottom: 2px;
     font-weight: bold;
 }
 
-.tableau_etat{
+.tableau_etat {
     margin-top: 15px;
     display: flex;
     justify-content: space-between;
     padding-bottom: 20px;
 }
-.tableau_etat ul{
+
+.tableau_etat ul {
     list-style: none;
     width: 100%;
 }
 
-.tableau_etat ul li{
-    border-bottom: 1px solid rgba(69,95,120,0.5);
+.tableau_etat ul li {
+    border-bottom: 1px solid rgba(69, 95, 120, 0.5);
 }
-.tableau_etat ul li{
+
+.tableau_etat ul li {
     height: 50px;
     display: flex;
     justify-content: space-around;
     align-items: center;
 }
-@media all and (max-width: 768px){
-    .tableau_etat{
+
+@media all and (max-width: 768px) {
+    .tableau_etat {
         flex-direction: column;
     }
 }
+
 
 /* / mes css*/

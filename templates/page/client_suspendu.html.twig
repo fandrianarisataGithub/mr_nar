@@ -1,193 +1,103 @@
 {% extends "base.html.twig" %}
 {% block title %}
-    client suspendu
+	client suspendu
 {% endblock %}
 {% block body %}
-<div class="titre_page">
-	<h2>Liste des clients suspendus</h2>
-</div>
+	<div class="titre_page">
+		<h2>Liste des clients suspendus</h2>
+	</div>
 
-<div class="tableau tab_historique">
-	<table class="display" id="tab_client_heb" style="width:100%">
-		<thead>
-			<tr>
-				<td>
-					<span>MATRICULE</span>
-				</td>
-				<td>
-					<span>NOM ET PRENOM</span>
-				</td>
-				<td>
-					<span>CIN</span>
-				</td>
-				<td>
-					<span>ADRESSE</span>
-				</td>
-				<td>
-					<span>MONTANT</span>
-				</td>
-				<td>
-					<span>MONTANT
-						<br>
-						MENSUEL</span>
-				</td>
-				<td>
-					<span>NBR VERSEMENT</span>
-				</td>
-				<td>
-					<span>DATE DE DEBUT</span>
-				</td>
-				<td>
-					<span>DATE DE FIN</span>
-				</td>
-				<td>
-					<span>ACTIONS</span>
-				</td>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>
-					<span>Matricule</span>
-				</td>
-				<td>
-					<span>Rakoto</span><br>
-					<span>Jean</span>
-				</td>
-				<td>
-					<span>numero cin</span>
-					<a href="#">image cin</a>
-				</td>
-				<td>
-					<span>Lot adresse</span>
-				</td>
-				<td>
-					<span>600</span>
-					<span>Ar</span>
-				</td>
-				<td>
-					<span>600</span>
-					<span>Ar</span>
-				</td>
-				<td>
-					<span>60</span>
-					<span>Ar</span>
-				</td>
-				<td>
-					<span>13/02/2020</span>
-				</td>
-				<td>
-					<span>14/02/2020</span>
-				</td>
-				<td>
-					<a href="#" class="modif btn btn-info btn-xs">
-						<span class="fa fa-edit"></span>
-					</a>
-					<a href="#" class="suppr btn btn-danger btn-xs">
-						<span class="fa fa-trash-o"></span>
-					</a>
-					<a href="#" class="voir btn btn-primary btn-xs">
-						<span>Voir</span>
-					</a>
-				</td>
+	<div class="tableau tab_historique">
+		<table class="display" id="tab_client_heb" style="width:100%">
+			<thead>
+				<tr>
+					<td>
+						<span>MATRICULE</span>
+					</td>
+					<td>
+						<span>NOM ET PRENOM</span>
+					</td>
+					<td>
+						<span>CIN</span>
+					</td>
+					<td>
+						<span>ADRESSE</span>
+					</td>
+					<td>
+						<span>MONTANT</span>
+					</td>
+					<td>
+						<span>MONTANT
+							<br>
+							MENSUEL</span>
+					</td>
+					<td>
+						<span>NBR VERSEMENT</span>
+					</td>
+					<td>
+						<span>DATE DE DEBUT</span>
+					</td>
+					<td>
+						<span>DATE DE FIN</span>
+					</td>
+					<td>
+						<span>ACTIONS</span>
+					</td>
+				</tr>
+			</thead>
+			<tbody>
+				{% for item in items %}
+					<tr>
+						<td>
+							<span>{{ item.matricule }}</span>
+						</td>
+						<td>
+							<span>{{ item.nom }}</span><br>
+							<span>{{  item.prenom }}</span>
+						</td>
+						<td>
+							<span>{{ item.cin }}</span>
+							<a href="#">image cin</a>
+						</td>
+						<td>
+							<span>{{ item.adresse }}</span>
+						</td>
+						<td>
+							<span>{{ item.montant }}</span>
+							<span>Ar</span>
+						</td>
+						<td>
+							<span>{{ item.getMontantMensuel() }}</span>
+							<span>Ar</span>
+						</td>
+						<td>
+							<span>{{ item.getNbrVersement() }}</span>
+							<span>Ar</span>
+						</td>
+						<td>
+							<span>{{ item.getDateDebut() | date('Y,m,d') }}</span>
+						</td>
+						<td>
+							<span>{{ item.getDatefin() | date('Y,m,d') }}</span>
+						</td>
+						<td>
+							<a href="#" class="modif btn btn-info btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:block;" {% else %} style="display:none;" {% endif %}>
+								<span class="fa fa-edit"></span>
+							</a>
+							<a href="#" class="suppr btn btn-danger btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:block;" {% else %} style="display:none;" {% endif %}>
+								<span class="fa fa-trash-o"></span>
+							</a>
+							<a href="{{ path('single_page', {'id_client': item.id }) }}" class="voir btn btn-primary btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:block;" {% else %} style="display:none;" {% endif %}>
+								<span>Voir</span>
+							</a>
+						</td>
 
-			</tr>
-			<tr>
-				<td>
-					<span>Matricule</span>
-				</td>
-				<td>
-					<span>Rakoto</span><br>
-					<span>Jean</span>
-				</td>
-				<td>
-					<span>numero cin</span>
-					<a href="#">image cin</a>
-				</td>
-				<td>
-					<span>Lot adresse</span>
-				</td>
-				<td>
-					<span>600</span>
-					<span>Ar</span>
-				</td>
-				<td>
-					<span>600</span>
-					<span>Ar</span>
-				</td>
-				<td>
-					<span>60</span>
-					<span>Ar</span>
-				</td>
-				<td>
-					<span>13/02/2020</span>
-				</td>
-				<td>
-					<span>14/02/2020</span>
-				</td>
-				<td>
-					<a href="#" class="modif btn btn-info btn-xs">
-						<span class="fa fa-edit"></span>
-					</a>
-					<a href="#" class="suppr btn btn-danger btn-xs">
-						<span class="fa fa-trash-o"></span>
-					</a>
-					<a href="#" class="voir btn btn-primary btn-xs">
-						<span>Voir</span>
-					</a>
-				</td>
-
-			</tr>
-			<tr>
-				<td>
-					<span>Matricule</span>
-				</td>
-				<td>
-					<span>Rakoto</span><br>
-					<span>Jean</span>
-				</td>
-				<td>
-					<span>numero cin</span>
-					<a href="#">image cin</a>
-				</td>
-				<td>
-					<span>Lot adresse</span>
-				</td>
-				<td>
-					<span>600</span>
-					<span>Ar</span>
-				</td>
-				<td>
-					<span>600</span>
-					<span>Ar</span>
-				</td>
-				<td>
-					<span>60</span>
-					<span>Ar</span>
-				</td>
-				<td>
-					<span>13/02/2020</span>
-				</td>
-				<td>
-					<span>14/02/2020</span>
-				</td>
-				<td>
-					<a href="#" class="modif btn btn-info btn-xs">
-						<span class="fa fa-edit"></span>
-					</a>
-					<a href="#" class="suppr btn btn-danger btn-xs">
-						<span class="fa fa-trash-o"></span>
-					</a>
-					<a href="#" class="voir btn btn-primary btn-xs">
-						<span>Voir</span>
-					</a>
-				</td>
-
-			</tr>
+					</tr>
+				{% endfor %}
 
 
-		</tbody>
-	</table>
-</div>
+			</tbody>
+		</table>
+	</div>
 
 {% endblock %}

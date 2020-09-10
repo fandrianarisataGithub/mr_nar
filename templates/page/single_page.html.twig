@@ -1,118 +1,130 @@
 {% extends "base.html.twig" %}
 {% block title %}
-    Afficher client
+	Afficher client
 {% endblock %}
 {% block body %}
-<div class="titre_page">
-	<h2>Details du client</h2>
-</div>
-
-<div class="container single_content">
-	<div class="row">
-		<div class="col-sm-6">
-			<div class="nom_client">
-				<p>Nom du client</p>
-			</div>
-			<div class="adresse_client">
-				<p>
-					adresse client
-				</p>
-			</div>
-			<div class="cin">
-				<a href="#" class="link_cin">
-					<img src="{{ asset('images/image1.jpg') }}" class="img-responsive img-thumbnail" width="90%" height="250" alt="cin 1">
-				</a>
-				<a href="#" class="link_cin">
-					<img src="{{ asset('images/image2.jpg') }}" class="img-responsive img-thumbnail" width="90%" height="250" alt="cin 1">
-				</a>
-			</div>
-		</div>
-		<div class="col-sm-6">
-			<div class="matricule_client">
-				<p>
-					<label for="">Matricule :</label>
-					<span>
-						1255</span>
-				</p>
-			</div>
-			<div class="montant_client">
-				<p>
-					<label for="">Montant :</label>
-					<span>1231</span>
-					<span>
-						Ar</span>
-				</p>
-			</div>
-			<div class="mois_client">
-				<p>
-					<label for="">Nombre de mois du paiement :</label>
-					<span>12</span>
-					<span>
-						mois</span>
-				</p>
-			</div>
-			<div class="montant_client_payé">
-				<p>
-					<label for="">Montant payé :</label>
-					<span>1231</span>
-					<span>
-						Ar</span>
-				</p>
-			</div>
-			<div class="montant_client_restant">
-				<p>
-					<label for="">Montant restant :</label>
-					<span>1231</span>
-					<span>
-						Ar</span>
-				</p>
-			</div>
-			<div class="mos_client_restant">
-				<p>
-					<label for="">Nombre de mois restant du paiement :</label>
-					<span>11</span>
-					<span>
-						mois</span>
-				</p>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="container">
 	<div class="titre_page">
-		<h2>Etat actuel du paiement effectué</h2>
+		<h2>Details du client</h2>
 	</div>
-	<div class="tableau_etat">
 
-		<ul>
-			<li>
-				<span>nom du mois</span>
-				<span>
-					<i class="fa fa-check"></i>
-				</span>
-			</li>
-			<li>
-				<span>nom du mois</span>
-				<span>
-					<i class="fa fa-check"></i>
-				</span>
-			</li>
-		</ul>
-		<ul>
-			<li>
-				<span>nom du mois</span>
-				<span>
-					<i class="fa fa-check"></i>
-				</span>
-			</li>
-			<li>
-				<span>nom du mois</span>
-				<span>
-					<i class="fa fa-check"></i>
-				</span>
-			</li>
-		</ul>
+	<div class="container single_content">
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="nom_client">
+					<p>{{ item.nom }}
+						<br>
+						{% if item.prenom is defined and item.prenom is not null %}
+							{{ item.prenom }}
+						{% endif %}
+					</p>
+				</div>
+				<div class="adresse_client">
+					<p>
+						{{ item.adresse }}
+					</p>
+				</div>
+				<div class="cin">
+					<a href="#" class="link_cin">
+						<img src="{{ asset('uploads/cin_images/' ~ item.getImage1()) }}" class="img-responsive img-thumbnail" width="90%" height="250" alt="cin 1">
+					</a>
+					<a href="#" class="link_cin">
+						<img src="{{ asset('uploads/cin_images/' ~ item.getImage2()) }}" class="img-responsive img-thumbnail" width="90%" height="250" alt="cin 1">
+					</a>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="matricule_client">
+					<p>
+						<label for="">Matricule :</label>
+						<span>{{ item.matricule }}</span>
+					</p>
+				</div>
+				<div class="montant_client">
+					<p>
+						<label for="">Montant :</label>
+						<span>{{ item.montant }}</span>
+						<span>Ar</span>
+					</p>
+				</div>
+				<div class="mois_client">
+					<p>
+						<label for="">Nombre de mois du versement :</label>
+						<span class="nbr_versement_total">{{ item.getNbrVersement() }}</span>
+						<span>mois</span>
+						<span data-paiement-effectue = "{{ nbr_p_effectue }}"></span>
+					</p>
+				</div>
+				<div class="montant_client_payé">
+					<p>
+						<label for="">Montant payé :</label>
+						<span>{{ montant_paye }}</span>
+						<span>Ar</span>
+					</p>
+				</div>
+				<div class="montant_client_restant">
+					<p>
+						<label for="">Montant restant :</label>
+						<span>{{ montant_restant }}</span>
+						<span>Ar</span>
+					</p>
+				</div>
+				<div class="mois_client_restant">
+					<p>
+						<label for="">Nombre de mois restant du paiement :</label>
+						<span class="nbr_mois_restant">{{ nbr_mois_restant }}</span>
+						<span>mois</span>
+					</p>
+				</div>
+				<div class="date_dernier_pointage">
+					<p>
+						<label for="">Date du dernier pointage :</label>
+						<span class="date_last_point">date </span>
+					</p>
+					<p>
+						<span>C'était il y a </span><span> x</span> <span>mois</span>
+					</p>
+				</div>
+				<div class="date_dernier_pointage">
+					<a href="#" class="btn btn-danger btn-sm">Suspendre ce client</a>
+				</div>
+			</div>
+		</div>
 	</div>
-</div>
+	<div class="container">
+		<div class="titre_page">
+			<h2>Etat actuel du paiement effectué</h2>
+		</div>
+		<div class="tableau_etat">
+
+			<ul>
+				<li>
+					<span>nom du mois</span>
+					<span>
+						<i class="fa fa-check"></i>
+					</span>
+				</li>
+				<li>
+					<span>nom du mois</span>
+					<span>
+						<i class="fa fa-check"></i>
+					</span>
+				</li>
+			</ul>
+			<ul>
+				<li>
+					<span>nom du mois</span>
+					<span>
+						<i class="fa fa-check"></i>
+					</span>
+				</li>
+				<li>
+					<span>nom du mois</span>
+					<span>
+						<i class="fa fa-check"></i>
+					</span>
+				</li>
+			</ul>
+		</div>
+	</div>
 
 {% endblock %}
