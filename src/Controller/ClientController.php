@@ -35,6 +35,7 @@ class ClientController extends AbstractController
         
         if($form_register->isSubmitted() && $form_register->isValid()){
             $client = $form_register->getData();
+            dd($client);
             $client->setUser($user);
             $image_cin_1 = $form_register->get('image_1')->getData();
             $image_cin_2 = $form_register->get('image_2')->getData();
