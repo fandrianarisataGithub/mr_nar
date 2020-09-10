@@ -11,19 +11,23 @@
 	<div class="row">
 		<div class="col-sm-6">
 			<div class="nom_client">
-				<p>Nom du client</p>
+				<p>{{ item.nom }} <br> 
+					{% if item.prenom is defined and item.prenom is not null %}
+						{{ item.prenom }}
+					{% endif %}
+				</p>
 			</div>
 			<div class="adresse_client">
 				<p>
-					adresse client
+					{{ item.adresse }}
 				</p>
 			</div>
 			<div class="cin">
 				<a href="#" class="link_cin">
-					<img src="{{ asset('images/image1.jpg') }}" class="img-responsive img-thumbnail" width="90%" height="250" alt="cin 1">
+					<img src="{{ asset('images/') }}" class="img-responsive img-thumbnail" width="90%" height="250" alt="cin 1">
 				</a>
 				<a href="#" class="link_cin">
-					<img src="{{ asset('images/image2.jpg') }}" class="img-responsive img-thumbnail" width="90%" height="250" alt="cin 1">
+					<img src="{{ asset('images/') }}" class="img-responsive img-thumbnail" width="90%" height="250" alt="cin 1">
 				</a>
 			</div>
 		</div>
@@ -31,22 +35,21 @@
 			<div class="matricule_client">
 				<p>
 					<label for="">Matricule :</label>
-					<span>
-						1255</span>
+					<span>{{ item.matricule }}</span>
 				</p>
 			</div>
 			<div class="montant_client">
 				<p>
 					<label for="">Montant :</label>
-					<span>1231</span>
+					<span>{{ item.montant }}</span>
 					<span>
 						Ar</span>
 				</p>
 			</div>
 			<div class="mois_client">
 				<p>
-					<label for="">Nombre de mois du paiement :</label>
-					<span>12</span>
+					<label for="">Nombre de mois du versement :</label>
+					<span>{{ item.getNbrVersement() }}</span>
 					<span>
 						mois</span>
 				</p>

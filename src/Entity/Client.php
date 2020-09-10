@@ -41,14 +41,6 @@ class Client
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank
-     * @Assert\Length(
-     *      min = 12,
-     *      max = 12,
-     *      minMessage = "ça mandue de chiffre(s)",
-     *      maxMessage = "trop de chiffres",
-     *      allowEmptyString = false
-     * )
      */
     private $cin;
 

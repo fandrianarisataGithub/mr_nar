@@ -35,13 +35,10 @@ class ClientController extends AbstractController
         
         if($form_register->isSubmitted() && $form_register->isValid()){
             $client = $form_register->getData();
-            dd($client);
             $client->setUser($user);
             $image_cin_1 = $form_register->get('image_1')->getData();
             $image_cin_2 = $form_register->get('image_2')->getData();
 
-            // this condition is needed because the 'brochure' field is not required
-            // so the PDF file must be processed only when a file is uploaded
             if ($image_cin_1 && $image_cin_2) {
                 $originalFilename1 = pathinfo($image_cin_1->getClientOriginalName(), PATHINFO_FILENAME);
                 $originalFilename2 = pathinfo($image_cin_2->getClientOriginalName(), PATHINFO_FILENAME);
@@ -66,12 +63,11 @@ class ClientController extends AbstractController
                     // ... handle exception if something happens during file upload
                 }
 
-                // updates the 'image_cin_1name' property to store the PDF file name
-                // instead of its contents
+               
                 $client->setImage1($newFilename1);
                 $client->setImage2($newFilename2);
             }
-            dump($client);
+            //dd($client);
             $manager->persist($client);
             $manager->flush();
             return $this->redirectToRoute("register_client");
@@ -100,6 +96,21 @@ class ClientController extends AbstractController
         //dd($items);
         return $this->render("client/listeClientUser.html.twig",[
             "items" => $items
+        ]);
+        
+    }
+
+    /**
+     * @Route("/admin/clients_des_editeur/{user_id}", name="clients_des_editeur")
+     */
+    public function clients_des_editeur(Request $request, $user_id)
+    {   
+        $user = new User();
+        $user = $repos->find($user_id);
+        $items = $repoClient->findByUser($user);
+        dd($items);
+        return $this->render('client/clients_des_editeur.html.twig',[
+            "items"=>$items
         ]);
     }
     
