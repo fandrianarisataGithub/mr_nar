@@ -4,12 +4,14 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Client;
+use App\Entity\Pointage;
 use App\Form\ClientType;
-use App\Service\FileUploader;
 use App\Repository\UserRepository;
 use App\Repository\ClientRepository;
+use App\Repository\PointageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,6 +37,7 @@ class ClientController extends AbstractController
         
         if($form_register->isSubmitted() && $form_register->isValid()){
             $client = $form_register->getData();
+            //dd($client);
             $client->setUser($user);
             $image_cin_1 = $form_register->get('image_1')->getData();
             $image_cin_2 = $form_register->get('image_2')->getData();
@@ -82,7 +85,10 @@ class ClientController extends AbstractController
 
         return $this->render('client/register.html.twig', [
             "form" => $form_register->createView(),
-            "items" => $items
+            "items" => $items,
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
         ]);
     }
     /**
@@ -98,7 +104,10 @@ class ClientController extends AbstractController
         $items = $repoClient->findByUser($user);
         //dd($items);
         return $this->render("client/listeClientUser.html.twig",[
-            "items" => $items
+            "items" => $items,
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
         ]);
     }
 
@@ -116,6 +125,64 @@ class ClientController extends AbstractController
 
         return $this->render('base.html.twig');
     }
+
+    /**
+     * @Route("/admin/supprimer_client/{id}", name ="supprimer_client")
+     */
+    public function supprimer_client($id, Request $request, EntityManagerInterface $manager, PointageRepository $repoPointage)
+    {
+        $response = new Response();
+        if($request->isXmlHttpRequest()){
+            
+            $action = $request->get('action');
+            if($action== "suppression"){
+                // on select le client
+                $client = new Client();
+                $client = $this->getDoctrine()->getRepository(Client::class)->find($id);
+                // on supprime le client
+                    // mais d'abord il faaut enlever les champs des tables fille
+                    // suppr de son pointage
+                    $pointage = new Pointage(); 
+                    $pointages = $repoPointage->findByClient($client);
+                    foreach ($pointages as $pointage) {
+                        $manager->remove($pointage);
+                    }
+                // maintenant le client
+                $manager->remove($client);
+                $manager->flush();
+                $data = json_encode("ok"); // formater le résultat de la requête en json
+                $response->headers->set('Content-Type', 'application/json');
+                $response->setContent($data);
+                return $response;
+            }
+           
+        }
+        return $this->redirectToRoute("client_present");
+    }
+
+    public function count_present(ClientRepository $repoClient)
+    {
+        $tabPresent = $repoClient->countPresent('non');
+        $n = count($tabPresent);
+        //dd($n);
+        return $n;
+    }
+    public function count_suspendu(ClientRepository $repoClient)
+    {
+        $tabPresent = $repoClient->countPresent('oui');
+        $n = count($tabPresent);
+        //dd($n);
+        return $n;
+    }
+    public function count_impaye(ClientRepository $repoClient)
+    {
+        $tabPresent = $repoClient->countPresent('impaye');
+        $n = count($tabPresent);
+        //dd($n);
+        return $n;
+    }
+
+
     
     
 }

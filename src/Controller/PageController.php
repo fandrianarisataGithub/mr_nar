@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Client;
 use App\Entity\Pointage;
+use App\Repository\UserRepository;
 use App\Repository\ClientRepository;
 use App\Repository\PointageRepository;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,21 +19,27 @@ class PageController extends AbstractController
     public function client_present(ClientRepository $repoClient)
     {
         $user = new User();
-        $items = $repoClient->findAll();
+        $items = $repoClient->countPresent('non');
         //dd($items);
         return $this->render('page/client_present.html.twig', [
-            'items' => $items
+            'items' => $items,
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
         ]);
     }
     /**
-     * @Route("/admin/client_paye", name="client_paye")
+     * @Route("/admin/client_paye", name="client_impaye")
      */
     public function client_paye(ClientRepository $repoClient)
     { 
         $user = new User();
-        $items = $repoClient->findAll();
+        $items = $repoClient->countPresent('impaye');
         return $this->render('page/client_paye.html.twig', [
             'items' => $items,
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
         ]);
     }
     /**
@@ -41,9 +48,27 @@ class PageController extends AbstractController
     public function client_suspendu(ClientRepository $repoClient)
     {
         $user = new User();
-        $items = $repoClient->findAll();
+        $items = $repoClient->countPresent('oui');
         return $this->render('page/client_suspendu.html.twig', [
             'items' => $items,
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+        ]);
+    }
+    /**
+     * @Route("/admin/editeurs", name="editeurs")
+     */
+    public function editeurs(ClientRepository $repoClient, UserRepository $repoUser)
+    {
+        $user = new User();
+        $items = $repoUser->findAll();
+        //dd($items);
+        return $this->render('page/editeurs.html.twig', [
+            'items' => $items,
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
         ]);
     }
     /**
@@ -77,7 +102,11 @@ class PageController extends AbstractController
             'montant_restant' => $montant_restant,
             'nbr_p_effectue' => $nbr_p_effectue,
             'nbr_paiement_total' => $nbrMois,
-            'nbr_mois_restant' => $nbr_mois_restant
+            'nbr_mois_restant' => $nbr_mois_restant,
+            "nbr_pointage" => $nbr_p_effectue,
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
         ]);
     }
     /**
@@ -89,7 +118,33 @@ class PageController extends AbstractController
         $items = $repoClient->findAll();
         return $this->render('page/pointage.html.twig', [
             'items' => $items,
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
         ]);
+    }
+   
+    public function count_present(ClientRepository $repoClient)
+    {
+        $tabPresent = $repoClient->countPresent('non');
+        $n = count($tabPresent);
+        //dd($n);
+        return $n;
+        
+    }
+    public function count_suspendu(ClientRepository $repoClient)
+    {
+        $tabPresent = $repoClient->countPresent('oui');
+        $n = count($tabPresent);
+        //dd($n);
+        return $n;
+    }
+    public function count_impaye(ClientRepository $repoClient)
+    {
+        $tabPresent = $repoClient->countPresent('impaye');
+        $n = count($tabPresent);
+        //dd($n);
+        return $n;
     }
     
 }

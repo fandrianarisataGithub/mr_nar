@@ -1,0 +1,40 @@
+{% extends "base.html.twig" %}
+{% block title %}
+     Les éditeurs
+{% endblock %}
+{% block body %}
+    <div class="titre_page">
+		<h2>Les éditeurs</h2>
+	</div>
+    <div class="liste_user">
+       {% for item in items %}
+           <div>
+           <a href="{{ path('liste_client_de_user', {'user_id': item.id }) }}">
+                <div><span class="fa fa-user"></span></div>
+                <ul>
+                    <li>{{ item.username }}</li>
+                    <li>{{ item.nom }} <i>{% if item.prenom is defined and item.prenom is not null %}
+							{{ item.prenom }}
+						{% endif %}</i></li>
+                     <li><i>CIN: </i>{{ item.cin }}</li>
+                      <li><i>Contact:</i> {{ item.phone }}</li>
+                       <li><i>Adresse:</i> {{ item.adresse }}</li>
+                    <li><i>Rôle: </i>
+                        {% if item.roles[0] == "ROLE_ADMIN" %}
+                            Administrateur
+                        {% else %}
+                            Editeurs
+                        {% endif %}
+                    </li>
+                </ul>
+            </a>
+        </div>
+       {% endfor %}
+         <div class='action'>
+           <a href="#">
+            <div><span class="fa fa-user action"><b>+</b></span></div>
+            </a>
+        </div>
+    </div>
+
+{% endblock %}

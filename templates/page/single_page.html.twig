@@ -46,12 +46,18 @@
 						<span>Ar</span>
 					</p>
 				</div>
+				<div class="date_debut">
+					<p>
+						<label for="">Date de début:</label>
+						<span class="dd">{{ item.getDateDebut() | date('Y-m-d') }} </span><span>(année-mois-jour)</span>
+					</p>
+				</div>
 				<div class="mois_client">
 					<p>
 						<label for="">Nombre de mois du versement :</label>
 						<span class="nbr_versement_total">{{ item.getNbrVersement() }}</span>
 						<span>mois</span>
-						<span data-paiement-effectue = "{{ nbr_p_effectue }}"></span>
+						<span class="nbr_eff" data-paiement-effectue = "{{ nbr_p_effectue }}"></span>
 					</p>
 				</div>
 				<div class="montant_client_payé">
@@ -78,15 +84,13 @@
 				<div class="date_dernier_pointage">
 					<p>
 						<label for="">Date du dernier pointage :</label>
-						<span class="date_last_point">date </span>
+						<span class="date_last_point"> 2020-05-15 </span>
 					</p>
 					<p>
 						<span>C'était il y a </span><span> x</span> <span>mois</span>
 					</p>
 				</div>
-				<div class="date_dernier_pointage">
-					<a href="#" class="btn btn-danger btn-sm">Suspendre ce client</a>
-				</div>
+				
 			</div>
 		</div>
 	</div>
@@ -97,34 +101,120 @@
 		<div class="tableau_etat">
 
 			<ul>
-				<li>
-					<span>nom du mois</span>
-					<span>
-						<i class="fa fa-check"></i>
-					</span>
-				</li>
-				<li>
-					<span>nom du mois</span>
-					<span>
-						<i class="fa fa-check"></i>
-					</span>
-				</li>
 			</ul>
-			<ul>
-				<li>
-					<span>nom du mois</span>
-					<span>
-						<i class="fa fa-check"></i>
-					</span>
-				</li>
-				<li>
-					<span>nom du mois</span>
-					<span>
-						<i class="fa fa-check"></i>
-					</span>
-				</li>
-			</ul>
+		</div>
+		<div class="action_dangeureux">
+			<a href="#" class="btn btn-danger btn-sm">Suspendre ce client</a>
+			<a href="#" class="btn btn-warning btn-sm">Classer impayé</a>
 		</div>
 	</div>
 
+{% endblock %}
+{% block javascripts %}
+	<script>
+		$(document).ready(function(){
+
+			var dd = $('.dd').text();
+			var dm = parseInt(dd.split('-')[1]);
+			var annee = parseInt(dd.split('-')[0]);
+			var annee2 = annee++;
+			// decxalage de derb=nier pointage et le mois actuel
+			var date_actus = new Date();
+			var mois_actus = date_actus.getMonth() + 1 ;
+
+			// date du dernier pointage
+			var ddp = $('.date_last_point').text();
+
+			// mois ddp
+			var mddp = parseInt(ddp.split('-')[1]);
+
+			// decalage = 
+			var decalage = mois_actus - mddp ;
+
+			 // nombre de mois à afficher
+			 var nma = parseInt($('.nbr_versement_total').text()); 
+
+			 //n mois eff
+			 var nbr_pointage_e = parseInt($('.nbr_eff').attr('data-paiement-effectue'));
+			 //alert("nma="+nma+"/ nme="+nbr_pointage_e+"mois de debut de paiement="+dm) marina
+			 var tab_mois = [];
+
+			// il faut afficher le tableau de mois de mddp à nma 
+			 var mois = [
+				'Janvier',
+				'Février',
+				 'Mars',
+				 'Avril',
+				'Mai',
+				'Juin',
+				'Juillet',
+				'Août',
+				'Septembre',
+				'Octobre',
+				'Novembre',
+				'Décembre']
+
+
+			// pour le calcul
+			/*for (var i = 5; i <=19; i++) { // 19 = (5 + 15) - 1 où 15 = nma et 5 = debut de mois
+				if(i<=11){
+					//console.log(mois[i])
+					tab_mois.push(mois[i]+"-"+annee2);
+				}
+				if( i>= 12){
+					// supposon que le nma = 15
+					var j = i % 12 ;
+						//console.log(mois[j])
+						tab_mois.push(mois[j]+"-"+annee);
+				}
+			}
+			//console.log(tab_mois)
+			// design
+			$('.tableau_etat ul').html('');
+			var string = "";
+			for (var i = 0; i < tab_mois.length; i++) {
+				if(i<5){ // ex 5 = nbr de pointage effectué avant
+					string+='<li><span>'+tab_mois[i]+'</span><span><i class="fa fa-check"></i></span></li>'
+				}
+				else{
+					string+='<li><span>'+tab_mois[i]+'</span><span></span></li>'
+				}
+				
+			}
+			$('.tableau_etat ul').html(string);*/
+
+			// en pratique 
+			var fin_boucle = (dm + nma) - 1;
+			var debut_boucle = dm;
+			for (var i = debut_boucle - 1; i <=fin_boucle; i++) { // 19 = (5 + 15) - 1 où 15 = nma et 5 = debut de mois
+				if(i<=11){
+					//console.log(mois[i])
+					tab_mois.push(mois[i]+"-"+annee2);
+				}
+				if( i>= 12){
+					// supposon que le nma = 15
+					var j = i % 12 ;
+						//console.log(mois[j])
+						tab_mois.push(mois[j]+"-"+annee);
+				}
+			}
+			//console.log(tab_mois)
+			// design
+			$('.tableau_etat ul').html('');
+			var string = "";
+			for (var i = 0; i < tab_mois.length; i++) {
+				if(i<nbr_pointage_e){ // ex 5 = nbr de pointage effectué avant
+					string+='<li><span>'+tab_mois[i]+'</span><span><i class="fa fa-check"></i></span></li>'
+				}
+				else{
+					string+='<li><span>'+tab_mois[i]+'</span><span></span></li>'
+				}
+				
+			}
+			$('.tableau_etat ul').html(string);
+			
+
+		})
+	
+	</script>
 {% endblock %}

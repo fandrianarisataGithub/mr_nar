@@ -131,7 +131,6 @@
 					</td>
 					<td>
 						<span>{{ item.cin }}</span>
-						<a href="#">image cin</a>
 					</td>
 					<td>
 						<span>{{ item.adresse }}</span>
@@ -155,6 +154,7 @@
 						<span>{{ item.getDatefin() | date('Y,m,d') }}</span>
 					</td>
 					<td>
+					<div class="action">
 						<a href="#" class="modif btn btn-info btn-xs" 
 						{% if is_granted('ROLE_ADMIN') %}
                                                     style = "display:block;"
@@ -185,6 +185,7 @@
                                                 {% endif %}>
 							<span>Voir</span>
 						</a>
+						</div>
 					</td>
 
 				</tr>

@@ -119,6 +119,11 @@ class Client
      */
     private $matricule;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $suspendu;
+
     public function __construct()
     {
         $this->pointages = new ArrayCollection();
@@ -312,6 +317,18 @@ class Client
     public function setMatricule(string $matricule): self
     {
         $this->matricule = $matricule;
+
+        return $this;
+    }
+
+    public function getSuspendu(): ?string
+    {
+        return $this->suspendu;
+    }
+
+    public function setSuspendu(string $suspendu): self
+    {
+        $this->suspendu = $suspendu;
 
         return $this;
     }

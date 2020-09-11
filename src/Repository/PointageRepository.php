@@ -3,8 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Pointage;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Pointage|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +17,19 @@ class PointageRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Pointage::class);
+    }
+    /**
+     * @return Pointage[] Returns an array of Pointage objects
+     */
+    public function tous_les_pointages($value)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.client_id = :val')
+            ->setParameter('val', $value)
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     // /**

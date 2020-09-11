@@ -33,6 +33,18 @@ class ClientRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+    
+    /**
+     * @return Client[] Returns an array of Client objects
+     */
+    public function countPresent($value)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.suspendu = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult();
+    }
 
     // /**
     //  * @return Client[] Returns an array of Client objects

@@ -63,36 +63,12 @@
                                                     style = "display:none;"
 
                                                 {% endif %}>
-                                                    <a href="#layout">
+                                                    <a href="{{ path('editeurs') }}">
                                                         <i class="fa  fa-users icon">
                                                             
                                                         </i>
-                                                        <span class="pull-right">
-                                                            <i class="fa fa-angle-down text"></i>
-                                                            <i class="fa fa-angle-up text-active"></i>
-                                                        </span>
                                                         <span>Les éditeurs</span>
                                                     </a>
-                                                    <ul class="nav lt">
-                                                        <li>
-                                                            <a href="#">
-                                                                <i class="fa fa-angle-right"></i>
-                                                                <span>Editeur 1</span>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">
-                                                                <i class="fa fa-angle-right"></i>
-                                                                <span>Editeur 2</span>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="#">
-                                                                <i class="fa fa-angle-right"></i>
-                                                                <span>Liste</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
                                                 </>
                                                 <li>
                                                     <a href="#layout">
@@ -139,19 +115,19 @@
                                                     <ul class="nav lt">
                                                         <li>
                                                             <a href="{{ path('client_present') }}">
-                                                                <b class="badge bg-info pull-right">369</b>
+                                                                <b class="badge bg-info pull-right">{{ present }}</b>
                                                                 <i class="fa fa-angle-right"></i> <span>Client présent</span>
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a href="{{ path('client_paye') }}">
-                                                                <b class="badge bg-info pull-right">369</b>
-                                                                <i class="fa fa-angle-right"></i> <span>Client (payé)</span>
+                                                            <a href="{{ path('client_impaye') }}">
+                                                                <b class="badge bg-info pull-right">{{ impaye }}</b>
+                                                                <i class="fa fa-angle-right"></i> <span>Client (impayé)</span>
                                                             </a>
                                                         </li>
                                                         <li>
                                                             <a href="{{ path('client_suspendu') }}">
-                                                                <b class="badge bg-info pull-right">369</b>
+                                                                <b class="badge bg-info pull-right">{{ suspendu }}</b>
                                                                 <i class="fa fa-angle-right"></i> <span>Client (suspendu)</span>
                                                             </a>
                                                         </li>
@@ -207,7 +183,96 @@
                                                 
                                             {% endblock %}
                                     </div>
-
+                                    {# modal suppr  #}
+                                        <div id="modal_suppression">
+                                            <section class="inner_modal">
+                                                <h3 class="modal_titre">Voulez-vous vraiment supprimer ce client?</h3>
+                                                <div class="modal_liste_btn">
+                                                    <form>
+                                                        <input type="hidden" value="">
+                                                        <div class="form-group">
+                                                            <button data-id-client="0" class="btn btn-primary btn-sm" id="btn_supprimer_client"  type="submit">Supprimer</button>
+                                                            <a href="#"  class="btn btn-danger annuler_suppression btn-sm">Annuler</a>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </section>
+                                        </div>
+                                        <div id="modal_modification">
+                                            <section class="inner_modal">
+                                                <div class="modal_head">
+                                                    <button class="btn btn-danger">
+                                                        <span class="fa fa-times"></span>
+                                                    </button>
+                                                    <h3>
+                                                        <span>Matricule:</span>
+                                                        <span class="son_matricule">123</span>
+                                                    </h3>
+                                                    <div class="last_etat">
+                                                        <span>Dernier mois pointé:
+                                                        </span>
+                                                        <span class="last_mois">Fevrier
+                                                        </span>/<span>
+                                                            2020</span>
+                                                    </div>
+                                                </div>
+                                                <form action="">
+                                                    <div class="form-group row">
+                                                        <div class="col-sm-6">
+                                                            <label for="annee">Année:</label>
+                                                            <select name="annee_pointage" id="annee_pointage" class="form-control"></select>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <label for="annee">Mois:</label>
+                                                            <select name="mois_pointage" id="mois_pointage" class="form-control">
+                                                                <option value="1">Janvier</option>
+                                                                <option value="2">Février</option>
+                                                                <option value="3">Mars</option>
+                                                                <option value="4">Avril</option>
+                                                                <option value="5">Mais</option>
+                                                                <option value="6">Juin</option>
+                                                                <option value="7">Juillet</option>
+                                                                <option value="8">Août</option>
+                                                                <option value="9">Septembre</option>
+                                                                <option value="10">Octobre</option>
+                                                                <option value="11">Novembre</option>
+                                                                <option value="12">décembre</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group btn_action">
+                                                            <div class="form-group">
+                                                                <label>Montant (ariary):</label>
+                                                                <input type="number" class="form-control montant" name="montant" id="montant">
+                                                            </div>
+                                                            <div id="info">
+                                                                <p>Lorem ipsum dolor sit amet consectetur adipis</p>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <button type="sumbit" data-id-client="0" id="add_pointage" class="btn btn-primary btn-sm">Enregistrer</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <div class="block_details">
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label for="">Nombre de mois restant:</label>
+                                                            <p class="details_client">12
+                                                                <span>mois</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label for="">Montant total restant:</label>
+                                                            <p class="details_clientl">12 000<span>Ariary</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    {# /modal suppr #}
                                 </section>
                             </section>
                             <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a>
@@ -232,49 +297,62 @@
     $(window).load(function() {
 		// Animate loader off screen
 		$(".se-pre-con").fadeOut("slow");;
-	});
-        $(document).ready(function() {
-            var table = $('#tab_client_heb').DataTable({
-                "language": {
-                    "sEmptyTable": "Aucune donnée disponible dans le tableau",
-                    "sInfo": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
-                    "sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
-                    "sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
-                    "sInfoPostFix": "",
-                    "sInfoThousands": ",",
-                    "sLengthMenu": "Afficher _MENU_ éléments",
-                    "sLoadingRecords": "Chargement...",
-                    "sProcessing": "Traitement...",
-                    "sSearch": "Rechercher :",
-                    "sZeroRecords": "Aucun élément correspondant trouvé",
-                    "oPaginate": {
-                        "sFirst": "Premier",
-                        "sLast": "Dernier",
-                        "sNext": "Suivant",
-                        "sPrevious": "Précédent"
-                    },
-                    "oAria": {
-                        "sSortAscending": ": activer pour trier la colonne par ordre croissant",
-                        "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
-                    },
-                    "select": {
-                        "rows": {
-                            "_": "%d lignes sélectionnées",
-                            "0": "Aucune ligne sélectionnée",
-                            "1": "1 ligne sélectionnée"
-                        }
-                    }
-                },
-                responsive: true,
-                scrollY: false, // raha scrollena de asina val ex 400
-                scrollX: true,
-                scrollCollapse: true,
-                paging: true,
-                autoFill: true
-            });
+    });
+    $(document).ready(function(){
+        // animation modal 
 
-            new $.fn.dataTable.FixedHeader(table);
-        });
+            function show_modal_suppression(){
+                $('#modal_suppression').css('display', 'flex');
+                $('.inner_modal').css('transform' , 'scale(1)');
+            }
+             function hide_modal_suppression(){
+				 //$(".clicked").removeClass('clicked');
+                $('#modal_suppression').css('display', 'none');
+                $('.inner_modal').css('transform' , 'scale(0)');
+			}
+			
+			 // hide modal 
+            $('.annuler_suppression').click(function(e){
+				e.preventDefault();
+                hide_modal_suppression();
+			})
+
+			$('.suppr').click(function(e){
+				e.preventDefault();
+				var id = $(this).attr('data-id-client');
+				//alert(id);
+				// on pose ce id dans le bouton suppr
+				$("#btn_supprimer_client").attr('data-id-client',id);
+				show_modal_suppression();
+
+			})
+			$('#btn_supprimer_client').click(function(e){
+				e.preventDefault();
+				var id = $(this).attr('data-id-client')
+				// ajax : 
+				$.ajax({
+					url :"/admin/supprimer_client/"+id,
+					type : "POST",
+					data : {
+						"action":"suppression",
+					},
+					beforeSend : function(){
+						$('#btn_supprimer_client').text('Suppression du client en cours');
+					},
+					success: function(response){
+						$('#btn_supprimer_client').text("Supprimer")
+					},
+					error: function(){
+						alert('erreur ajax');
+					},
+					complete: function(){
+						location.reload();
+					}
+
+				})
+			})
+    })
+       
     </script>
         {% block javascripts %}{% endblock %}
     </body>

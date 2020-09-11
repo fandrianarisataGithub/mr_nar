@@ -22,6 +22,11 @@ class UserFixtures extends Fixture
             $user = new User();
             $user->setPassword($this->passwordEncoder->encodePassword($user, "password" . $i));
             $user->setUsernmane('username' . $i);
+            $user->setNom("Nom".$i);
+            $user->setPrenom("prenom".$i);
+            $user->setAdresse("lot ".$i);
+            $user->setCin("12345678912".$i);
+            $user->setPhone("0332105406".$i);
             $manager->persist($user);
             $manager->flush();
         }
