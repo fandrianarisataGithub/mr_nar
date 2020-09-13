@@ -73,7 +73,7 @@ class ClientController extends AbstractController
                 $client->setImage1($newFilename1);
                 $client->setImage2($newFilename2);
             }
-            dump($client);
+            //dump($client);
             $manager->persist($client);
             $manager->flush();
             return $this->redirectToRoute("register_client");
@@ -162,26 +162,26 @@ class ClientController extends AbstractController
 
     public function count_present(ClientRepository $repoClient)
     {
-        $tabPresent = $repoClient->countPresent('non');
+        $tabPresent = $repoClient->countPresent('présent');
         $n = count($tabPresent);
         //dd($n);
         return $n;
+        
     }
     public function count_suspendu(ClientRepository $repoClient)
     {
-        $tabPresent = $repoClient->countPresent('oui');
+        $tabPresent = $repoClient->countPresent('suspendu');
         $n = count($tabPresent);
         //dd($n);
         return $n;
     }
     public function count_impaye(ClientRepository $repoClient)
     {
-        $tabPresent = $repoClient->countPresent('impaye');
+        $tabPresent = $repoClient->countPresent('impayé');
         $n = count($tabPresent);
         //dd($n);
         return $n;
     }
-
 
     
     

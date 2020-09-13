@@ -29,7 +29,7 @@ class ClientType extends AbstractType
             ])
             ->add('suspendu', HiddenType::class, [
                 "attr" => [
-                    "value" => "non"
+                    "value" => "présent"
                 ]
             ])
             ->add('nom', TextType::class, [

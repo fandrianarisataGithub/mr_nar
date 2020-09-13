@@ -14199,6 +14199,8 @@ span.fa-check {
 .container.single_content {
     background: #f1f2f6;
     box-shadow: 0px 1px 3px #41586e;
+    width: 90% !important;
+    
 }
 
 .container.single_content .col-sm-6 {
@@ -14281,6 +14283,10 @@ div.action a {
     justify-content: center;
     align-items: center;
     margin-left: 5px;
+}
+
+.scrollable.padder .container{
+    width: 90%;
 }
 
 @media all and (max-width: 768px) {

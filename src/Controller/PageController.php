@@ -19,7 +19,7 @@ class PageController extends AbstractController
     public function client_present(ClientRepository $repoClient)
     {
         $user = new User();
-        $items = $repoClient->countPresent('non');
+        $items = $repoClient->countPresent('présent');
         //dd($items);
         return $this->render('page/client_present.html.twig', [
             'items' => $items,
@@ -34,7 +34,7 @@ class PageController extends AbstractController
     public function client_paye(ClientRepository $repoClient)
     { 
         $user = new User();
-        $items = $repoClient->countPresent('impaye');
+        $items = $repoClient->countPresent('impayé');
         return $this->render('page/client_paye.html.twig', [
             'items' => $items,
             'present' => $this->count_present($repoClient),
@@ -48,7 +48,7 @@ class PageController extends AbstractController
     public function client_suspendu(ClientRepository $repoClient)
     {
         $user = new User();
-        $items = $repoClient->countPresent('oui');
+        $items = $repoClient->countPresent('suspendu'); 
         return $this->render('page/client_suspendu.html.twig', [
             'items' => $items,
             'present' => $this->count_present($repoClient),
@@ -126,7 +126,7 @@ class PageController extends AbstractController
    
     public function count_present(ClientRepository $repoClient)
     {
-        $tabPresent = $repoClient->countPresent('non');
+        $tabPresent = $repoClient->countPresent('présent');
         $n = count($tabPresent);
         //dd($n);
         return $n;
@@ -134,14 +134,14 @@ class PageController extends AbstractController
     }
     public function count_suspendu(ClientRepository $repoClient)
     {
-        $tabPresent = $repoClient->countPresent('oui');
+        $tabPresent = $repoClient->countPresent('suspendu');
         $n = count($tabPresent);
         //dd($n);
         return $n;
     }
     public function count_impaye(ClientRepository $repoClient)
     {
-        $tabPresent = $repoClient->countPresent('impaye');
+        $tabPresent = $repoClient->countPresent('impayé');
         $n = count($tabPresent);
         //dd($n);
         return $n;

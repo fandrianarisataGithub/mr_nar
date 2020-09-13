@@ -116,7 +116,7 @@ class AppUserAuthenticator extends AbstractFormLoginAuthenticator implements Pas
         $session->set("session_user", $session_user);
         //dd($session_user);
 
-        return new RedirectResponse($this->urlGenerator->generate('client_present'));
+        return new RedirectResponse($this->urlGenerator->generate('register_client'));
         //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 
