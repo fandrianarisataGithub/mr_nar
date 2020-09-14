@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use Faker;
 use App\Entity\User;
 use App\Entity\Client;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,14 +19,14 @@ class UserFixtures extends Fixture
     }
     public function load(ObjectManager $manager)
     {
-
+        $faker = Faker\Factory::create('fr_FR');
         for ($i = 1; $i <= 5; $i++) {
             $user = new User();
             $user->setPassword($this->passwordEncoder->encodePassword($user, "password" . $i));
             $user->setUsernmane('username' . $i);
-            $user->setNom("Nom".$i);
-            $user->setPrenom("prenom".$i);
-            $user->setAdresse("lot ".$i);
+            $user->setNom($faker->name);
+            $user->setPrenom($faker->lastName);
+            $user->setAdresse($faker->address);
             $user->setCin("12345678912".$i);
             $user->setPhone("0332105406".$i);
             $manager->persist($user);
@@ -33,16 +34,15 @@ class UserFixtures extends Fixture
             for($j=1; $j<=30; $j++){
                 $client = new Client();
                 $client->setMatricule("mat".$i.$j);
-                $client->setNom("nom".$i.$j);
-                $client->setPrenom("prénom".$i.$j);
+                $client->setNom($faker->name);
+                $client->setPrenom($faker->lastName);
                 $n = rand(213 , 5846);
                 $client->setCin($n."2".$i.$j.$i);
-                $client->setImage1("image1".$i."".$j);
-                $client->setImage2("image2".$i."".$j);
-                $client->setAdresse("adresse".$i.$j);
+                $client->setImage1($faker->imageUrl(640,480));
+                $client->setImage2($faker->imageUrl(640, 480));
+                $client->setAdresse($faker->address);
                 $client->setMontantMensuel(rand(100,1200));
                 $client->setMontant(rand(10000,120000));
-                $client->setNbrVersement(rand(5,24));
                 $client->setNbrVersement(rand(5,24));
                 $client->setDateDebut(new \DateTime("2020-".rand(1,12)."-".rand(1,31)));
                 $client->setDateFin(new \DateTime("2021-".rand(1,12)."-".rand(1,31)));

@@ -80,7 +80,7 @@
 						</td>
 						<td>
 							<div class="action">
-								<a href="#" class="modif btn btn-info btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+								<a href="{{ path('edit_client', {'id': item.id }) }}" class="modif btn btn-info btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
 									<span class="fa fa-edit"></span>
 								</a>
 								<a href="#" data-id-client = "{{ item.id }}" class="suppr btn btn-danger btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
@@ -97,6 +97,11 @@
 
 			</tbody>
 		</table>
+		<div class="titre_page footer">
+			<h2>
+				<a href="{{ path('imprimer_client_present') }}" class="btn btn-primary">Imprimer la liste</a>
+			</h2>
+		</div>
 	</div>
 	
 

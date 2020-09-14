@@ -245,12 +245,12 @@
             }
 
             // activation du modal 
-            $('.pointer').click(function(e){
-				e.preventDefault();
+           $('tbody').on('click', '.pointer', function(e){
+			   	e.preventDefault();
 				$(this).addClass('clicked');
 				$('#add_pointage').attr('data-id-client',$(this).attr('data-id-client'));
 				show_modal();
-            })
+		   })
 			$('#add_pointage').click(function(e){
 				e.preventDefault();
 				var id_client = $(this).attr('data-id-client');

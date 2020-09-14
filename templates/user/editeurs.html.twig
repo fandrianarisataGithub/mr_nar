@@ -9,26 +9,30 @@
     <div class="liste_user">
        {% for item in items %}
            <div>
-           <a href="{{ path('liste_client_de_user', {'user_id': item.id }) }}">
-                <div><span class="fa fa-user"></span></div>
-                <ul>
-                    <li>{{ item.username }}</li>
-                    <li>{{ item.nom }} <i>{% if item.prenom is defined and item.prenom is not null %}
-							{{ item.prenom }}
-						{% endif %}</i></li>
-                     <li><i>CIN: </i>{{ item.cin }}</li>
-                      <li><i>Contact:</i> {{ item.phone }}</li>
-                       <li><i>Adresse:</i> {{ item.adresse }}</li>
-                    <li><i>Rôle: </i>
-                        {% if item.roles[0] == "ROLE_ADMIN" %}
-                            Administrateur
-                        {% else %}
-                            Editeurs
-                        {% endif %}
-                    </li>
-                </ul>
-            </a>
-        </div>
+                <aside class="user_action">
+                    <a href="{{ path('edit_user', {'id': item.id }) }}"><span class="fa fa-edit"></span></a>
+                    <a href="#"><span class="fa fa-trash-o"></span></a>
+                </aside>
+                <a href="{{ path('liste_client_de_user', {'user_id': item.id }) }}">
+                    <div><span class="fa fa-user"></span></div>
+                    <ul>
+                        <li>{{ item.username }}</li>
+                        <li>{{ item.nom }} <i>{% if item.prenom is defined and item.prenom is not null %}
+                                {{ item.prenom }}
+                            {% endif %}</i></li>
+                        <li><i><u>CIN:</u> </i>{{ item.cin }}</li>
+                        <li><i><u>Contact:</u></i> {{ item.phone }}</li>
+                        <li><i><u>Adresse:</u></i> {{ item.adresse }}</li>
+                        <li><i><u>Rôle:</u> </i>
+                            {% if item.roles[0] == "ROLE_ADMIN" %}
+                                Administrateur
+                            {% else %}
+                                Editeurs
+                            {% endif %}
+                        </li>
+                    </ul>
+                </a>
+            </div>
        {% endfor %}
         <!-- <div class='action'>
            <a href="#">
@@ -64,4 +68,13 @@
     </div>
     
 
+{% endblock %}
+{% block javascripts %}
+    <script>
+
+        $(document).ready(function(){
+           // alert('io')
+        })
+
+    </script>
 {% endblock %}

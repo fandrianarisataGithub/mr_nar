@@ -31,6 +31,22 @@ class PointageRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+    public function findLastDatePointageFor($client_id): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+        SELECT MAX(created_at) 
+        FROM pointage 
+        WHERE client_id = :client_id
+        ';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['client_id' => $client_id]);
+
+        // returns an array of arrays (i.e. a raw data set)
+        return $stmt->fetchAll();
+    }
+    
 
     // /**
     //  * @return Pointage[] Returns an array of Pointage objects

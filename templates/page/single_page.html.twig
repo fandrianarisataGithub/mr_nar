@@ -86,12 +86,12 @@
 						<span>mois</span>
 					</p>
 				</div>
-				<div class="date_dernier_pointage">
+				{# <div class="date_dernier_pointage">
 					<p>
 						<label for="">Date du dernier pointage :</label>
-						<span class="date_last_point"> 2020-05-15 </span>
+						<span class="date_last_point"> {{ data_last_pointage }} </span>
 					</p>
-				</div>
+				</div> #}
 				
 			</div>
 		</div>
@@ -101,12 +101,11 @@
 			<h2>Etat actuel du paiement effectué</h2>
 		</div>
 		<div class="tableau_etat">
-
 			<ul>
 			</ul>
 		</div>
 		<div class="action_dangeureux">
-			<a href="#" class="btn btn-danger btn-sm">Suspendre ce client</a>
+			{# <a href="{{ path('suspendre_client', {'id':item.id}) }}" class="btn btn-danger btn-sm">Suspendre ce client</a> #}
 			<a href="#" class="btn btn-warning btn-sm">Classer impayé</a>
 		</div>
 	</div>

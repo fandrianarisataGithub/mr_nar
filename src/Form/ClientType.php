@@ -53,7 +53,7 @@ class ClientType extends AbstractType
                     "placeholder" => "101 xxx xxx xxx",
                 ]
             ])
-            ->add('image_1', FileType::class, [
+            ->add('image_1', FileType::class, array('data_class' => null) ,[ // tsy maintsy misy an'io array io manjary tsy tafa le modif
                 'constraints' => [
                     new File([
                         'maxSize' => '1024k',
@@ -61,7 +61,7 @@ class ClientType extends AbstractType
                     ])
                 ],
             ])
-            ->add('image_2', FileType::class, [
+            ->add('image_2', FileType::class, array('data_class' => null), [
                 'constraints' => [
                     new File([
                         'maxSize' => '1024k',

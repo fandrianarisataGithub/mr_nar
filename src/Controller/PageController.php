@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use App\Entity\User;
 use App\Entity\Client;
 use App\Form\UserType;
@@ -9,12 +11,16 @@ use App\Entity\Pointage;
 use App\Repository\UserRepository;
 use App\Repository\ClientRepository;
 use App\Repository\PointageRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+// Include Dompdf required namespaces
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class PageController extends AbstractController
 {
+    
     /**
      * @Route("/profile/client_present", name="client_present")
      */
@@ -24,6 +30,21 @@ class PageController extends AbstractController
         $items = $repoClient->countPresent('présent');
         //dd($items);
         return $this->render('page/client_present.html.twig', [
+            'items' => $items,
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+        ]);
+    }
+    /**
+     * @Route("/profile/imprimer/client_present", name="imprimer_client_present")
+     */
+    public function imprimer_client_present(ClientRepository $repoClient)
+    {
+        $user = new User();
+        $items = $repoClient->countPresent('présent');
+        //dd($items);
+        return $this->render('page/listePresentImpr.html.twig', [
             'items' => $items,
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
@@ -60,16 +81,25 @@ class PageController extends AbstractController
     }
     /**
      * @Route("/admin/editeurs", name="editeurs")
+     * @Route("/admin/edit_editeurs/{id}", name="edit_user")
      */
-    public function editeurs(ClientRepository $repoClient, UserRepository $repoUser, Request $request)
+    public function editeurs(User $user = null, ClientRepository $repoClient, UserRepository $repoUser, Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder)
     {
-        $user = new User();
+        if($user == null){
+            $user = new User();
+        }
         $form = $this->createForm(UserType::class, $user);
         $items = $repoUser->findAll();
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()){
-            //$user = $form->getData();
-           
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = new User();
+            $user = $form->getData();
+            $pass = $user->getPassword();
+            $user->setPassword($encoder->encodePassword($user,"password"));
+            dd($pass); 
+            // $manager->persist($user);
+            // $manager->flush();
+            return $this->redirectToRoute("editeurs");
         }
         //dd($items);
         return $this->render('user/editeurs.html.twig', [
@@ -80,6 +110,8 @@ class PageController extends AbstractController
             'impaye' => $this->count_impaye($repoClient),
         ]);
     }
+
+
     /**
      * @Route("/profile/single_page/{id_client}", name="single_page")
      */
@@ -88,7 +120,6 @@ class PageController extends AbstractController
         $client = new Client();
         $client = $repoClient->find($id_client);
         $pointage = new Pointage();
-        //dd($client);
         $montant = $client->getMontant();
         $nbrMois = $client->getNbrVersement();
         $montant_mensuel = $client->getMontantMensuel();

@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -14,8 +15,11 @@ class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $tab_admin = ["ROLE_ADMIN"];
-        $tab_editeur = [""];
+        $tab_admin["ROLE_ADMIN"] = "ROLE_ADMIN";
+        $tab_editeur["ROLE_EDITOR"] = "ROLE_EDITOR";
+        $arr = array(["ROLE_ADMIN"],["ROLE_EDITOR"]);
+
+        //echo json_encode($arr);
 
         $builder
             ->add('usernmane', TextType::class, [
@@ -25,14 +29,15 @@ class UserType extends AbstractType
                 ]
             ])
             ->add('roles', ChoiceType::class, [
-                "label" => "Rôle de l'utilisateur: ",
+                'required' => true,
+                'multiple' => false,
+                'expanded' => false,
                 'choices'  => [
-                    'Choisir un rôle (Obligatoire)' => null,
-                    'Editeur' => "Editeur",
-                    'Administrateur' => "Administrateur"
+                    'Editeur' => 'ROLE_EDITOR',
+                    'Admin' => 'ROLE_ADMIN',
                 ],
                 "attr" => [
-                    "class" => "form-control"
+                    "class" => "form-control",
                 ]
             ])
             ->add('password', TextType::class, [
@@ -78,6 +83,18 @@ class UserType extends AbstractType
                 ]
             ])
         ;
+        // Data transformer
+        $builder->get('roles')
+            ->addModelTransformer(new CallbackTransformer(
+                function ($rolesArray) {
+                    // transform the array to a string
+                    return count($rolesArray) ? $rolesArray[0] : null;
+                },
+                function ($rolesString) {
+                    // transform the string back to an array
+                    return [$rolesString];
+                }
+            ));
     }
 
     public function configureOptions(OptionsResolver $resolver)

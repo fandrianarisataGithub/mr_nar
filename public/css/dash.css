@@ -13965,6 +13965,24 @@ fieldset[disabled] .btn-gplus.active {
     padding: 15px;
     border-radius: 5px;
 }
+.liste_user>div i{
+    font-style: normal;
+}
+aside.user_action{
+    text-align: end;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+.user_action a{
+    margin-right: 5px;
+    display: inline-block;
+    width: 25px;
+    text-align: center;
+    position: relative;
+    bottom: 5px;
+}
+.user_action a span{
+    color: #fff;
+}
 .liste_user>div>a span{
     display: block;
     color: #fff;
@@ -14289,7 +14307,7 @@ div.action a {
     width: 90%;
 }
 #cover_form_user{
-    background: rgba(0,0,0,0.5);
+    background: rgba(65,88,110,0.9);
     width: 100% !important;
     top: 0;
     left: 0;
@@ -14297,6 +14315,7 @@ div.action a {
     height: auto;
     margin-bottom: 50px;
     padding-bottom: 50px;
+    margin-top: 25px;
 }
 #cover_form_user h3{
     text-align: center;
@@ -14317,8 +14336,13 @@ div.action a {
 }
 .form_user .form-control.btn{
     background: #fff;
-    color: #4cc0c1 !important;
+    color: #41586e !important;
     border-color: #ffff;
+}
+.form_user .form-control.btn:hover{
+    background: rgba(65,88,110,0.8);
+    color: #fff !important;
+    transition: all 1s ease-in-out;
 }
 .form_user .form-control:not(.btn){
     background-color: transparent;
@@ -14327,7 +14351,12 @@ div.action a {
     border-bottom: 1px solid #fff !important;
     border-radius: 0px;
 }
-
+.form_user > form ul li{
+    color: red;
+}
+.titre_page.footer{
+    text-align: end;
+}
 @media all and (max-width: 768px) {
     .tableau_etat {
         flex-direction: column;

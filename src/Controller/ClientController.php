@@ -21,24 +21,29 @@ class ClientController extends AbstractController
 {
     /**
      * @Route("/profile/register_client", name="register_client")
+     * @Route("/profile/edit_client/{id}", name="edit_client")
      */
-    public function register_client(Request $request, ClientRepository $repoClient, UserRepository $repos, EntityManagerInterface $manager,SessionInterface $session)
+    public function register_client(Client $client = null, Request $request, ClientRepository $repoClient, UserRepository $repos, EntityManagerInterface $manager,SessionInterface $session)
     {   
-        $client = new Client();
+        if(!$client){
+            $client = new Client();
+        }
+        // else{
+        //     dd($client);
+        // }
         $user = new User();
         $session  = $request->getSession();
         $session_user = $session->get('session_user', []);
-
-        $user = $repos->find($session_user['id']);
-        //dd($session_user);
-        
+        $user = $repos->find($session_user['id']);        
         $form_register = $this->createForm(ClientType::class, $client);
         $form_register->handleRequest($request);
         
         if($form_register->isSubmitted() && $form_register->isValid()){
             $client = $form_register->getData();
-            //dd($client);
-            $client->setUser($user);
+            if(!$client->getId()){
+                $client->setUser($user);
+            }
+           
             $image_cin_1 = $form_register->get('image_1')->getData();
             $image_cin_2 = $form_register->get('image_2')->getData();
 
@@ -73,7 +78,7 @@ class ClientController extends AbstractController
                 $client->setImage1($newFilename1);
                 $client->setImage2($newFilename2);
             }
-            //dump($client);
+              //  dd($client);
             $manager->persist($client);
             $manager->flush();
             return $this->redirectToRoute("register_client");
@@ -91,6 +96,7 @@ class ClientController extends AbstractController
             'impaye' => $this->count_impaye($repoClient),
         ]);
     }
+    
     /**
      * @Route("/profile/lister_tout_client/{user_id}", name="liste_client_de_user")
      */
@@ -101,16 +107,17 @@ class ClientController extends AbstractController
         $session_user = $session->get('session_user', []);
 
         $user = $repos->find($user_id);
+        $nom = $user->getNom();
         $items = $repoClient->findByUser($user);
         //dd($items);
         return $this->render("client/listeClientUser.html.twig",[
             "items" => $items,
+            "nom_user" => $nom,
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
             'impaye' => $this->count_impaye($repoClient),
         ]);
     }
-
     /**
      * @Route("/admin/count", name="count")
      */
@@ -127,7 +134,7 @@ class ClientController extends AbstractController
     }
 
     /**
-     * @Route("/admin/supprimer_client/{id}", name ="supprimer_client")
+     * @Route("/admin/supprimer_client/{id}", name="supprimer_client")
      */
     public function supprimer_client($id, Request $request, EntityManagerInterface $manager, PointageRepository $repoPointage)
     {
