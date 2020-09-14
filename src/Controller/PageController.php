@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Client;
+use App\Form\UserType;
 use App\Entity\Pointage;
 use App\Repository\UserRepository;
 use App\Repository\ClientRepository;
 use App\Repository\PointageRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -59,13 +61,20 @@ class PageController extends AbstractController
     /**
      * @Route("/admin/editeurs", name="editeurs")
      */
-    public function editeurs(ClientRepository $repoClient, UserRepository $repoUser)
+    public function editeurs(ClientRepository $repoClient, UserRepository $repoUser, Request $request)
     {
         $user = new User();
+        $form = $this->createForm(UserType::class, $user);
         $items = $repoUser->findAll();
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            //$user = $form->getData();
+           
+        }
         //dd($items);
-        return $this->render('page/editeurs.html.twig', [
+        return $this->render('user/editeurs.html.twig', [
             'items' => $items,
+            'form' => $form->createView(),
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
             'impaye' => $this->count_impaye($repoClient),

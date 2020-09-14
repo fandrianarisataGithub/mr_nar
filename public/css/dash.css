@@ -14288,6 +14288,45 @@ div.action a {
 .scrollable.padder .container{
     width: 90%;
 }
+#cover_form_user{
+    background: rgba(0,0,0,0.5);
+    width: 100% !important;
+    top: 0;
+    left: 0;
+    margin: 0;
+    height: auto;
+    margin-bottom: 50px;
+    padding-bottom: 50px;
+}
+#cover_form_user h3{
+    text-align: center;
+    color: #ffff;
+}
+#user_enregistrer{
+    margin-top: 25px;
+}
+.form_user>form{
+    padding: 15px;
+    border-radius: 5px;
+    display: block;
+    
+}
+.form_user label{
+    color: #fff !important;
+    margin-top: 15px;
+}
+.form_user .form-control.btn{
+    background: #fff;
+    color: #4cc0c1 !important;
+    border-color: #ffff;
+}
+.form_user .form-control:not(.btn){
+    background-color: transparent;
+    color: #ffff !important;
+    border: none;
+    border-bottom: 1px solid #fff !important;
+    border-radius: 0px;
+}
 
 @media all and (max-width: 768px) {
     .tableau_etat {

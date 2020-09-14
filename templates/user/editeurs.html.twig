@@ -30,11 +30,38 @@
             </a>
         </div>
        {% endfor %}
-         <div class='action'>
+        <!-- <div class='action'>
            <a href="#">
             <div><span class="fa fa-user action"><b>+</b></span></div>
             </a>
+        </div> -->
+    </div>
+    <div class="row" id="cover_form_user">
+        
+            <h3>Enregistrer un utilisateur</h3>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+                <div class="form_user" style="margin-top: 50px;">
+                    {{ form_start(form) }}
+                    <div class="col-sm-6">
+                        {{ form_row(form.usernmane) }}
+                        {{ form_row(form.roles) }}
+                        {{ form_row(form.password) }}
+                        {{ form_row(form.adresse) }}
+                        {{ form_row(form.cin) }}                
+                    </div>
+                    <div class="col-sm-6">
+                        {{ form_row(form.nom) }}
+                        {{ form_row(form.prenom) }}
+                        {{ form_row(form.phone) }}
+                        {{ form_row(form.enregistrer) }}
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+            <div class="col-sm-2"></div>
         </div>
     </div>
+    
 
 {% endblock %}
