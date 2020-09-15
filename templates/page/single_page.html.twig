@@ -25,7 +25,12 @@
 				</div>
 				<div class="adresse_client">
 					<p>
-						{{ item.adresse }}
+						Adresse : {{ item.adresse }}
+					</p>
+				</div>
+				<div class="cin_client">
+					<p>
+						CIN numéro : {{ item.cin }}
 					</p>
 				</div>
 				<div class="cin">
@@ -38,12 +43,6 @@
 				</div>
 			</div>
 			<div class="col-sm-6">
-				<div class="matricule_client">
-					<p>
-						<label for="">Matricule :</label>
-						<span>{{ item.matricule }}</span>
-					</p>
-				</div>
 				<div class="montant_client">
 					<p>
 						<label for="">Montant :</label>
@@ -59,7 +58,7 @@
 				</div>
 				<div class="mois_client">
 					<p>
-						<label for="">Nombre de mois du versement :</label>
+						<label for="">Nombre de mois du versement prévu :</label>
 						<span class="nbr_versement_total">{{ item.getNbrVersement() }}</span>
 						<span>mois</span>
 						<span class="nbr_eff" data-paiement-effectue = "{{ nbr_p_effectue }}"></span>
@@ -81,7 +80,7 @@
 				</div>
 				<div class="mois_client_restant">
 					<p>
-						<label for="">Nombre de mois restant du paiement :</label>
+						<label for="">Nombre de mois du versement en attente :</label>
 						<span class="nbr_mois_restant">{{ nbr_mois_restant }}</span>
 						<span>mois</span>
 					</p>
@@ -105,8 +104,8 @@
 			</ul>
 		</div>
 		<div class="action_dangeureux">
-			{# <a href="{{ path('suspendre_client', {'id':item.id}) }}" class="btn btn-danger btn-sm">Suspendre ce client</a> #}
-			<a href="#" class="btn btn-warning btn-sm">Classer impayé</a>
+			<a href="{{ path('suspendre_client', {'id':item.id}) }}" class="btn btn-danger btn-sm">Suspendre ce client</a>
+			<a href="{{ path('classe_impaye_client', {'id':item.id}) }}" class="btn btn-warning btn-sm">Classer impayé</a>
 		</div>
 	</div>
 

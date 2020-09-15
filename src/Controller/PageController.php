@@ -43,14 +43,114 @@ class PageController extends AbstractController
     {
         $user = new User();
         $items = $repoClient->countPresent('présent');
-        //dd($items);
-        return $this->render('page/listePresentImpr.html.twig', [
+        // dompdf
+        // Configure Dompdf according to your needs
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+        
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($pdfOptions);
+        
+        // Retrieve the HTML generated in our twig file
+        $html = $this->renderView('page/listePresentImpr.html.twig', [
             'items' => $items,
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
             'impaye' => $this->count_impaye($repoClient),
         ]);
+        
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+        
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser (force download)
+        $dompdf->stream("mypdf.pdf", [
+            "Attachment" => true
+        ]);
     }
+
+    /**
+     * @Route("/profile/imprimer/client_impaye", name="imprimer_client_impaye")
+     */
+    public function imprimer_client_impaye(ClientRepository $repoClient)
+    {
+        $user = new User();
+        $items = $repoClient->countPresent('impaye');
+        // dompdf
+        // Configure Dompdf according to your needs
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($pdfOptions);
+
+        // Retrieve the HTML generated in our twig file
+        $html = $this->renderView('page/listeImpayeImpr.html.twig', [
+            'items' => $items,
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+        ]);
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser (force download)
+        $dompdf->stream("mypdf.pdf", [
+            "Attachment" => true
+        ]);
+    }
+
+    /**
+     * @Route("/profile/imprimer/client_suspendu", name="imprimer_client_suspendu")
+     */
+    public function imprimer_client_suspendu(ClientRepository $repoClient)
+    {
+        $user = new User();
+        $items = $repoClient->countPresent('suspendu');
+        // dompdf
+        // Configure Dompdf according to your needs
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($pdfOptions);
+
+        // Retrieve the HTML generated in our twig file
+        $html = $this->renderView('page/listeSuspenduImpr.html.twig', [
+            'items' => $items,
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+        ]);
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser (force download)
+        $dompdf->stream("mypdf.pdf", [
+            "Attachment" => true
+        ]);
+    }
+
+
     /**
      * @Route("/admin/client_paye", name="client_impaye")
      */
@@ -79,38 +179,6 @@ class PageController extends AbstractController
             'impaye' => $this->count_impaye($repoClient),
         ]);
     }
-    /**
-     * @Route("/admin/editeurs", name="editeurs")
-     * @Route("/admin/edit_editeurs/{id}", name="edit_user")
-     */
-    public function editeurs(User $user = null, ClientRepository $repoClient, UserRepository $repoUser, Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder)
-    {
-        if($user == null){
-            $user = new User();
-        }
-        $form = $this->createForm(UserType::class, $user);
-        $items = $repoUser->findAll();
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user = new User();
-            $user = $form->getData();
-            $pass = $user->getPassword();
-            $user->setPassword($encoder->encodePassword($user,"password"));
-            dd($pass); 
-            // $manager->persist($user);
-            // $manager->flush();
-            return $this->redirectToRoute("editeurs");
-        }
-        //dd($items);
-        return $this->render('user/editeurs.html.twig', [
-            'items' => $items,
-            'form' => $form->createView(),
-            'present' => $this->count_present($repoClient),
-            'suspendu' => $this->count_suspendu($repoClient),
-            'impaye' => $this->count_impaye($repoClient),
-        ]);
-    }
-
 
     /**
      * @Route("/profile/single_page/{id_client}", name="single_page")

@@ -28,9 +28,7 @@ class ClientController extends AbstractController
         if(!$client){
             $client = new Client();
         }
-        // else{
-        //     dd($client);
-        // }
+       
         $user = new User();
         $session  = $request->getSession();
         $session_user = $session->get('session_user', []);
@@ -40,10 +38,6 @@ class ClientController extends AbstractController
         
         if($form_register->isSubmitted() && $form_register->isValid()){
             $client = $form_register->getData();
-            if(!$client->getId()){
-                $client->setUser($user);
-            }
-           
             $image_cin_1 = $form_register->get('image_1')->getData();
             $image_cin_2 = $form_register->get('image_2')->getData();
 
@@ -77,9 +71,19 @@ class ClientController extends AbstractController
                 // instead of its contents
                 $client->setImage1($newFilename1);
                 $client->setImage2($newFilename2);
+                if (!$client->getId()) {
+                    $client->setUser($user);
+                    $client->setSuspendu("présent");
+                    $manager->persist($client);
+                }
+                else{
+                    $etat = $client->getSuspendu();
+                    $client->setSuspendu($etat);
+                }
+                //dd($client);
             }
               //  dd($client);
-            $manager->persist($client);
+           
             $manager->flush();
             return $this->redirectToRoute("register_client");
 
@@ -165,6 +169,46 @@ class ClientController extends AbstractController
            
         }
         return $this->redirectToRoute("client_present");
+    }
+
+    /**
+     * @Route("/admin/suspendre_client/{id}", name="suspendre_client")
+     */
+    public function suspendre_client($id, ClientRepository $repoClient, EntityManagerInterface $manager)
+    {
+        $client = new Client();
+        $client =$repoClient->find($id);
+        $client->setSuspendu("suspendu");
+        $manager->flush();
+        return $this->redirectToRoute('client_suspendu', [
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+        ]);
+
+    }
+    /**
+     * @Route("/admin/classe_impaye/{id}", name="classe_impaye_client")
+     */
+    public function classe_impaye_client($id, ClientRepository $repoClient, EntityManagerInterface $manager)
+    {
+        $client = new Client();
+        $client = $repoClient->find($id);
+        $client->setSuspendu("impaye");
+        $manager->flush();
+        return $this->redirectToRoute('client_impaye', [
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+        ]);
+    }
+
+    /**
+     * @Route("/admin/modification_client/{client_id}/{user_id}", name = "modify_client")
+     */
+    public function modify_client($client_id, $user_id, ClientRepository $repoClient, UserRepository $repoUser, EntityManagerInterface $manager, Request $request)
+    {
+        
     }
 
     public function count_present(ClientRepository $repoClient)

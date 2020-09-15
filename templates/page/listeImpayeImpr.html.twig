@@ -1,0 +1,82 @@
+
+	<div class="titre_page">
+		<h2>Liste des clients qui sont classé impayés</h2>
+	</div>
+
+	<div class="tableau tab_historique">
+		<table class="display" id="tab_client_heb" style="width:100%">
+			<thead>
+				<tr>
+					<td>
+						<span>MATRICULE</span>
+					</td>
+					<td>
+						<span>NOM ET PRENOM</span>
+					</td>
+					<td>
+						<span>CIN</span>
+					</td>
+					<td>
+						<span>ADRESSE</span>
+					</td>
+					<td>
+						<span>MONTANT</span>
+					</td>
+					<td>
+						<span>MONTANT
+							<br>
+							MENSUEL</span>
+					</td>
+					<td>
+						<span>NBR VERSEMENT</span>
+					</td>
+					<td>
+						<span>DATE DE DEBUT</span>
+					</td>
+					<td>
+						<span>DATE DE FIN</span>
+					</td>
+				</tr>
+			</thead>
+			<tbody>
+				{% for item in items %}
+					<tr>
+						<td>
+							<span>{{ item.matricule }}</span>
+						</td>
+						<td>
+							<span>{{ item.nom }}</span><br>
+							<span>{{  item.prenom }}</span>
+						</td>
+						<td>
+							<span>{{ item.cin }}</span>
+						</td>
+						<td>
+							<span>{{ item.adresse }}</span>
+						</td>
+						<td>
+							<span>{{ item.montant }}</span>
+							<span>Ar</span>
+						</td>
+						<td>
+							<span>{{ item.getMontantMensuel() }}</span>
+							<span>Ar</span>
+						</td>
+						<td>
+							<span>{{ item.getNbrVersement() }}</span>
+							<span>Ar</span>
+						</td>
+						<td>
+							<span>{{ item.getDateDebut() | date('Y,m,d') }}</span>
+						</td>
+						<td>
+							<span>{{ item.getDatefin() | date('Y,m,d') }}</span>
+						</td>
+					</tr>
+				{% endfor %}
+
+			</tbody>
+		</table>
+	</div>
+
+

@@ -4,7 +4,7 @@
 {% endblock %}
 {% block body %}
 	<div class="titre_page">
-		<h2>Liste des clients qui ont payé</h2>
+		<h2>Liste des clients qui sont classé impayés</h2>
 	</div>
 
 	<div class="tableau tab_historique">
@@ -98,6 +98,11 @@
 
 			</tbody>
 		</table>
+		<div class="titre_page footer">
+			<h2>
+				<a href="{{ path('imprimer_client_impaye') }}" class="btn btn-primary">Imprimer la liste</a>
+			</h2>
+		</div>
 	</div>
 
 {% endblock %}

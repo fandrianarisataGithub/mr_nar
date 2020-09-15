@@ -27,11 +27,6 @@ class ClientType extends AbstractType
                     "class" => "form-control"
                 ]
             ])
-            ->add('suspendu', HiddenType::class, [
-                "attr" => [
-                    "value" => "présent"
-                ]
-            ])
             ->add('nom', TextType::class, [
                 "label" => "Nom du client:",
                 "attr" => [

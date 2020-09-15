@@ -66,6 +66,11 @@ class User implements UserInterface
      */
     private $cin;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $type;
+
     public function __construct()
     {
         $this->clients = new ArrayCollection();
@@ -236,6 +241,18 @@ class User implements UserInterface
     public function setCin(string $cin): self
     {
         $this->cin = $cin;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

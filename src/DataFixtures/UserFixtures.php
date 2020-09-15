@@ -27,6 +27,7 @@ class UserFixtures extends Fixture
             $user->setNom($faker->name);
             $user->setPrenom($faker->lastName);
             $user->setAdresse($faker->address);
+            $user->setType("editor");
             $user->setCin("12345678912".$i);
             $user->setPhone("0332105406".$i);
             $manager->persist($user);
