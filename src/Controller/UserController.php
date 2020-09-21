@@ -52,6 +52,7 @@ class UserController extends AbstractController
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
             'impaye' => $this->count_impaye($repoClient),
+            'paye' => $this->count_paye($repoClient),
         ]);
     }
 
@@ -79,7 +80,13 @@ class UserController extends AbstractController
         //dd($n);
         return $n;
     }
-
+    public function count_paye(ClientRepository $repoClient)
+    {
+        $tabPresent = $repoClient->countPresent('payé');
+        $n = count($tabPresent);
+        //dd($n);
+        return $n;
+    }
     /**
      * @Route("/admin/client_de/{user_id}", name="supprimer_client_de")
      */

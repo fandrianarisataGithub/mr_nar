@@ -28,19 +28,35 @@ class ClientRepository extends ServiceEntityRepository
             ->andWhere('c.user = :val')
             ->setParameter('val', $user)
             ->orderBy('c.id', 'DESC')
-            ->setMaxResults(10)
+            ->setMaxResults(20)
             ->getQuery()
             ->getResult()
         ;
     }
-    
+
+    public function les_mpandainga(): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+        SELECT * FROM `client` 
+        WHERE DATEDIFF(created_at, date_debut) > :marge
+        ';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['marge' => 93]);
+
+        // returns an array of arrays (i.e. a raw data set)
+        return $stmt->fetchAll();
+    }
+
+
     /**
      * @return Client[] Returns an array of Client objects
      */
     public function countPresent($value)
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.suspendu = :val')
+            ->andWhere('c.etat_client = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getResult();

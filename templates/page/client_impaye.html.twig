@@ -1,12 +1,10 @@
 {% extends "base.html.twig" %}
 {% block title %}
-	client suspendu
+	client en regle
 {% endblock %}
 {% block body %}
-
-
 	<div class="titre_page">
-		<h2>Liste des clients suspendus</h2>
+		<h2>Liste des clients qui sont classé impayés</h2>
 	</div>
 
 	<div class="tableau tab_historique">
@@ -20,7 +18,7 @@
 						<span>NOM ET PRENOM</span>
 					</td>
 					<td>
-						<span>CLIENT DE </span>
+						<span>CIN</span>
 					</td>
 					<td>
 						<span>NUMERO BL</span>
@@ -58,8 +56,7 @@
 							<span>{{  item.prenom }}</span>
 						</td>
 						<td>
-							<span>{{ item.getUser().nom }}</span><br>
-							(<span>{{ item.getUser().username }}</span>)
+							<span>{{ item.cin }}</span>
 						</td>
 						<td>
 							<span>{{ item.getNumeroBl() }}</span>
@@ -76,10 +73,10 @@
 							<span>{{ item.getNbrVersement() }}</span>
 						</td>
 						<td>
-							<span>{{ item.getDateDebut() | date('Y-m-d') }}</span>
+							<span>{{ item.getDateDebut() | date('Y,m,d') }}</span>
 						</td>
 						<td>
-							<span>{{ item.getDatefin() | date('Y-m-d') }}</span>
+							<span>{{ item.getDatefin() | date('Y,m,d') }}</span>
 						</td>
 						<td>
 							<div class="action">
@@ -105,15 +102,13 @@
 					</tr>
 				{% endfor %}
 
-
 			</tbody>
 		</table>
 		<div class="titre_page footer">
 			<h2>
-				<a href="{{ path('imprimer_client_suspendu') }}" class="btn btn-primary">Imprimer la liste</a>
+				<a href="{{ path('imprimer_client_impaye') }}" class="btn btn-primary">Imprimer la liste</a>
 			</h2>
 		</div>
-
 	</div>
 
 {% endblock %}
@@ -151,7 +146,12 @@
                             "1": "1 ligne sélectionnée"
                         }
                     }
-                },
+				},
+				"columnDefs": [{
+               "targets": 'no-sort',
+               "orderable": false
+		   }],
+		   
                 responsive: true,
                 scrollY: false, // raha scrollena de asina val ex 400
                 scrollX: true,

@@ -98,6 +98,7 @@ class ClientController extends AbstractController
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
             'impaye' => $this->count_impaye($repoClient),
+            'paye' => $this->count_impaye($repoClient),
         ]);
     }
     
@@ -120,6 +121,7 @@ class ClientController extends AbstractController
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
             'impaye' => $this->count_impaye($repoClient),
+            'paye' => $this->count_impaye($repoClient),
         ]);
     }
     /**
@@ -178,12 +180,12 @@ class ClientController extends AbstractController
     {
         $client = new Client();
         $client =$repoClient->find($id);
-        $client->setSuspendu("suspendu");
         $manager->flush();
         return $this->redirectToRoute('client_suspendu', [
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
             'impaye' => $this->count_impaye($repoClient),
+            'paye' => $this->count_impaye($repoClient),
         ]);
 
     }
@@ -194,12 +196,12 @@ class ClientController extends AbstractController
     {
         $client = new Client();
         $client = $repoClient->find($id);
-        $client->setSuspendu("impaye");
         $manager->flush();
         return $this->redirectToRoute('client_impaye', [
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
             'impaye' => $this->count_impaye($repoClient),
+            'paye' => $this->count_impaye($repoClient),
         ]);
     }
 
@@ -230,6 +232,14 @@ class ClientController extends AbstractController
     {
         $tabPresent = $repoClient->countPresent('impayé');
         $n = count($tabPresent);
+        //dd($n);
+        return $n;
+    }
+
+    public function count_paye(ClientRepository $repoClient)
+    {
+        $tabPaye = $repoClient->countPresent('payé');
+        $n = count($tabPaye);
         //dd($n);
         return $n;
     }

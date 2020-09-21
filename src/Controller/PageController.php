@@ -34,6 +34,7 @@ class PageController extends AbstractController
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
             'impaye' => $this->count_impaye($repoClient),
+             'paye' => $this->count_paye($repoClient),
         ]);
     }
     /**
@@ -57,6 +58,7 @@ class PageController extends AbstractController
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
             'impaye' => $this->count_impaye($repoClient),
+             'paye' => $this->count_paye($repoClient),
         ]);
         
         // Load HTML to Dompdf
@@ -95,6 +97,7 @@ class PageController extends AbstractController
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
             'impaye' => $this->count_impaye($repoClient),
+             'paye' => $this->count_paye($repoClient),
         ]);
 
         // Load HTML to Dompdf
@@ -133,6 +136,7 @@ class PageController extends AbstractController
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
             'impaye' => $this->count_impaye($repoClient),
+             'paye' => $this->count_paye($repoClient),
         ]);
 
         // Load HTML to Dompdf
@@ -152,17 +156,18 @@ class PageController extends AbstractController
 
 
     /**
-     * @Route("/admin/client_paye", name="client_impaye")
+     * @Route("/admin/client_impaye", name="client_impaye")
      */
-    public function client_paye(ClientRepository $repoClient)
+    public function client_impaye(ClientRepository $repoClient)
     { 
         $user = new User();
         $items = $repoClient->countPresent('impayé');
-        return $this->render('page/client_paye.html.twig', [
+        return $this->render('page/client_impaye.html.twig', [
             'items' => $items,
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
             'impaye' => $this->count_impaye($repoClient),
+             'paye' => $this->count_paye($repoClient),
         ]);
     }
     /**
@@ -177,6 +182,23 @@ class PageController extends AbstractController
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
             'impaye' => $this->count_impaye($repoClient),
+             'paye' => $this->count_paye($repoClient),
+        ]);
+    }
+
+    /**
+     * @Route("/admin/client_paye", name="client_paye")
+     */
+    public function client_paye(ClientRepository $repoClient)
+    {
+        $user = new User();
+        $items = $repoClient->countPresent('paye');
+        return $this->render('page/client_paye.html.twig', [
+            'items' => $items,
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+             'paye' => $this->count_paye($repoClient),
         ]);
     }
 
@@ -215,6 +237,7 @@ class PageController extends AbstractController
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
             'impaye' => $this->count_impaye($repoClient),
+            'paye' => $this->count_paye($repoClient),
         ]);
     }
     /**
@@ -229,8 +252,25 @@ class PageController extends AbstractController
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
             'impaye' => $this->count_impaye($repoClient),
+            'paye' => $this->count_paye($repoClient),
         ]);
     }
+
+    /**
+     * @Route("/admin/graph", name="graph")
+     */
+    public function graph(ClientRepository $repoClient)
+    {
+       
+        return $this->render('page/graph.html.twig', [
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'paye' => $this->count_paye($repoClient),
+        ]);
+    }
+    
+
    
     public function count_present(ClientRepository $repoClient)
     {
@@ -239,6 +279,13 @@ class PageController extends AbstractController
         //dd($n);
         return $n;
         
+    }
+    public function count_paye(ClientRepository $repoClient)
+    {
+        $tabPaye = $repoClient->countPresent('payé');
+        $n = count($tabPaye);
+        //dd($n);
+        return $n;
     }
     public function count_suspendu(ClientRepository $repoClient)
     {
@@ -253,6 +300,19 @@ class PageController extends AbstractController
         $n = count($tabPresent);
         //dd($n);
         return $n;
+    }
+
+    // client suspendu 
+    public function suspended_client(ClientRepository $repoClient)
+    {
+        // on select les client qui ont de retard de 3 mois de pointage mais qui est déjà présent dans 3 mois
+        // ty lo le client présent fa tsy nandoha vola tampoka refa tonga le date debut
+        // SELECT * FROM `client` WHERE DATEDIFF(created_at, date_debut)>93
+        $les_client_mpandainga = $repoClient->les_mpandainga();
+        
+       
+        
+        
     }
     
 }

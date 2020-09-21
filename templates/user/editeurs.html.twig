@@ -7,40 +7,41 @@
 		<h2>Les éditeurs</h2>
 	</div>
     <div class="liste_user">
-       {% for item in items %}
-           <div>
-                <aside class="user_action">
-                    <a href="{{ path('edit_user', {'id': item.id }) }}"><span class="fa fa-edit"></span></a>
-                    <a href="{{ path('supprimer_client_de', {'user_id': item.id }) }}"><span class="fa fa-trash-o"></span></a>
-                </aside>
-                <a href="{{ path('liste_client_de_user', {'user_id': item.id }) }}">
-                    <div><span class="fa fa-user"></span></div>
-                    <ul>
-                        <li>{{ item.username }}</li>
-                        <li>{{ item.nom }} <i>{% if item.prenom is defined and item.prenom is not null %}
-                                {{ item.prenom }}
-                            {% endif %}</i></li>
-                        <li><i><u>CIN:</u> </i>{{ item.cin }}</li>
-                        <li><i><u>Contact:</u></i> {{ item.phone }}</li>
-                        <li><i><u>Adresse:</u></i> {{ item.adresse }}</li>
-                        <li><i><u>Rôle:</u> </i>
-                            {% if item.roles[0] == "ROLE_ADMIN" %}
-                                Administrateur
-                            {% else %}
-                                Editeurs
-                            {% endif %}
-                        </li>
-                    </ul>
-                </a>
-            </div>
-       {% endfor %}
+        {% for item in items %}
+            <div>
+                    <aside class="user_action">
+                        <a href="{{ path('edit_user', {'id': item.id }) }}"><span class="fa fa-edit"></span></a>
+                        <a href="{{ path('supprimer_client_de', {'user_id': item.id }) }}"><span class="fa fa-trash-o"></span></a>
+                    </aside>
+                    <a href="{{ path('liste_client_de_user', {'user_id': item.id }) }}">
+                        <div><span class="fa fa-user"></span></div>
+                        <ul>
+                            <li>{{ item.username }}</li>
+                            <li>{{ item.nom }} <i>{% if item.prenom is defined and item.prenom is not null %}
+                                    {{ item.prenom }}
+                                {% endif %}</i></li>
+                            <li><i><u>CIN:</u> </i>{{ item.cin }}</li>
+                            <li><i><u>Contact:</u></i> {{ item.phone }}</li>
+                            <li><i><u>Adresse:</u></i> {{ item.adresse }}</li>
+                            <li><i><u>Rôle:</u> </i>
+                                {% if item.roles[0] == "ROLE_ADMIN" %}
+                                    Administrateur
+                                {% else %}
+                                    Editeurs
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </a>
+                </div>
+        {% endfor %}
+    </div>
         <!-- <div class='action'>
            <a href="#">
             <div><span class="fa fa-user action"><b>+</b></span></div>
             </a>
         </div> -->
-    </div>
-    <div class="row" id="cover_form_user">
+   
+        <div class="row" id="cover_form_user">
         
             <h3>Enregistrer un utilisateur</h3>
             <div class="col-sm-2"></div>
@@ -65,7 +66,44 @@
             </div>
             <div class="col-sm-2"></div>
         </div>
-    </div>
+    	<div class="titre_page">
+            <h2>Evaluation journalière des clients enregistrés</h2>
+        </div>
+        <div class="tableau tab_historique" style="margin-bottom:50px;">
+                <table class="table" id="tab_client_heb" style="width:100%">
+                    <thead>
+                        <tr>
+                            <td>
+                                <span>EDITEURS</span>
+                            </td>
+                            <td>
+                                <span>NOMBRES DE CLIENT ENREGISTRES</span>
+                            </td>
+                            <td>
+                                <span>MONTANT MENS TOTAL</span>
+                            </td>
+                            <td>
+                                <span>MONTANT TOTAL DU JOUR</span>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>fenitra</td>
+                            <td>12</td>
+                            <td><span>12313</span><span style="margin-left:5px;">Ar</span></td>
+                            <td><span>12313</span><span style="margin-left:5px;">Ar</span></td>
+                        </tr>
+                         <tr>
+                            <td>fenitra</td>
+                            <td>12</td>
+                            <td><span>12313</span><span style="margin-left:5px;">Ar</span></td>
+                            <td><span>12313</span><span style="margin-left:5px;">Ar</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+	
     
 
 {% endblock %}

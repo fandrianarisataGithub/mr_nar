@@ -26,7 +26,9 @@
                                 <i class="fa fa-bars"></i>
                             </a>
                             <a href="#" class="navbar-brand" data-toggle="fullscreen">Groupe</a>
-
+                            <a class="btn btn-link visible-xs" id="btn_menu" data-toggle="class:nav-off-screen,open" data-target="#nav,html">
+                                <i class="fa fa-times"></i>
+                            </a>
                             <a href="{{ path('app_logout')}}" class="btn btn-link visible-xs" id="deconnexion_resp">
                                 <i class="fa fa-power-off"></i>
                             </a>
@@ -69,7 +71,6 @@
                                                         </i>
                                                         <span>Les éditeurs</span>
                                                     </a>
-                                                </>
                                                 <li>
                                                     <a href="#layout">
                                                         <i class="fa fa-pencil icon">
@@ -119,6 +120,12 @@
                                                                 <i class="fa fa-angle-right"></i> <span>Client présent</span>
                                                             </a>
                                                         </li>
+                                                         <li>
+                                                            <a href="{{ path('client_paye') }}">
+                                                                <b class="badge bg-info pull-right">{{ paye }}</b>
+                                                                <i class="fa fa-angle-right"></i> <span>Client (en règle)</span>
+                                                            </a>
+                                                        </li>
                                                         <li>
                                                             <a href="{{ path('client_impaye') }}">
                                                                 <b class="badge bg-info pull-right">{{ impaye }}</b>
@@ -161,9 +168,29 @@
                                                         </i> <span>Pointage</span>
                                                     </a>
                                                 </li>
+                                                <li {% if is_granted('ROLE_ADMIN') %}
+                                                    style = "display:block;"
+                                                    
+                                                    {% else %}
+                                                    style = "display:none;"
+
+                                                {% endif %}
+                                                >
+                                                    <a href="{{ path('graph') }}">
+                                                        <i class="fa fa-bar-chart-o icon">
+                                                        
+                                                        </i> <span>Evaluation graphique</span>
+                                                    </a>
+                                                </li>
 
                                             </ul>
                                         </nav>
+                                         <div class="div__form">
+                                                <form action="">
+                                                <input type="text" placeholder="Rechercher un matricule">
+                                                <a href="#" class="btn btn-primary btn btn-xs"><i class="fa fa-search"></i></a>
+                                                </form>
+                                            </div>
                                         <!-- / nav -->
                                     </div>
                                 </section>
@@ -289,6 +316,7 @@
     integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <script src="{{ asset('js/dash.js') }}"></script>
+    <script src="{{ asset('js/main.js') }}"></script>
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/fixedheader/3.1.7/js/dataTables.fixedHeader.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.4/js/dataTables.responsive.min.js"></script>

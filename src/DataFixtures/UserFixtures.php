@@ -45,9 +45,12 @@ class UserFixtures extends Fixture
                 $client->setMontantMensuel(rand(100,1200));
                 $client->setMontant(rand(10000,120000));
                 $client->setNbrVersement(rand(5,24));
+                $client->setEtatClient('présent');
+                $client->setCreatedAt($faker->dateTimeBetween('-3 years', 'now'));
+                $client->setVerifier("non");
+                $client->setNumeroBl(112458);
                 $client->setDateDebut(new \DateTime("2020-".rand(1,12)."-".rand(1,31)));
                 $client->setDateFin(new \DateTime("2021-".rand(1,12)."-".rand(1,31)));
-                $client->setSuspendu("présent");
                 $client->setUser($user);
                 $manager->persist($client);
 

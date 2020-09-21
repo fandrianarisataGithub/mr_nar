@@ -3,6 +3,117 @@
     clients
 {% endblock %}
 {% block body %}
+
+<aside class="compteur container-fluid">
+	<div class="col-md-6"></div>
+	<div class="compteur_content col-md-6 ">
+		<div class="details bg-primary">
+			<div class="date_du_jour">
+				<p>Date du jour:
+					<span class="val_date">2020-09-21</span>
+				</p>
+			</div>
+			<div class="total_montant">
+				<p>Montant mensuel total du jour:
+					<span>20000</span>
+					<span>Ariary</span>
+				</p>
+			</div>
+			<div class="nbr_total_client">
+				<p>Nombre total de client du jour:
+					<span>20</span>
+					<span>client(s)</span>
+				</p>
+			</div>
+		</div>
+	</div>
+</aside>
+<div class="titre_page">
+	<h2>Détails de l'enregistrement journalier</h2>
+</div>
+<div class="tableautab_historique" style="margin-bottom:50px;">
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					<span>Date du jour</span>
+				</th>
+				<th>
+					<span>Matricule du client</span>
+				</th>
+				<th>
+					<span>Numéro BL</span>
+				</th>
+				<th>
+					<span>Montant</span>
+				</th>
+				<th>
+					<span>Montant mensuel</span>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<span class="date_du_jour">
+						21-09-2020</span>
+				</td>
+				<td>
+					<span class="matricule_client">
+						m123586</span>
+				</td>
+				<td>
+					<span class="numero_bl">
+						586</span>
+				</td>
+				<td>
+					<sapn class="montant_client">10000</sapn>
+					<span style="margin-left:5px;">Ar</span>
+				</td>
+				<td>
+					<sapn class="montant_mens_client">100</sapn>
+					<span style="margin-left:5px;">Ar</span>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<span class="date_du_jour">
+						21-09-2020</span>
+				</td>
+				<td>
+					<span class="matricule_client">
+						m123586</span>
+				</td>
+				<td>
+					<span class="numero_bl">
+						586</span>
+				</td>
+				<td>
+					<sapn class="montant_client">10000</sapn>
+					<span style="margin-left:5px;">Ar</span>
+				</td>
+				<td>
+					<sapn class="montant_mens_client">100</sapn>
+					<span style="margin-left:5px;">Ar</span>
+				</td>
+			</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="4"><b>Total montant mensuel :</b></td>
+				<td><b>1231231</b><b style="margin-left:5px;">Ar</b></td>
+			</tr>
+			<tr>
+				<td colspan="4"><b>Total montant général :</b></td>
+				<td><b>1231231</b><b style="margin-left:5px;">Ar</b></td>
+			</tr>
+		</tfoot>
+	</table>
+
+</div>
+
+
+
 <div class="titre_page">
 	<h2>Liste de {{ nom_user }}</h2>
 </div>
@@ -18,10 +129,7 @@
 					<span>NOM ET PRENOM</span>
 				</td>
 				<td>
-					<span>CIN</span>
-				</td>
-				<td>
-					<span>ADRESSE</span>
+					<span>NUMERO BL</span>
 				</td>
 				<td>
 					<span>MONTANT</span>
@@ -32,13 +140,7 @@
 						MENSUEL</span>
 				</td>
 				<td>
-					<span>NBR VERSEMENT</span>
-				</td>
-				<td>
-					<span>DATE DE DEBUT</span>
-				</td>
-				<td>
-					<span>DATE DE FIN</span>
+					<span>DATE D'AJOUT</span>
 				</td>
 				<td>
 					<span>ACTIONS</span>
@@ -50,16 +152,14 @@
 				<tr>
 					<td>
 						<span>{{ item.matricule }}</span>
+						<b class=" check fa fa-check"></b>
 					</td>
 					<td>
 						<span>{{ item.nom }}</span><br>
 						<span>{{  item.prenom }}</span>
 					</td>
 					<td>
-						<span>{{ item.cin }}</span>
-					</td>
-					<td>
-						<span>{{ item.adresse }}</span>
+						<span>{{ item.getNumeroBL() }}</span>
 					</td>
 					<td>
 						<span>{{ item.montant }}</span>
@@ -70,34 +170,49 @@
 						<span>Ar</span>
 					</td>
 					<td>
-						<span>{{ item.getNbrVersement() }}</span>
-						<span>Ar</span>
-					</td>
-					<td>
-						<span>{{ item.getDateDebut() | date('Y-m-d') }}</span>
-					</td>
-					<td>
-						<span>{{ item.getDatefin() | date('Y-m-d') }}</span>
+						<span>{{ item.getCreatedAt() | date('Y-m-d') }}</span>
 					</td>
 					<td>
 						<div class="action">
-								<a href="{{ path('edit_client', {'id': item.id }) }}" class="modif btn btn-info btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
-									<span class="fa fa-edit"></span>
-								</a>
-								<a href="#" data-id-client = "{{ item.id }}" class="suppr btn btn-danger btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
-									<span class="fa fa-trash-o"></span>
-								</a>
-								<a href="{{ path('single_page', {'id_client': item.id }) }}" class="voir btn btn-primary btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
-									<span>Voir</span>
-								</a>
+								<div>
+									<a href="{{ path('edit_client', {'id': item.id }) }}" class="modif btn btn-info btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+										<span class="fa fa-edit"></span>
+									</a>
+									<a href="#" data-id-client = "{{ item.id }}" class="suppr btn btn-danger btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+										<span class="fa fa-trash-o"></span>
+									</a>
+								</div>
+								<div>
+									<a href="#" class="voir btn btn-primary btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+										<span class = "fa fa-check-square-o"></span>
+									</a>
+									<a href="{{ path('single_page', {'id_client': item.id }) }}" class="voir btn btn-primary btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+										<span>Voir</span>
+									</a>
+								</div>
 							</div>
 					</td>
 
 				</tr>
 			{% endfor %} 
 		</tbody>
+		
+		
 	</table>
+	<div class="div_footer_tab">
+		<div>
+			<div>
+				<span>Total montant mensuel : </span><span>1213032</span><span style="margin-left">Ar</span>
+			</div>
+			<div>
+				<span>Total montant : </span><span>1213032</span><span style="margin-left">Ar</span>
+			</div>
+		</div>
+	</div>
 </div>
+
+
+
 
 {% endblock %}
 {% block javascripts %}

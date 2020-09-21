@@ -85,7 +85,7 @@ class ClientType extends AbstractType
                     "class" => "form-control"
                 ]
             ])
-            ->add('nbr_versement', NumberType::class, [
+            ->add('nbr_versement', IntegerType::class, [
                
                 "attr" => [
                     "class" => "form-control"
@@ -93,11 +93,25 @@ class ClientType extends AbstractType
             ])
             ->add('date_debut', DateType::class, [
                 "label" => "Date de debut:",
-                'widget' => 'choice',   
+                'widget' => 'choice',
+                'placeholder' => [
+                    'year' => 'Année', 'month' => 'Mois', 'day' => 'Jour',
+                ],
+                'format' => 'dd-MM-yyyy', 
             ])
-            ->add('date_fin', DateType::class, [
-                "label" => "Date de fin:",
-                'widget' => 'choice',   
+            ->add('createdAt', DateType::class, [
+                "label" => "Date du jour: ",
+                'widget' => 'choice',
+                'placeholder' => [
+                    'year' => 'Année', 'month' => 'Mois', 'day' => 'Jour',
+                ],
+                 'format' => 'dd-MM-yyyy',
+            ])
+            ->add('numero_bl', IntegerType::class, [
+                "attr" => [
+                    "class" => "form-control"
+                ],
+                
             ])
             ->add('register_client', SubmitType::class, [
                 "attr" => [

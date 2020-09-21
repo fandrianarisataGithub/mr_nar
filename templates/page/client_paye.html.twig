@@ -4,7 +4,7 @@
 {% endblock %}
 {% block body %}
 	<div class="titre_page">
-		<h2>Liste des clients qui sont classé impayés</h2>
+		<h2>Liste des clients qui sont en règles</h2>
 	</div>
 
 	<div class="tableau tab_historique">
@@ -18,10 +18,10 @@
 						<span>NOM ET PRENOM</span>
 					</td>
 					<td>
-						<span>CIN</span>
+						<span>CLIENT DE</span>
 					</td>
 					<td>
-						<span>ADRESSE</span>
+						<span>NUMERO BL</span>
 					</td>
 					<td>
 						<span>MONTANT</span>
@@ -56,10 +56,11 @@
 							<span>{{  item.prenom }}</span>
 						</td>
 						<td>
-							<span>{{ item.cin }}</span>
+							<span>{{ item.getUser().nom }}</span><br>
+							(<span>{{ item.getUser().username }}</span>)
 						</td>
 						<td>
-							<span>{{ item.adresse }}</span>
+							<span>{{ item.getNumeroBl() }}</span>
 						</td>
 						<td>
 							<span>{{ item.montant }}</span>
@@ -71,7 +72,6 @@
 						</td>
 						<td>
 							<span>{{ item.getNbrVersement() }}</span>
-							<span>Ar</span>
 						</td>
 						<td>
 							<span>{{ item.getDateDebut() | date('Y,m,d') }}</span>
@@ -81,15 +81,22 @@
 						</td>
 						<td>
 							<div class="action">
-								<a href="{{ path('edit_client', {'id': item.id }) }}" class="modif btn btn-info btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
-									<span class="fa fa-edit"></span>
-								</a>
-								<a href="#" data-id-client = "{{ item.id }}" class="suppr btn btn-danger btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
-									<span class="fa fa-trash-o"></span>
-								</a>
-								<a href="{{ path('single_page', {'id_client': item.id }) }}" class="voir btn btn-primary btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
-									<span>Voir</span>
-								</a>
+								<div>
+									<a href="{{ path('edit_client', {'id': item.id }) }}" class="modif btn btn-info btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+										<span class="fa fa-edit"></span>
+									</a>
+									<a href="#" data-id-client = "{{ item.id }}" class="suppr btn btn-danger btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+										<span class="fa fa-trash-o"></span>
+									</a>
+								</div>
+								<div>
+									<a href="#" class="voir btn btn-primary btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+										<span class = "fa fa-check-square-o"></span>
+									</a>
+									<a href="{{ path('single_page', {'id_client': item.id }) }}" class="voir btn btn-primary btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+										<span>Voir</span>
+									</a>
+								</div>
 							</div>
 						</td>
 
@@ -109,53 +116,55 @@
 {% block javascripts %}
 	<script>
 
-		 $(document).ready(function() {
-            var table = $('#tab_client_heb').DataTable({
-                "language": {
-                    "sEmptyTable": "Aucune donnée disponible dans le tableau",
-                    "sInfo": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
-                    "sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
-                    "sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
-                    "sInfoPostFix": "",
-                    "sInfoThousands": ",",
-                    "sLengthMenu": "Afficher _MENU_ éléments",
-                    "sLoadingRecords": "Chargement...",
-                    "sProcessing": "Traitement...",
-                    "sSearch": "Rechercher :",
-                    "sZeroRecords": "Aucun élément correspondant trouvé",
-                    "oPaginate": {
-                        "sFirst": "Premier",
-                        "sLast": "Dernier",
-                        "sNext": "Suivant",
-                        "sPrevious": "Précédent"
-                    },
-                    "oAria": {
-                        "sSortAscending": ": activer pour trier la colonne par ordre croissant",
-                        "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
-                    },
-                    "select": {
-                        "rows": {
-                            "_": "%d lignes sélectionnées",
-                            "0": "Aucune ligne sélectionnée",
-                            "1": "1 ligne sélectionnée"
-                        }
-                    }
-				},
-				"columnDefs": [{
-               "targets": 'no-sort',
-               "orderable": false
-		   }],
-		   
-                responsive: true,
-                scrollY: false, // raha scrollena de asina val ex 400
-                scrollX: true,
-                scrollCollapse: true,
-                paging: true,
-                autoFill: true
-            });
+		$(document).ready(function () {
+var table = $('#tab_client_heb').DataTable({
+"language": {
+"sEmptyTable": "Aucune donnée disponible dans le tableau",
+"sInfo": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
+"sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
+"sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
+"sInfoPostFix": "",
+"sInfoThousands": ",",
+"sLengthMenu": "Afficher _MENU_ éléments",
+"sLoadingRecords": "Chargement...",
+"sProcessing": "Traitement...",
+"sSearch": "Rechercher :",
+"sZeroRecords": "Aucun élément correspondant trouvé",
+"oPaginate": {
+"sFirst": "Premier",
+"sLast": "Dernier",
+"sNext": "Suivant",
+"sPrevious": "Précédent"
+},
+"oAria": {
+"sSortAscending": ": activer pour trier la colonne par ordre croissant",
+"sSortDescending": ": activer pour trier la colonne par ordre décroissant"
+},
+"select": {
+"rows": {
+"_": "%d lignes sélectionnées",
+"0": "Aucune ligne sélectionnée",
+"1": "1 ligne sélectionnée"
+}
+}
+},
+"columnDefs": [
+{
+"targets": 'no-sort',
+"orderable": false
+}
+],
 
-            new $.fn.dataTable.FixedHeader(table);
-        });
-	
+responsive: true,
+scrollY: false, // raha scrollena de asina val ex 400
+scrollX: true,
+scrollCollapse: true,
+paging: true,
+autoFill: true
+});
+
+new $.fn.dataTable.FixedHeader(table);
+});
 	</script>
 {% endblock %}
+

@@ -18,10 +18,10 @@
 						<span>NOM ET PRENOM</span>
 					</td>
 					<td>
-						<span>CIN</span>
+						<span>CLIENT DE</span>
 					</td>
 					<td>
-						<span>ADRESSE</span>
+						<span>NUMERO BL</span>
 					</td>
 					<td>
 						<span>MONTANT</span>
@@ -56,11 +56,11 @@
 							<span>{{  item.prenom }}</span>
 						</td>
 						<td>
-							<span>{{ item.cin }}</span>
-						
+							<span>{{ item.getUser().nom }}</span><br>
+							(<span>{{ item.getUser().username }}</span>)
 						</td>
 						<td>
-							<span>{{ item.adresse }}</span>
+							<span>{{ item.getNumeroBl }}</span>
 						</td>
 						<td>
 							<span>{{ item.montant }}</span>

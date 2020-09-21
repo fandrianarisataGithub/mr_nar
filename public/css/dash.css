@@ -7198,6 +7198,9 @@ button.close {
     .visible-xs-block {
         display: block !important;
     }
+    #btn_menu {
+        display: none !important;
+    }
 }
 
 @media (max-width: 767px) {
@@ -13943,6 +13946,52 @@ fieldset[disabled] .btn-gplus.active {
 
 /* Mes css */
 
+#btn_menu {
+    display: none !important;
+}
+.my_liste_legend  {
+  margin-top: 20px;
+}
+.my_liste_legend li{
+  display: inline-block ;
+}
+.my_liste_legend li:first-child {
+  margin-left: 78px;
+}
+.my_liste_legend li:not(:first-child) {
+  margin-left: 40px;
+}
+.my_liste_legend li span {
+  position: relative ;
+  width: 30px;
+  height: 15px;
+  display: inline-block;
+  border-radius: 20px;
+  color: transparent ;
+}
+.my_liste_legend li b {
+  font-weight: 500;
+  position: relative;
+  bottom: 2px;
+  font-size: 12px;
+  left : 5px;
+  
+}
+.my_liste_legend li span {
+  cursor : pointer ;
+}
+.legende_click {
+  background: transparent !important;
+  border : 1px solid red ;
+}
+
+
+@media all and (max-width: 767px){
+    #btn_menu {
+        display: none !important;
+    }
+}
+
 .titre_page {
     margin-top: 25px;
     margin-bottom: 25px;
@@ -13952,12 +14001,13 @@ fieldset[disabled] .btn-gplus.active {
     color: #41586e;
 }
 
-.liste_user{
+.liste_user {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
 }
-.liste_user>div{
+
+.liste_user>div {
     background: #4cc0c1;
     display: block;
     width: 200px;
@@ -13965,14 +14015,17 @@ fieldset[disabled] .btn-gplus.active {
     padding: 15px;
     border-radius: 5px;
 }
-.liste_user>div i{
+
+.liste_user>div i {
     font-style: normal;
 }
-aside.user_action{
+
+aside.user_action {
     text-align: end;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
-.user_action a{
+
+.user_action a {
     margin-right: 5px;
     display: inline-block;
     width: 25px;
@@ -13980,62 +14033,70 @@ aside.user_action{
     position: relative;
     bottom: 5px;
 }
-.user_action a span{
+
+.user_action a span {
     color: #fff;
 }
-.liste_user>div>a span{
+
+.liste_user>div>a span {
     display: block;
     color: #fff;
     text-align: center;
     font-size: 50px;
-    border-bottom: 1px solid rgba(255,255,255,0.5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
     padding-bottom: 5px;
 }
-.liste_user>div.action{
+
+.liste_user>div.action {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.liste_user>div.action a{
-   display: flex;
+
+.liste_user>div.action a {
+    display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 100%;
 }
-.liste_user>div.action a b{
-    color: rgba(255,255,255,0.5);
-    animation : jiro 1.5s infinite;
+
+.liste_user>div.action a b {
+    color: rgba(255, 255, 255, 0.5);
+    animation: jiro 1.5s infinite;
     transition: all 1.5s ease-out;
 }
-@keyframes jiro{
-    0%{
-        color: rgba(255,255,255,0.5);
+
+@keyframes jiro {
+    0% {
+        color: rgba(255, 255, 255, 0.5);
     }
-    25%{
-        color: rgba(255,255,255,0.7);
+    25% {
+        color: rgba(255, 255, 255, 0.7);
     }
-    50%{
-        color: rgba(255,255,255,0.8);
+    50% {
+        color: rgba(255, 255, 255, 0.8);
     }
-    75%{
-        color: rgba(255,255,255,0.9);
+    75% {
+        color: rgba(255, 255, 255, 0.9);
     }
-     100%{
-        color: rgba(255,255,255,1);
+    100% {
+        color: rgba(255, 255, 255, 1);
     }
 }
 
-.liste_user>div>a span.action{
-    border-bottom: 0px solid rgba(255,255,255,0.5);
+.liste_user>div>a span.action {
+    border-bottom: 0px solid rgba(255, 255, 255, 0.5);
 }
-.liste_user > div >a>ul{
+
+.liste_user>div>a>ul {
     list-style: none;
     margin-top: 15px;
     padding-left: 10px;
 }
-.liste_user > div >a>ul li{
-    color: rgba(255,255,255,0.8);
+
+.liste_user>div>a>ul li {
+    color: rgba(255, 255, 255, 0.8);
     margin-top: 5px;
 }
 
@@ -14096,10 +14157,8 @@ aside.user_action{
     transition-timing-function: cubic-bezier(0, 0.1, 0.7, 1);
 }
 
-
 .modal_liste_btn {
     display: flex;
-    
     justify-content: center;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -14188,7 +14247,14 @@ span.fa-check {
     color: #fff;
     font-weight: bold;
 }
-
+#form_tri_annee{
+    text-align: end;
+}
+#form_tri_annee select{
+    width: 200px;
+    float: right;
+    margin-right:25px;
+}
 #info {
     display: flex;
     justify-content: center;
@@ -14218,7 +14284,6 @@ span.fa-check {
     background: #f1f2f6;
     box-shadow: 0px 1px 3px #41586e;
     width: 90% !important;
-    
 }
 
 .container.single_content .col-sm-6 {
@@ -14294,6 +14359,16 @@ span.fa-check {
 
 div.action {
     display: flex;
+    flex-wrap: wrap;
+}
+
+tr td b.check{
+    float: right;
+}
+
+div.action >div{
+    display: flex;
+    margin-top: 5px;
 }
 
 div.action a {
@@ -14303,11 +14378,21 @@ div.action a {
     margin-left: 5px;
 }
 
-.scrollable.padder .container{
+.scrollable.padder .container {
     width: 90%;
 }
-#cover_form_user{
-    background: rgba(65,88,110,0.9);
+
+body tfoot{
+   text-align: end !important; 
+    
+}
+body tfoot tr td:last-child{
+    text-align: start;
+}
+
+
+#cover_form_user {
+    background: rgba(65, 88, 110, 0.9);
     width: 100% !important;
     top: 0;
     left: 0;
@@ -14317,50 +14402,126 @@ div.action a {
     padding-bottom: 50px;
     margin-top: 25px;
 }
-#cover_form_user h3{
+
+#cover_form_user h3 {
     text-align: center;
     color: #ffff;
 }
-#user_enregistrer{
+
+#user_enregistrer {
     margin-top: 25px;
 }
-.form_user>form{
+
+.form_user>form {
     padding: 15px;
     border-radius: 5px;
     display: block;
-    
 }
-.form_user label{
+
+.form_user label {
     color: #fff !important;
     margin-top: 15px;
 }
-.form_user .form-control.btn{
+
+.form_user .form-control.btn {
     background: #fff;
     color: #41586e !important;
     border-color: #ffff;
 }
-.form_user .form-control.btn:hover{
-    background: rgba(65,88,110,0.8);
+
+.form_user .form-control.btn:hover {
+    background: rgba(65, 88, 110, 0.8);
     color: #fff !important;
     transition: all 1s ease-in-out;
 }
-.form_user .form-control:not(.btn){
+
+.form_user .form-control:not(.btn) {
     background-color: transparent;
     color: #ffff !important;
     border: none;
     border-bottom: 1px solid #fff !important;
     border-radius: 0px;
 }
-.form_user > form ul li{
+
+.form_user>form ul li {
     color: red;
 }
-.titre_page.footer{
+
+.titre_page.footer {
     text-align: end;
+}
+.div__form{
+    margin-top: 15px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+
+.div__form form{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+.div__form form input{
+    background: rgba(255,255,255,0.8);
+    color: black;
+    border:1px solid rgba(255,255,255,0.8);
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    padding-left: 5px;
+}
+.div__form form a.btn{
+     border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    background: #4cc0c1;
+}
+
+.compteur .compteur_content .details{
+    background: #41586e;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 320px;
+    margin-left: auto;
+    border-radius: 5px;
+    padding: 15px;
+}
+.details p span{
+    margin-left: 5px;
+}
+.div_footer_tab{
+    margin-bottom: 25px;
+    margin-top: 25px;
+   display: flex;
+    justify-content: end;
+}
+.div_footer_tab >div{
+     display: flex;
+    justify-content: end;
+    flex-direction: column;
+    width: 320px;
+    background: #41586e;
+    padding: 15px;
+    border-radius: 5px;
+}
+.div_footer_tab >div>div:last-child{
+    margin-top: 25px;
+}
+.div_footer_tab >div span{
+    color: #ffff;
+}
+.div_footer_tab span:not(:first-child){
+    margin-left: 5px;
 }
 @media all and (max-width: 768px) {
     .tableau_etat {
         flex-direction: column;
     }
+    #deconnexion_resp{
+    position: static;
+        float: right;
+    }
+   
+   
 }
 
 

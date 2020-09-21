@@ -112,10 +112,26 @@ class Client
      */
     private $matricule;
 
+
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $suspendu;
+    private $verifier;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $numero_bl;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $etat_client;
 
     public function __construct()
     {
@@ -314,14 +330,51 @@ class Client
         return $this;
     }
 
-    public function getSuspendu(): ?string
+
+    public function getVerifier(): ?string
     {
-        return $this->suspendu;
+        return $this->verifier;
     }
 
-    public function setSuspendu(string $suspendu): self
+    public function setVerifier(string $verifier): self
     {
-        $this->suspendu = $suspendu;
+        $this->verifier = $verifier;
+
+        return $this;
+    }
+
+    public function getNumeroBl(): ?int
+    {
+        return $this->numero_bl;
+    }
+
+    public function setNumeroBl(int $numero_bl): self
+    {
+        $this->numero_bl = $numero_bl;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getEtatClient(): ?string
+    {
+        return $this->etat_client;
+    }
+
+    public function setEtatClient(string $etat_client): self
+    {
+        $this->etat_client = $etat_client;
 
         return $this;
     }
