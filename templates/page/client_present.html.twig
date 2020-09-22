@@ -8,24 +8,30 @@
 			<div class="details bg-primary">
 				<div class="date_du_jour">
 					<p>Date du jour:
-						<span class="val_date">2020-09-21</span>
+						<span class="val_date">{{ date_du_jour | date('d-m-Y') }}</span>
+					</p>
+				</div>
+				<div class="total_montant_mensuel">
+					<p>Montant total mensuel du jour:
+						<span>{{ total_mmj }}</span>
+						<span>Ariary</span>	
 					</p>
 				</div>
 				<div class="total_montant">
-					<p>Montant mensuel total du jour:
-						<span>20000</span>
+					<p>Montant total du jour:
+						<span>{{ total_mj }}</span>
 						<span>Ariary</span>	
 					</p>
 				</div>
 				<div class="nbr_total_client">
 					<p>Nombre total de client du jour:
-						<span>20</span>
+						<span>{{ nbr_client_du_jour }}</span>
 						<span>client(s)</span>
 					</p>
 				</div>
 				<div class="nbr_total_client">
 					<p>Nombre total de clients présents:
-						<span>20</span>
+						<span>{{ present }}</span>
 						<span>client(s)</span>
 					</p>
 				</div>
@@ -78,8 +84,14 @@
 			<tbody>
 				{% for item in items %}
 					<tr>
-						<td>
+						<td class="td-check">
 							<span>{{ item.matricule }}</span>
+							{% if item.verifier == "oui" %}
+								<b class=" check fa fa-check"></b>
+							{% else %}
+								<b class=" check fa "></b>
+							{% endif %}
+							<b class=" check check-hide fa fa-check" style="display:none"></b>
 						</td>
 						<td>
 							<span>{{ item.nom }}</span><br>
@@ -112,18 +124,18 @@
 						<td>
 							<div class="action">
 								<div>
-									<a href="{{ path('edit_client', {'id': item.id }) }}" class="modif btn btn-info btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+									<a href="{{ path("edit_client", {"id": item.id }) }}" class="modif btn btn-info btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
 										<span class="fa fa-edit"></span>
 									</a>
-									<a href="#" data-id-client = "{{ item.id }}" class="suppr btn btn-danger btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+									<a href="#" data-id-client = "{{ item.id }}" class="suppr btn btn-danger btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
 										<span class="fa fa-trash-o"></span>
 									</a>
 								</div>
 								<div>
-									<a href="#" class="voir btn btn-primary btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+									<a href="#" data-id-client = "{{ item.id }}" class="verifier btn btn-primary btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
 										<span class = "fa fa-check-square-o"></span>
 									</a>
-									<a href="{{ path('single_page', {'id_client': item.id }) }}" class="voir btn btn-primary btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+									<a href="{{ path('single_page', {'id_client': item.id }) }}" class="voir btn btn-primary btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
 										<span>Voir</span>
 									</a>
 								</div>
@@ -195,7 +207,28 @@
 
 			new $.fn.dataTable.FixedHeader(table);
 			
-			// modal 
+			// verification 
+
+			$("tbody").on('click', ".verifier", function(e){
+				e.preventDefault()
+				var id_client = $(this).attr('data-id-client');
+				var tr = $(this).parent().parent().parent().parent();
+				var string = "";
+				$.ajax({
+					url : "/admin/verifier/"+id_client,
+					type : "GET",
+					success : function(response){
+						if(response=="ok"){
+							tr.children('.td-check').children(".check-hide").show();
+						}
+					},
+					error : function(){
+						alert('erreur ajax');
+					}
+					
+				})
+			})
+
 
 
         });

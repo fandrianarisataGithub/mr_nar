@@ -34,6 +34,52 @@ class ClientRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+    * @return Client[] Returns an array of Client objects
+    */
+    
+    public function clientDuJour(User $user)
+    {   
+        $date = new \DateTime();
+        $date = $date->format('Y-m-d');
+        $demain = date('Y-m-d', strtotime("$date +1 day"));
+        $hier = date('Y-m-d', strtotime("$date -1 day"));
+        //dd($demain);
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = '
+        SELECT * FROM `client` 
+        WHERE user_id = :user_id_me and created_at < :date_dem and created_at > :date_omaly
+        ORDER BY id DESC
+        ';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['user_id_me' => $user->getId(), 'date_dem' => $demain, 'date_omaly' => $hier]);
+        // returns an array of arrays (i.e. a raw data set)
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * @return Client[] Returns an array of Client objects
+     */
+
+    public function valablePointage()
+    {
+        $date = new \DateTime();
+        $date = $date->format('Y-m');
+        //dd($demain);
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = '
+        SELECT * FROM `client` 
+        WHERE  date_debut <= :date_now and date_fin >= :date_now
+        ORDER BY id DESC
+        ';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['date_now' => $date]);
+        
+        // returns an array of arrays (i.e. a raw data set)
+        return $stmt->fetchAll();
+    }
+
+
     public function les_mpandainga(): array
     {
         $conn = $this->getEntityManager()->getConnection();

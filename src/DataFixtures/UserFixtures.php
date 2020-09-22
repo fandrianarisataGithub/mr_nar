@@ -44,13 +44,27 @@ class UserFixtures extends Fixture
                 $client->setAdresse($faker->address);
                 $client->setMontantMensuel(rand(100,1200));
                 $client->setMontant(rand(10000,120000));
-                $client->setNbrVersement(rand(5,24));
+                $client->setNbrVersement(rand(5,36));
                 $client->setEtatClient('présent');
                 $client->setCreatedAt($faker->dateTimeBetween('-3 years', 'now'));
                 $client->setVerifier("non");
                 $client->setNumeroBl(112458);
-                $client->setDateDebut(new \DateTime("2020-".rand(1,12)."-".rand(1,31)));
-                $client->setDateFin(new \DateTime("2021-".rand(1,12)."-".rand(1,31)));
+                $client->setDateDebut(new \DateTime("2020-".rand(1,12)."-".rand(1,29)));
+                // dateFin
+                // calcul de la date 
+                $dd = $client->getDateDebut();
+                // consvertissena hon string lo zany
+                $dd_s = $dd->format('Y-m-d');
+                // $dd = date($dd);
+                // nombre de versement
+                $nbr = $client->getNbrVersement();
+                $nbr--;
+                // date de fin en string
+
+                $df = date("Y-m-d", strtotime("$dd_s + $nbr month"));
+
+                $df_dt = new \DateTime($df);
+                $client->setDateFin($df_dt);
                 $client->setUser($user);
                 $manager->persist($client);
 

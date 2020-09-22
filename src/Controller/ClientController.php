@@ -25,17 +25,20 @@ class ClientController extends AbstractController
      */
     public function register_client(Client $client = null, Request $request, ClientRepository $repoClient, UserRepository $repos, EntityManagerInterface $manager,SessionInterface $session)
     {   
+        $misy = "oui";
         if(!$client){
             $client = new Client();
+            $misy = "non";
         }
-       
+        $date_du_jour = new \Datetime();
         $user = new User();
         $session  = $request->getSession();
         $session_user = $session->get('session_user', []);
         $user = $repos->find($session_user['id']);        
         $form_register = $this->createForm(ClientType::class, $client);
         $form_register->handleRequest($request);
-        
+       
+       // dd($clients_du_jour);
         if($form_register->isSubmitted() && $form_register->isValid()){
             $client = $form_register->getData();
             $image_cin_1 = $form_register->get('image_1')->getData();
@@ -69,28 +72,52 @@ class ClientController extends AbstractController
 
                 // updates the 'image_cin_1name' property to store the PDF file name
                 // instead of its contents
-                $client->setImage1($newFilename1);
-                $client->setImage2($newFilename2);
+               
                 if (!$client->getId()) {
                     $client->setUser($user);
-                    $client->setSuspendu("présent");
-                    $manager->persist($client);
+                    $client->setVerifier("non");
+                    $client->setCreatedAt(new \DateTime());
+                    $client->setImage1($newFilename1);
+                    $client->setImage2($newFilename2);
+                    $client->setEtatClient("présent");
                 }
-                else{
-                    $etat = $client->getSuspendu();
-                    $client->setSuspendu($etat);
-                }
-                //dd($client);
+                // calcul de la date 
+                $dd = $form_register->get('date_debut')->getData();
+                // consvertissena hon string lo zany
+                $dd_s = $dd->format('Y-m-d');
+                // $dd = date($dd);
+                // nombre de versement
+                $nbr = $form_register->get('nbr_versement')->getData();
+                $nbr--;
+                // date de fin en string
+
+                $df = date("Y-m-d", strtotime("$dd_s + $nbr month"));
+
+                $df_dt = new \DateTime($df);
+                //dd($df_dt);
+                $client->setDateFin($df_dt);
+                $etat = $client->getEtatClient();
+                $client->setEtatClient($etat);
+              
             }
-              //  dd($client);
-           
+            //  dd($client);
+            $manager->persist($client);
             $manager->flush();
             return $this->redirectToRoute("register_client");
 
         }
-       
+        $clients_du_jour = $repoClient->clientDuJour($user);
         $items = $repoClient->chercherTous($user);
-        //dd($items);
+        
+        // calcul des montant journalier
+
+        $mj = 0 ;
+        $mmj = 0;
+        foreach($clients_du_jour as $item){
+            $mj += $item['montant'];
+            $mmj += $item['montant_mensuel'];
+        }
+       
 
         return $this->render('client/register.html.twig', [
             "form" => $form_register->createView(),
@@ -99,6 +126,12 @@ class ClientController extends AbstractController
             'suspendu' => $this->count_suspendu($repoClient),
             'impaye' => $this->count_impaye($repoClient),
             'paye' => $this->count_impaye($repoClient),
+            "date_du_jour" => $date_du_jour,
+            "misy" => $misy,
+            "clients_du_jour" => $clients_du_jour,
+            "mmj" => $mmj,
+            "mj" => $mj,
+            "nbr_client_jour" => count($clients_du_jour),
         ]);
     }
     
@@ -113,7 +146,22 @@ class ClientController extends AbstractController
 
         $user = $repos->find($user_id);
         $nom = $user->getNom();
+        $clients_du_jour = $repoClient->clientDuJour($user);
         $items = $repoClient->findByUser($user);
+        $mj = 0;
+        $mmj = 0;
+        foreach ($clients_du_jour as $item) {
+            $mj += $item['montant'];
+            $mmj += $item['montant_mensuel'];
+        }
+        //Total be 
+        $m = 0;
+        $mm = 0;
+        foreach ($items as $item) {
+            $m += $item->getMontant();
+            $mm += $item->getMontantMensuel();
+        }
+       
         //dd($items);
         return $this->render("client/listeClientUser.html.twig",[
             "items" => $items,
@@ -122,6 +170,13 @@ class ClientController extends AbstractController
             'suspendu' => $this->count_suspendu($repoClient),
             'impaye' => $this->count_impaye($repoClient),
             'paye' => $this->count_impaye($repoClient),
+            "clients_du_jour" => $clients_du_jour,
+            "mmj" => $mmj,
+            "mj" => $mj,
+            "nbr_client_jour" => count($clients_du_jour),
+            "date_du_jour" => new \DateTime(),
+            "m" =>$m,
+            "mm" =>$mm,
         ]);
     }
     /**
@@ -205,13 +260,6 @@ class ClientController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/admin/modification_client/{client_id}/{user_id}", name = "modify_client")
-     */
-    public function modify_client($client_id, $user_id, ClientRepository $repoClient, UserRepository $repoUser, EntityManagerInterface $manager, Request $request)
-    {
-        
-    }
 
     public function count_present(ClientRepository $repoClient)
     {
@@ -244,6 +292,28 @@ class ClientController extends AbstractController
         return $n;
     }
 
+    /**
+     * @Route("/admin/verifier/{id}", name ="verifier_client")
+     */
+    public function verifier_client($id, Request $request, ClientRepository $repoClient, EntityManagerInterface $manager)
+    {
+        $response = new Response();
+        $client = new Client();
+        if($request->isXmlHttpRequest()){
+            
+            $client = $repoClient->find($id);
+            $client->setVerifier("oui");
+            $manager->persist($client);
+            $manager->flush();
+
+            $data = json_encode("ok"); // formater le résultat de la requête en json
+
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent($data);
+            return $response;
+        }
+    }
+    
     
     
 }

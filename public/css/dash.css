@@ -7194,6 +7194,10 @@ button.close {
     }
 }
 
+.unite {
+    margin-left: 5px;
+}
+
 @media (max-width: 767px) {
     .visible-xs-block {
         display: block !important;
@@ -13949,44 +13953,50 @@ fieldset[disabled] .btn-gplus.active {
 #btn_menu {
     display: none !important;
 }
-.my_liste_legend  {
-  margin-top: 20px;
+
+.my_liste_legend {
+    margin-top: 20px;
 }
-.my_liste_legend li{
-  display: inline-block ;
+
+.my_liste_legend li {
+    display: inline-block;
 }
+
 .my_liste_legend li:first-child {
-  margin-left: 78px;
+    margin-left: 78px;
 }
+
 .my_liste_legend li:not(:first-child) {
-  margin-left: 40px;
+    margin-left: 40px;
 }
+
 .my_liste_legend li span {
-  position: relative ;
-  width: 30px;
-  height: 15px;
-  display: inline-block;
-  border-radius: 20px;
-  color: transparent ;
+    position: relative;
+    width: 30px;
+    height: 15px;
+    display: inline-block;
+    border-radius: 20px;
+    color: transparent;
 }
+
 .my_liste_legend li b {
-  font-weight: 500;
-  position: relative;
-  bottom: 2px;
-  font-size: 12px;
-  left : 5px;
-  
+    font-weight: 500;
+    position: relative;
+    bottom: 2px;
+    font-size: 12px;
+    left: 5px;
 }
+
 .my_liste_legend li span {
-  cursor : pointer ;
+    cursor: pointer;
 }
+
 .legende_click {
-  background: transparent !important;
-  border : 1px solid red ;
+    background: transparent !important;
+    border: 1px solid red;
 }
 
-
-@media all and (max-width: 767px){
+@media all and (max-width: 767px) {
     #btn_menu {
         display: none !important;
     }
@@ -14247,14 +14257,17 @@ span.fa-check {
     color: #fff;
     font-weight: bold;
 }
-#form_tri_annee{
+
+#form_tri_annee {
     text-align: end;
 }
-#form_tri_annee select{
+
+#form_tri_annee select {
     width: 200px;
     float: right;
-    margin-right:25px;
+    margin-right: 25px;
 }
+
 #info {
     display: flex;
     justify-content: center;
@@ -14360,13 +14373,14 @@ span.fa-check {
 div.action {
     display: flex;
     flex-wrap: wrap;
+    flex-direction: column;
 }
 
-tr td b.check{
+tr td b.check {
     float: right;
 }
 
-div.action >div{
+div.action>div {
     display: flex;
     margin-top: 5px;
 }
@@ -14376,20 +14390,22 @@ div.action a {
     justify-content: center;
     align-items: center;
     margin-left: 5px;
+    width: 30px;
+    height: 25px;
+    padding: 2px;
 }
 
 .scrollable.padder .container {
     width: 90%;
 }
 
-body tfoot{
-   text-align: end !important; 
-    
-}
-body tfoot tr td:last-child{
-    text-align: start;
+body tfoot {
+    text-align: end !important;
 }
 
+body tfoot tr td:last-child {
+    text-align: start;
+}
 
 #cover_form_user {
     background: rgba(65, 88, 110, 0.9);
@@ -14450,33 +14466,35 @@ body tfoot tr td:last-child{
 .titre_page.footer {
     text-align: end;
 }
-.div__form{
+
+.div__form {
     margin-top: 15px;
     text-align: center;
     margin-bottom: 15px;
 }
 
-
-.div__form form{
+.div__form form {
     display: flex;
     flex-wrap: nowrap;
     justify-content: center;
 }
-.div__form form input{
-    background: rgba(255,255,255,0.8);
+
+.div__form form input {
+    background: rgba(255, 255, 255, 0.8);
     color: black;
-    border:1px solid rgba(255,255,255,0.8);
+    border: 1px solid rgba(255, 255, 255, 0.8);
     border-top-left-radius: 2px;
     border-bottom-left-radius: 2px;
     padding-left: 5px;
 }
-.div__form form a.btn{
-     border-top-left-radius: 0px;
+
+.div__form form a.btn {
+    border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
     background: #4cc0c1;
 }
 
-.compteur .compteur_content .details{
+.compteur .compteur_content .details {
     background: #41586e;
     margin-top: 15px;
     margin-bottom: 15px;
@@ -14485,17 +14503,20 @@ body tfoot tr td:last-child{
     border-radius: 5px;
     padding: 15px;
 }
-.details p span{
+
+.details p span {
     margin-left: 5px;
 }
-.div_footer_tab{
+
+.div_footer_tab {
     margin-bottom: 25px;
     margin-top: 25px;
-   display: flex;
+    display: flex;
     justify-content: end;
 }
-.div_footer_tab >div{
-     display: flex;
+
+.div_footer_tab>div {
+    display: flex;
     justify-content: end;
     flex-direction: column;
     width: 320px;
@@ -14503,25 +14524,27 @@ body tfoot tr td:last-child{
     padding: 15px;
     border-radius: 5px;
 }
-.div_footer_tab >div>div:last-child{
+
+.div_footer_tab>div>div:last-child {
     margin-top: 25px;
 }
-.div_footer_tab >div span{
+
+.div_footer_tab>div span {
     color: #ffff;
 }
-.div_footer_tab span:not(:first-child){
+
+.div_footer_tab span:not(:first-child) {
     margin-left: 5px;
 }
+
 @media all and (max-width: 768px) {
     .tableau_etat {
         flex-direction: column;
     }
-    #deconnexion_resp{
-    position: static;
+    #deconnexion_resp {
+        position: static;
         float: right;
     }
-   
-   
 }
 
 
