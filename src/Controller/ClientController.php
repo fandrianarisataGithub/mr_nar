@@ -124,8 +124,8 @@ class ClientController extends AbstractController
             "items" => $items,
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
-            'impaye' => $this->count_impaye($repoClient),
-            'paye' => $this->count_impaye($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
             "date_du_jour" => $date_du_jour,
             "misy" => $misy,
             "clients_du_jour" => $clients_du_jour,
@@ -168,8 +168,8 @@ class ClientController extends AbstractController
             "nom_user" => $nom,
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
-            'impaye' => $this->count_impaye($repoClient),
-            'paye' => $this->count_impaye($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
             "clients_du_jour" => $clients_du_jour,
             "mmj" => $mmj,
             "mj" => $mj,
@@ -239,8 +239,8 @@ class ClientController extends AbstractController
         return $this->redirectToRoute('client_suspendu', [
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
-            'impaye' => $this->count_impaye($repoClient),
-            'paye' => $this->count_impaye($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
         ]);
 
     }
@@ -255,8 +255,8 @@ class ClientController extends AbstractController
         return $this->redirectToRoute('client_impaye', [
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
-            'impaye' => $this->count_impaye($repoClient),
-            'paye' => $this->count_impaye($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
         ]);
     }
 
@@ -267,7 +267,13 @@ class ClientController extends AbstractController
         $n = count($tabPresent);
         //dd($n);
         return $n;
-        
+    }
+    public function count_pointed(ClientRepository $repoClient)
+    {
+        $tabPaye = $repoClient->countPresent('pointé');
+        $n = count($tabPaye);
+        //dd($n);
+        return $n;
     }
     public function count_suspendu(ClientRepository $repoClient)
     {
@@ -276,18 +282,10 @@ class ClientController extends AbstractController
         //dd($n);
         return $n;
     }
-    public function count_impaye(ClientRepository $repoClient)
+    public function count_archived(ClientRepository $repoClient)
     {
-        $tabPresent = $repoClient->countPresent('impayé');
+        $tabPresent = $repoClient->countPresent('archivé');
         $n = count($tabPresent);
-        //dd($n);
-        return $n;
-    }
-
-    public function count_paye(ClientRepository $repoClient)
-    {
-        $tabPaye = $repoClient->countPresent('payé');
-        $n = count($tabPaye);
         //dd($n);
         return $n;
     }

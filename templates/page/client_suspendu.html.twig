@@ -20,27 +20,13 @@
 						<span>NOM ET PRENOM</span>
 					</td>
 					<td>
-						<span>CLIENT DE </span>
+						<span>CLIENT DE</span>
 					</td>
 					<td>
-						<span>NUMERO BL</span>
+						<span>DETAIL DU PAIEMENT</span>
 					</td>
 					<td>
-						<span>MONTANT</span>
-					</td>
-					<td>
-						<span>MONTANT
-							<br>
-							MENSUEL</span>
-					</td>
-					<td>
-						<span>NBR VERSEMENT</span>
-					</td>
-					<td>
-						<span>DATE DE DEBUT</span>
-					</td>
-					<td>
-						<span>DATE DE FIN</span>
+						<span>DATES</span>
 					</td>
 					<td>
 						<span>ACTIONS</span>
@@ -50,7 +36,7 @@
 			<tbody>
 				{% for item in items %}
 					<tr>
-						<td>
+						<td class="td-check">
 							<span>{{ item.matricule }}</span>
 						</td>
 						<td>
@@ -62,24 +48,21 @@
 							(<span>{{ item.getUser().username }}</span>)
 						</td>
 						<td>
-							<span>{{ item.getNumeroBl() }}</span>
+							<span>N° BL:</span>
+							<span class="unite">{{ item.getNumeroBl() }}</span>
+							<br>
+							<span>MONTANT:</span><b class="unite">{{ item.montant }}</b><b class="unite">Ar</b>
+							<br>
+							<span>MONTANT MENS:</span><b class="unite">{{ item.getMontantMensuel() }}</b><b class="unite">Ar</b>
+							<br>
+							<span>MONTANT MENS:</span><b class="unite">{{ item.getMontantMensuel() }}</b><b class="unite">Ar</b>
+							<br>
+							<span>NBR VERSEMENT:</span><b class="unite">{{ item.getNbrVersement() }}</b>
 						</td>
 						<td>
-							<span>{{ item.montant }}</span>
-							<span>Ar</span>
-						</td>
-						<td>
-							<span>{{ item.getMontantMensuel() }}</span>
-							<span>Ar</span>
-						</td>
-						<td>
-							<span>{{ item.getNbrVersement() }}</span>
-						</td>
-						<td>
-							<span>{{ item.getDateDebut() | date('Y-m-d') }}</span>
-						</td>
-						<td>
-							<span>{{ item.getDatefin() | date('Y-m-d') }}</span>
+							<span>DATE DE DEBUT:</span><span class="unite">{{ item.getDateDebut() | date('Y-m-d') }}</span>
+							<br>
+							<span>DATE DE DEBUT:</span><span class="unite">{{  item.getDatefin() | date('Y-m-d') }}</span>
 						</td>
 						<td>
 							<div class="action">
@@ -95,6 +78,10 @@
 									<a href="{{ path('single_page', {'id_client': item.id }) }}" class="voir btn btn-primary btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
 										<span>Voir</span>
 									</a>
+									<a href="#" data-id-client="{{ item.id }}" class="pointer btn btn-primary btn-xs">
+										<span>Pointer</span>
+										<span class="fa fa-check"></span>
+									</a>
 								</div>
 							</div>
 						</td>
@@ -105,6 +92,81 @@
 
 			</tbody>
 		</table>
+		<div id="modal_pointage">
+			<section class="inner_modal">
+				<div class="modal_head">
+					<button class="btn btn-danger">
+						<span class="fa fa-times"></span>
+					</button>
+					<h3>
+						<span>Matricule:</span>
+						<span class="son_matricule">123</span>
+					</h3>
+					<div class="last_etat">
+						<span>Dernier mois pointé:
+						</span>
+						<span class="last_mois">Fevrier
+						</span>/<span>
+							2020</span>
+					</div>
+				</div>
+				<form action="">
+					<div class="form-group row">
+						<div class="col-sm-6">
+							<label for="annee">Année:</label>
+							<select name="annee_pointage" id="annee_pointage" class="form-control"></select>
+						</div>
+						<div class="col-sm-6">
+							<label for="annee">Mois:</label>
+							<select name="mois_pointage" id="mois_pointage" class="form-control">
+								<option value="1">Janvier</option>
+								<option value="2">Février</option>
+								<option value="3">Mars</option>
+								<option value="4">Avril</option>
+								<option value="5">Mai</option>
+								<option value="6">Juin</option>
+								<option value="7">Juillet</option>
+								<option value="8">Août</option>
+								<option value="9">Septembre</option>
+								<option value="10">Octobre</option>
+								<option value="11">Novembre</option>
+								<option value="12">décembre</option>
+							</select>
+						</div>
+						<div class="form-group btn_action">
+							<div class="form-group">
+								<label>Montant (ariary):</label>
+								<input type="number" class="form-control montant" name="montant" id="montant">
+							</div>
+							<div id="info">
+								<p>Lorem ipsum dolor sit amet consectetur adipis</p>
+							</div>
+							<div class="form-group">
+								<button type="sumbit" data-id-client="0" id="add_pointage" class="btn btn-primary btn-sm">Enregistrer</button>
+							</div>
+						</div>
+					</div>
+				</form>
+				<div class="block_details">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label for="">Nombre de mois restant:</label>
+							<p class="details_client">12
+								<span>mois</span>
+							</p>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label for="">Montant total restant:</label>
+							<p class="details_clientl">12 000<span>Ariary</span>
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+
 		<div class="titre_page footer">
 			<h2>
 				<a href="{{ path('imprimer_client_suspendu') }}" class="btn btn-primary">Imprimer la liste</a>
@@ -158,6 +220,93 @@
             });
 
             new $.fn.dataTable.FixedHeader(table);
+			// function generate year
+
+            function generateYear() {
+                var today = new Date();
+                //alert(today);
+                var y = today.getFullYear();
+                //alert(y);
+                var html = "";
+                for (var index = 2009; index < y + 3; index++) {
+                    html += "<option value = '" + index + "'>" + index + "</option>";
+                }
+                $('#annee_pointage').append(html);
+            }
+            generateYear();
+
+            // animation modal 
+
+            function show_modal(){
+                $('#modal_pointage').css('display', 'flex');
+                $('.inner_modal').css('transform' , 'scale(1)');
+            }
+             function hide_modal(){
+				 $(".clicked").removeClass('clicked');
+                $('#modal_pointage').css('display', 'none');
+                $('.inner_modal').css('transform' , 'scale(0)');
+				$('#info p').slideUp();
+            }
+
+            // activation du modal 
+           $('tbody').on('click', '.pointer', function(e){
+			   	e.preventDefault();
+				$(this).addClass('clicked');
+				$('#add_pointage').attr('data-id-client',$(this).attr('data-id-client'));
+				show_modal();
+		   })
+			$('#add_pointage').click(function(e){
+				e.preventDefault();
+				var id_client = $(this).attr('data-id-client');
+				var annee = $('#annee_pointage').val();
+				var mois = $('#mois_pointage').val();
+				var montant = $('#montant').val();
+
+				//alert('id:'+id_client+'a:'+annee+'m:'+mois+'montant:'+montant)
+				var data = {
+					'client_id' : id_client,
+					'p_mois' : mois,
+					'p_annee' : annee,
+					'montant_mensuel' : montant
+				}
+				// ajax
+				$.ajax({
+					url : "/admin/pointer",
+					type : "POST",
+					data : data,
+					beforeSend: function(){
+						$('#info p').text("patienter...");
+					},
+					success : function(response){
+						if(response != "0"){
+							$('#info p').slideDown();
+							$('#info p').text(response);
+						}
+						else{
+
+							$('#info p').slideDown();
+							$('#info p').css('background', "#65bd77");
+							$('#info p').text("pointage réussi");
+							setTimeout(() => {
+								hide_modal();
+								window.location.href = "/profile/single_page/"+id_client;
+							}, 2000);
+							
+						}
+					},
+					error : function(){
+						alert('erreur ajax');
+					}
+				})
+
+			})
+
+            // hide modal 
+
+            $('.modal_head button').click(function(e){
+                e.preventDefault();
+                hide_modal();
+            })
         });
 	
 	</script>

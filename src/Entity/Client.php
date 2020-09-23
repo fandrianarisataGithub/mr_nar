@@ -97,10 +97,6 @@ class Client
      */
     private $user;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Pointage::class, mappedBy="client")
-     */
-    private $pointages;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -133,10 +129,16 @@ class Client
      */
     private $etat_client;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Pointage::class, mappedBy="clients")
+     */
+    private $pointages;
+
     public function __construct()
     {
         $this->pointages = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -287,36 +289,7 @@ class Client
         return $this;
     }
 
-    /**
-     * @return Collection|Pointage[]
-     */
-    public function getPointages(): Collection
-    {
-        return $this->pointages;
-    }
-
-    public function addPointage(Pointage $pointage): self
-    {
-        if (!$this->pointages->contains($pointage)) {
-            $this->pointages[] = $pointage;
-            $pointage->setClient($this);
-        }
-
-        return $this;
-    }
-
-    public function removePointage(Pointage $pointage): self
-    {
-        if ($this->pointages->contains($pointage)) {
-            $this->pointages->removeElement($pointage);
-            // set the owning side to null (unless already changed)
-            if ($pointage->getClient() === $this) {
-                $pointage->setClient(null);
-            }
-        }
-
-        return $this;
-    }
+    
 
     public function getMatricule(): ?string
     {
@@ -375,6 +348,34 @@ class Client
     public function setEtatClient(string $etat_client): self
     {
         $this->etat_client = $etat_client;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Pointage[]
+     */
+    public function getPointages(): Collection
+    {
+        return $this->pointages;
+    }
+
+    public function addPointage(Pointage $pointage): self
+    {
+        if (!$this->pointages->contains($pointage)) {
+            $this->pointages[] = $pointage;
+            $pointage->addClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removePointage(Pointage $pointage): self
+    {
+        if ($this->pointages->contains($pointage)) {
+            $this->pointages->removeElement($pointage);
+            $pointage->removeClient($this);
+        }
 
         return $this;
     }

@@ -27,7 +27,7 @@ class PointageController extends AbstractController
             $p_annee = $request->get('p_annee');
             $p_mois = $request->get('p_mois');
             $montant_mensuel = $request->get('montant_mensuel');
-
+            
             // testons si le client ment :D 
 
             $client = $repoClient->find($client_id);
@@ -40,7 +40,7 @@ class PointageController extends AbstractController
                 $pointage = new Pointage();
                 $pointage->setPMois($p_mois);
                 $pointage->setPAnnee($p_annee);
-                $pointage->setClient($client);
+                $pointage->addClient($client);
                 $pointage->setCreatedAt(new \DateTime());
                 $manager->persist($pointage);
                 $manager->flush();

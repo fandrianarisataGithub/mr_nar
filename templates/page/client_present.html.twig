@@ -57,24 +57,10 @@
 						<span>CLIENT DE</span>
 					</td>
 					<td>
-						<span>NUMERO BL</span>
+						<span>DETAIL DU PAIEMENT</span>
 					</td>
 					<td>
-						<span>MONTANT</span>
-					</td>
-					<td>
-						<span>MONTANT
-							<br>
-							MENSUEL</span>
-					</td>
-					<td>
-						<span>NBR VERSEMENT</span>
-					</td>
-					<td>
-						<span>DATE DE DEBUT</span>
-					</td>
-					<td>
-						<span>DATE DE FIN</span>
+						<span>DATES</span>
 					</td>
 					<td>
 						<span>ACTIONS</span>
@@ -102,24 +88,21 @@
 							(<span>{{ item.getUser().username }}</span>)
 						</td>
 						<td>
-							<span>{{ item.getNumeroBl() }}</span>
+							<span>N° BL:</span>
+							<span class="unite">{{ item.getNumeroBl() }}</span>
+							<br>
+							<span>MONTANT:</span><b class="unite">{{ item.montant }}</b><b class="unite">Ar</b>
+							<br>
+							<span>MONTANT MENS:</span><b class="unite">{{ item.getMontantMensuel() }}</b><b class="unite">Ar</b>
+							<br>
+							<span>MONTANT MENS:</span><b class="unite">{{ item.getMontantMensuel() }}</b><b class="unite">Ar</b>
+							<br>
+							<span>NBR VERSEMENT:</span><b class="unite">{{ item.getNbrVersement() }}</b>
 						</td>
 						<td>
-							<span>{{ item.montant }}</span>
-							<span>Ar</span>
-						</td>
-						<td>
-							<span>{{ item.getMontantMensuel() }}</span>
-							<span>Ar</span>
-						</td>
-						<td>
-							<span>{{ item.getNbrVersement() }}</span>
-						</td>
-						<td>
-							<span>{{ item.getDateDebut() | date('Y-m-d') }}</span>
-						</td>
-						<td>
-							<span>{{ item.getDatefin() | date('Y-m-d') }}</span>
+							<span>DATE DE DEBUT:</span><span class="unite">{{ item.getDateDebut() | date('Y-m-d') }}</span>
+							<br>
+							<span>DATE DE DEBUT:</span><span class="unite">{{  item.getDatefin() | date('Y-m-d') }}</span>
 						</td>
 						<td>
 							<div class="action">
