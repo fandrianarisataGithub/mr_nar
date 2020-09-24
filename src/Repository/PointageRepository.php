@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+
 use App\Entity\Client;
 use App\Entity\Pointage;
 use Doctrine\Persistence\ManagerRegistry;
@@ -69,6 +70,22 @@ class PointageRepository extends ServiceEntityRepository
         return $stmt->fetch();
     }
     
+     /**
+     * @return Pointage[] Returns an array of Pointage objects
+     */
+    public function findByAnneeActuelle($value)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.annee_actuelle = :val')
+            ->setParameter('val', $value)
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    
+
+
 
     // /**
     //  * @return Pointage[] Returns an array of Pointage objects

@@ -2,13 +2,18 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PointageRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=PointageRepository::class)
+ * @UniqueEntity("nom", message = "Le mois de pointage est déjà utiliser")
+ * 
  */
 class Pointage
 {
@@ -20,59 +25,41 @@ class Pointage
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $p_mois;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $p_annee;
-
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $nom;
+
+    /**
      * @ORM\ManyToMany(targetEntity=Client::class, inversedBy="pointages")
      */
-    private $clients;
+    private $client;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $nom_lit;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $annee_actuelle;
 
     public function __construct()
     {
-        $this->clients = new ArrayCollection();
+        $this->client = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getPMois(): ?string
-    {
-        return $this->p_mois;
-    }
-
-    public function setPMois(string $p_mois): self
-    {
-        $this->p_mois = $p_mois;
-
-        return $this;
-    }
-
-    public function getPAnnee(): ?int
-    {
-        return $this->p_annee;
-    }
-
-    public function setPAnnee(int $p_annee): self
-    {
-        $this->p_annee = $p_annee;
-
-        return $this;
-    }
 
 
     public function getCreatedAt(): ?\DateTimeInterface
@@ -87,18 +74,30 @@ class Pointage
         return $this;
     }
 
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): self
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
     /**
      * @return Collection|Client[]
      */
-    public function getClients(): Collection
+    public function getClient(): Collection
     {
-        return $this->clients;
+        return $this->client;
     }
 
     public function addClient(Client $client): self
     {
-        if (!$this->clients->contains($client)) {
-            $this->clients[] = $client;
+        if (!$this->client->contains($client)) {
+            $this->client[] = $client;
         }
 
         return $this;
@@ -106,10 +105,37 @@ class Pointage
 
     public function removeClient(Client $client): self
     {
-        if ($this->clients->contains($client)) {
-            $this->clients->removeElement($client);
+        if ($this->client->contains($client)) {
+            $this->client->removeElement($client);
         }
 
         return $this;
     }
+
+    public function getNomLit(): ?string
+    {
+        return $this->nom_lit;
+    }
+
+    public function setNomLit(string $nom_lit): self
+    {
+        $this->nom_lit = $nom_lit;
+
+        return $this;
+    }
+
+    public function getAnneeActuelle(): ?int
+    {
+        return $this->annee_actuelle;
+    }
+
+    public function setAnneeActuelle(int $annee_actuelle): self
+    {
+        $this->annee_actuelle = $annee_actuelle;
+
+        return $this;
+    }
+
+
+
 }

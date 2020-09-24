@@ -109,7 +109,7 @@ class AppUserAuthenticator extends AbstractFormLoginAuthenticator implements Pas
         $session  = $request->getSession();
 
         $session_user = $session->get('session_user', []);
-
+        
 
         $session_user['id'] = $this->getIdUser($this->getCredentials($request));
 

@@ -130,7 +130,7 @@ class Client
     private $etat_client;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Pointage::class, mappedBy="clients")
+     * @ORM\ManyToMany(targetEntity=Pointage::class, mappedBy="client")
      */
     private $pointages;
 
@@ -138,6 +138,7 @@ class Client
     {
         $this->pointages = new ArrayCollection();
     }
+
 
 
     public function getId(): ?int
@@ -379,4 +380,10 @@ class Client
 
         return $this;
     }
+
+   
+
+   
+
+   
 }

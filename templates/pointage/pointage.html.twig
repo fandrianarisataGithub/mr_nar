@@ -4,6 +4,50 @@
 {% endblock %}
 {% block body %}
 <div class="titre_page">
+	<h2>Ajouter un mois de pointage</h2>
+</div>
+<section class="mois_pointage container">
+<form action="/admin/pointage" class="row" method = "POST">
+		<div class="error_pointage" 
+			{% if error == 1 %}
+				style="display:block;"
+			{% else %}
+				style = "display:none;"
+			{% endif %}
+		
+		>
+			<p style="color:red;">
+				Ce mois de pointage existe déjà
+			</p>
+		</div>
+		<div class="col-sm-2">
+			<label for="annee">Mois:</label>
+			<select name="mois_pointage" id="mois_pointage" class="form-control">
+				<option value="1">Janvier</option>
+				<option value="2">Février</option>
+				<option value="3">Mars</option>
+				<option value="4">Avril</option>
+				<option value="5">Mai</option>
+				<option value="6">Juin</option>
+				<option value="7">Juillet</option>
+				<option value="8">Août</option>
+				<option value="9">Septembre</option>
+				<option value="10">Octobre</option>
+				<option value="11">Novembre</option>
+				<option value="12">décembre</option>
+			</select>
+		</div>
+		<div class="col-sm-2">
+			<label for="annee">Année:</label>
+			<select name="annee_pointage" id="annee_pointage" class="form-control"></select>
+		</div>
+		<div class="col-sm-12" style="margin-top:15px;">
+			<button type="submit" class="btn btn-primary btn-md">Executer</button>
+		</div>
+	</form>
+</section>
+
+<div class="titre_page">
 	<h2>Espace pointage</h2>
 </div>
 
@@ -85,7 +129,7 @@
 				<span class="son_matricule">123</span>
 			</h3>
 			<div class="last_etat">
-				<span>Dernier mois pointé:
+				<span>Dernier mois de pointage:
 				</span>
 				<span class="last_mois">Fevrier
 				</span>/<span>
@@ -93,29 +137,15 @@
 			</div>
 		</div>
 		<form action="">
-			<div class="form-group row">
-				<div class="col-sm-6">
-					<label for="annee">Année:</label>
-					<select name="annee_pointage" id="annee_pointage" class="form-control"></select>
-				</div>
-				<div class="col-sm-6">
-					<label for="annee">Mois:</label>
-					<select name="mois_pointage" id="mois_pointage" class="form-control">
-						<option value="1">Janvier</option>
-						<option value="2">Février</option>
-						<option value="3">Mars</option>
-						<option value="4">Avril</option>
-						<option value="5">Mai</option>
-						<option value="6">Juin</option>
-						<option value="7">Juillet</option>
-						<option value="8">Août</option>
-						<option value="9">Septembre</option>
-						<option value="10">Octobre</option>
-						<option value="11">Novembre</option>
-						<option value="12">décembre</option>
-					</select>
-				</div>
-				<div class="form-group btn_action">
+			<div class="form-group" style="width:50%; margin-left:auto;margin-right:auto;margin-top:10px;">
+			<label for="">Mois de pointage : </label>
+				<select class="form-control" name="" id="id_pointage" >
+					{% for p in pointages %}
+						<option value="{{ p.id }}">{{ p.getNomLit() }}</option>
+					{% endfor %}
+				</select>
+			</div>
+			<div class="form-group btn_action">
 					<div class="form-group">
 						<label>Montant (ariary):</label>
 						<input type="number" class="form-control montant" name="montant" id="montant">
@@ -127,7 +157,6 @@
 						<button type="sumbit" data-id-client = "0" id="add_pointage" class="btn btn-primary btn-sm">Enregistrer</button>
 					</div>
 				</div>
-			</div>
 		</form>
 		<div class="block_details">
 			<div class="col-sm-6">
@@ -237,40 +266,26 @@
 			$('#add_pointage').click(function(e){
 				e.preventDefault();
 				var id_client = $(this).attr('data-id-client');
-				var annee = $('#annee_pointage').val();
-				var mois = $('#mois_pointage').val();
+				var id_pointage = $('#id_pointage').val();
 				var montant = $('#montant').val();
 
-				//alert('id:'+id_client+'a:'+annee+'m:'+mois+'montant:'+montant)
+				//alert('id_client:'+id_client+' id_pointage:'+id_pointage+'montant:'+montant);
 				var data = {
-					'client_id' : id_client,
-					'p_mois' : mois,
-					'p_annee' : annee,
-					'montant_mensuel' : montant
+					'pointage_id' : id_pointage,
+					'montant_mensuel' : montant,
+					'client_id' : id_client
 				}
 				// ajax
 				$.ajax({
-					url : "/admin/pointer",
+					url : "/admin/pointer_client",
 					type : "POST",
 					data : data,
-					beforeSend: function(){
-						$('#info p').text("patienter...");
-					},
 					success : function(response){
-						if(response != "0"){
-							$('#info p').slideDown();
-							$('#info p').text(response);
+						if(response=="0"){
+							window.location.href = "{{ path('pointage') }}";
 						}
 						else{
-
-							$('#info p').slideDown();
-							$('#info p').css('background', "#65bd77");
-							$('#info p').text("pointage réussi");
-							setTimeout(() => {
-								hide_modal();
-								window.location.href = "/profile/single_page/"+id_client;
-							}, 2000);
-							
+							alert('Le montant entré n\'est incorrect ')
 						}
 					},
 					error : function(){
