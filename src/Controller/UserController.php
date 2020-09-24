@@ -51,8 +51,8 @@ class UserController extends AbstractController
             'form' => $form->createView(),
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
-            'impaye' => $this->count_impaye($repoClient),
-            'paye' => $this->count_paye($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
         ]);
     }
 
@@ -64,7 +64,13 @@ class UserController extends AbstractController
         $n = count($tabPresent);
         //dd($n);
         return $n;
-        
+    }
+    public function count_pointed(ClientRepository $repoClient)
+    {
+        $tabPaye = $repoClient->countPresent('pointé');
+        $n = count($tabPaye);
+        //dd($n);
+        return $n;
     }
     public function count_suspendu(ClientRepository $repoClient)
     {
@@ -73,16 +79,9 @@ class UserController extends AbstractController
         //dd($n);
         return $n;
     }
-    public function count_impaye(ClientRepository $repoClient)
+    public function count_archived(ClientRepository $repoClient)
     {
-        $tabPresent = $repoClient->countPresent('impayé');
-        $n = count($tabPresent);
-        //dd($n);
-        return $n;
-    }
-    public function count_paye(ClientRepository $repoClient)
-    {
-        $tabPresent = $repoClient->countPresent('payé');
+        $tabPresent = $repoClient->countPresent('archivé');
         $n = count($tabPresent);
         //dd($n);
         return $n;

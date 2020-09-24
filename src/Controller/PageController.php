@@ -50,8 +50,8 @@ class PageController extends AbstractController
             'items' => $items,
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
-            'impaye' => $this->count_impaye($repoClient),
-             'paye' => $this->count_paye($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
              "total_mj" => $total_mj,
              "total_mmj" => $total_mmj,
             "nbr_client_du_jour" => $nbr_client_du_jour,
@@ -79,8 +79,8 @@ class PageController extends AbstractController
             'items' => $items,
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
-            'impaye' => $this->count_impaye($repoClient),
-             'paye' => $this->count_paye($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
         ]);
         
         // Load HTML to Dompdf
@@ -104,7 +104,7 @@ class PageController extends AbstractController
     public function imprimer_client_impaye(ClientRepository $repoClient)
     {
         $user = new User();
-        $items = $repoClient->countPresent('impaye');
+        $items = $repoClient->countPresent('archivé');
         // dompdf
         // Configure Dompdf according to your needs
         $pdfOptions = new Options();
@@ -118,8 +118,8 @@ class PageController extends AbstractController
             'items' => $items,
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
-            'impaye' => $this->count_impaye($repoClient),
-             'paye' => $this->count_paye($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
         ]);
 
         // Load HTML to Dompdf
@@ -157,8 +157,8 @@ class PageController extends AbstractController
             'items' => $items,
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
-            'impaye' => $this->count_impaye($repoClient),
-             'paye' => $this->count_paye($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
         ]);
 
         // Load HTML to Dompdf
@@ -180,16 +180,16 @@ class PageController extends AbstractController
     /**
      * @Route("/admin/client_impaye", name="client_impaye")
      */
-    public function client_impaye(ClientRepository $repoClient)
+    public function client_archived(ClientRepository $repoClient)
     { 
         $user = new User();
-        $items = $repoClient->countPresent('impayé');
-        return $this->render('page/client_impaye.html.twig', [
+        $items = $repoClient->countPresent('archivé');
+        return $this->render('page/client_archived.html.twig', [
             'items' => $items,
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
-            'impaye' => $this->count_impaye($repoClient),
-             'paye' => $this->count_paye($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
         ]);
     }
     /**
@@ -203,24 +203,24 @@ class PageController extends AbstractController
             'items' => $items,
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
-            'impaye' => $this->count_impaye($repoClient),
-             'paye' => $this->count_paye($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
         ]);
     }
 
     /**
      * @Route("/admin/client_paye", name="client_paye")
      */
-    public function client_paye(ClientRepository $repoClient)
+    public function client_pointed(ClientRepository $repoClient)
     {
         $user = new User();
-        $items = $repoClient->countPresent('paye');
-        return $this->render('page/client_paye.html.twig', [
+        $items = $repoClient->countPresent('pointé');
+        return $this->render('page/client_pointed.html.twig', [
             'items' => $items,
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
-            'impaye' => $this->count_impaye($repoClient),
-             'paye' => $this->count_paye($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
         ]);
     }
 
@@ -235,50 +235,94 @@ class PageController extends AbstractController
         $montant = $client->getMontant();
         $nbrMois = $client->getNbrVersement();
         $montant_mensuel = $client->getMontantMensuel();
-        $pointage = $repoPointage->findByClient($client);
-        $nbr_p_effectue = count($pointage);
+        //$pointage = $repoPointage->findByClient($client);
+       // $nbr_p_effectue = count($pointage);
         //dd($nbr_p_effectue);
         // nombre de mois restant
 
-        $nbr_mois_restant = $nbrMois - $nbr_p_effectue;
+        /*$nbr_mois_restant = $nbrMois - $nbr_p_effectue;
         
         // montant payé
         $montant_paye = $montant_mensuel * $nbr_p_effectue;
 
         // montant restant
-        $montant_restant = $montant - $montant_paye;
+        $montant_restant = $montant - $montant_paye;*/
         
         return $this->render('page/single_page.html.twig', [
             'item' => $client,
-            'montant_paye' => $montant_paye,
+           /* 'montant_paye' => $montant_paye,
             'montant_restant' => $montant_restant,
             'nbr_p_effectue' => $nbr_p_effectue,
             'nbr_paiement_total' => $nbrMois,
             'nbr_mois_restant' => $nbr_mois_restant,
-            "nbr_pointage" => $nbr_p_effectue,
+            "nbr_pointage" => $nbr_p_effectue,*/
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
-            'impaye' => $this->count_impaye($repoClient),
-            'paye' => $this->count_paye($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
         ]);
     }
     /**
      * @Route("/admin/pointage", name="pointage")
      */
-    public function pointage(ClientRepository $repoClient, PointageRepository $repoPointage)
+    public function pointage(ClientRepository $repoClient, PointageRepository $repoPointage, EntityManagerInterface $manager)
     {
+        $this->retournAllToPresent();
+        
         $user = new User();
         $client = new Client();
         $pointage = new Pointage();
-        $tabClient = $repoClient->valablePointage();
-        // atao objet
+        $now = new \DateTime();
+        $now_s = $now->format("m-Y");
+        $last_moth = 0;
+        $fifteen_prec1 = date('Y-m-d', strtotime(date('Y-m-15')." -2 month"));
+        //dd($fifteen_prec);
+        $fifteen_prec2 = date_create($fifteen_prec1);
+        // le mois courant
+        $month = date("m", strtotime($now->format("Y-m-d")));
+        //dd($month);
+        $year = date("Y", strtotime($now->format("Y-m-d")));
+       // dd($year);
+        
         $items = [];
-        foreach($tabClient as $key){
-            $client = $repoClient->find($key['id']);
-            array_push($items, $client);
-        }
+        $liste_a_pointer = [];
+        $liste_a_nepas_pointer = [];
+        $clients_have_pointage = [];
+       
+        $clients_present = $repoClient->countPresent('présent'); // objet
+        
+        /*foreach($clients_present as $item){
+            $son_liste_pointage = $this->liste_m_p($item);
+            // si le mois actuel est dans son pointage
+            if(in_array($now_s, $son_liste_pointage)){
+                array_push($items, $item);
+                $item->setEtatClient("présent");
+                $manager->flush();
+            }
+           
+        }*/
+        
+        // jerena ze tsy nandoha talohan'ty mois ty
+       /* foreach($items as $item){
+           // $pointage = $repoPointage->lastPointagePourUnClient($item);
+            
+           if(!$pointage){ // tsy manana pointage nefa tokony hanao
+                array_push($liste_a_pointer, $item);
+                
+           }
+           else{
+                array_push($clients_have_pointage, $item);
+               
+                $t = $pointage["created_at"];
 
+                // si ce client a le pointage courant
+                if($pointage["p_mois"] == $month && $pointage["p_annee"] == $year){
+                    $item->setEtatClient("pointé");
+                    $manager->flush();
+                    array_push($clients_have_pointage, $item);            
+                }
 
+<<<<<<< HEAD
         dd($items);
         // tokony hanana pointage @ty mois ty 
         $now = new \DateTime();
@@ -295,15 +339,96 @@ class PageController extends AbstractController
              
         }
         //  dd($last_date);
+=======
+                // if ($t < $fifteen_prec2) { // si sa dernier date de pointage est avant le 15em du mois precédent 
+                //    // dd($t); ce client sera suspendu
+                //    $item->setEtatClient("suspendu");
+                //    $manager->flush();
+                //     array_push($liste_a_nepas_pointer, $item);
+                //    //dd($item); ok (lasa suspendu le client)
+                // }
+                // else{
+                //     $item->setEtatClient("présent");
+                //     $manager->flush();
+                //     array_push($liste_a_pointer, $item);
+                // }
+           }
+           
+            
+        }*/
+
+        //dd($clients_have_pointage);   
+        
+>>>>>>> 11cd3dcab7399ab3b6b312d0fc9085b5397fcbb6
         //dd($pointage[0]["created_at"]);
         return $this->render('page/pointage.html.twig', [
-            'items' => $items,
+           "items" => $clients_present,
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
-            'impaye' => $this->count_impaye($repoClient),
-            'paye' => $this->count_paye($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
         ]);
     }
+    // famerenana ny client rehetra ho présent
+
+    public function retournAllToPresent()
+    {
+        $repoClient = $this->getDoctrine()->getRepository(Client::class);
+        foreach($repoClient->findAll() as $item)
+        {
+            $item->setEtatClient("présent");
+            $this->getDoctrine()->getManager()->flush();
+        }
+    }
+
+   
+    /**
+     * tableau de pointage pour un client
+     */
+    public function liste_m_p(Client $client)
+    {
+        $liste_m_p = [];
+        $dd = $client->getDateDebut();
+        $df = $client->getDateFin();
+        $dd_s = $dd->format('d-m-Y');
+        $df_s = $df->format('d-m-Y');
+        $dd_sm = $dd->format('m-Y');
+        $df_sm = $df->format('m-Y');
+        // dif en mois de deux dates
+        $diff = $this->get_month_diff($dd_s, $df_s);
+        $diff ++;
+
+        $dtdebut = date_create($dd_s);
+        $dtfin = date_create($df_s);
+
+        foreach (new \DatePeriod($dtdebut, \DateInterval::createFromDateString('1 months'), $dtfin) as $dt) {
+            //echo $dt->format('m-Y')."  "; liste des mois
+            array_push($liste_m_p, $dt->format('m-Y'));
+        }
+        array_push($liste_m_p, $df_sm);
+        
+        return $liste_m_p;
+    }
+
+    /**
+     * Calculates how many months is past between two timestamps.
+     *
+     * @param  int $start Start timestamp.
+     * @param  int $end   Optional end timestamp.
+     *
+     * @return int
+     */
+    public function get_month_diff($start, $end = FALSE)
+    {
+        $end or $end = time();
+
+        $start = new \DateTime($start);
+        $end   = new \DateTime($end);
+        $diff  = $start->diff($end);
+
+        return $diff->format('%y') * 12 + $diff->format('%m');
+    }
+    
 
     /**
      * @Route("/admin/graph", name="graph")
@@ -314,8 +439,8 @@ class PageController extends AbstractController
         return $this->render('page/graph.html.twig', [
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
-            'impaye' => $this->count_impaye($repoClient),
-            'paye' => $this->count_paye($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
         ]);
     }
     
@@ -329,9 +454,9 @@ class PageController extends AbstractController
         return $n;
         
     }
-    public function count_paye(ClientRepository $repoClient)
+    public function count_pointed(ClientRepository $repoClient)
     {
-        $tabPaye = $repoClient->countPresent('payé');
+        $tabPaye = $repoClient->countPresent('pointé');
         $n = count($tabPaye);
         //dd($n);
         return $n;
@@ -343,25 +468,13 @@ class PageController extends AbstractController
         //dd($n);
         return $n;
     }
-    public function count_impaye(ClientRepository $repoClient)
+    public function count_archived(ClientRepository $repoClient)
     {
-        $tabPresent = $repoClient->countPresent('impayé');
+        $tabPresent = $repoClient->countPresent('archivé');
         $n = count($tabPresent);
         //dd($n);
         return $n;
     }
 
-    // client suspendu 
-    public function suspended_client(ClientRepository $repoClient)
-    {
-        // on select les client qui ont de retard de 3 mois de pointage mais qui est déjà présent dans 3 mois
-        // ty lo le client présent fa tsy nandoha vola tampoka refa tonga le date debut
-        // SELECT * FROM `client` WHERE DATEDIFF(created_at, date_debut)>93
-        $les_client_mpandainga = $repoClient->les_mpandainga();
-        
-       
-        
-        
-    }
     
 }

@@ -32,6 +32,7 @@ class PointageRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+    
     public function findLastDatePointageFor($client_id): array
     {
         $conn = $this->getEntityManager()->getConnection();

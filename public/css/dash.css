@@ -10731,14 +10731,14 @@ a:hover .caret-white {
         border-spacing: 0;
         width: 100%;
     }
-    .hbox>aside,
-    .hbox>section {
+    .hbox>aside, .hbox>section {
         display: table-cell;
         vertical-align: top;
         height: 100%;
         padding: 0;
         float: none;
     }
+   
     .hbox>aside.show,
     .hbox>aside.hidden-sm,
     .hbox>section.show,
@@ -13949,6 +13949,7 @@ fieldset[disabled] .btn-gplus.active {
 
 
 /* Mes css */
+ 
 
 #btn_menu {
     display: none !important;
