@@ -10,24 +10,31 @@
 		<div class="details bg-primary">
 			<div class="date_du_jour">
 				<p>Date du jour:
-					<span class="val_date">2020-09-21</span>
+					<span class="val_date">{{ date_du_jour | date("d-m-Y") }}</span>
 				</p>
 			</div>
 			<div class="total_montant">
 				<p>Montant mensuel total du jour:
-					<span>20000</span>
+					<span>{{ mmj }}</span>
+					<span>Ariary</span>
+				</p>
+			</div>
+			<div class="total_montant">
+				<p>Montant total du jour:
+					<span>{{ mj }}</span>
 					<span>Ariary</span>
 				</p>
 			</div>
 			<div class="nbr_total_client">
 				<p>Nombre total de client du jour:
-					<span>20</span>
+					<span>{{ nbr_client_jour }}</span>
 					<span>client(s)</span>
 				</p>
 			</div>
 		</div>
 	</div>
 </aside>
+
 <div class="titre_page">
 	<h2>Détails de l'enregistrement journalier</h2>
 </div>
@@ -53,59 +60,64 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
-				<td>
-					<span class="date_du_jour">
-						21-09-2020</span>
-				</td>
-				<td>
-					<span class="matricule_client">
-						m123586</span>
-				</td>
-				<td>
-					<span class="numero_bl">
-						586</span>
-				</td>
-				<td>
-					<sapn class="montant_client">10000</sapn>
-					<span style="margin-left:5px;">Ar</span>
-				</td>
-				<td>
-					<sapn class="montant_mens_client">100</sapn>
-					<span style="margin-left:5px;">Ar</span>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<span class="date_du_jour">
-						21-09-2020</span>
-				</td>
-				<td>
-					<span class="matricule_client">
-						m123586</span>
-				</td>
-				<td>
-					<span class="numero_bl">
-						586</span>
-				</td>
-				<td>
-					<sapn class="montant_client">10000</sapn>
-					<span style="margin-left:5px;">Ar</span>
-				</td>
-				<td>
-					<sapn class="montant_mens_client">100</sapn>
-					<span style="margin-left:5px;">Ar</span>
-				</td>
-			</tr>
+			{% for item in clients_du_jour %}
+				<tr>
+					<td>
+						<span class="date_du_jour">
+							{{ date_du_jour | date('d-m-Y') }}
+						</span>
+					</td>
+					<td>
+						<span class="matricule_client">
+							{{ item.matricule }}</span>
+					</td>
+					<td>
+						<span class="numero_bl">
+							{{ item.numero_bl | raw }}</span>
+					</td>
+					<td>
+						<sapn class="montant_client">{{ item.montant }}</sapn>
+						<span style="margin-left:5px;">Ar</span>
+					</td>
+					<td>
+						<sapn class="montant_mens_client">{{ item.montant_mensuel }}</sapn>
+						<span style="margin-left:5px;">Ar</span>
+					</td>
+					<td>
+						<sapn class="nbr_versement_client">{{ item.nbr_versement }}</sapn>
+					</td>
+					<td>
+						<span class="date_debut">
+							{{ item.date_debut | date('d-m-Y') }}</span>
+					</td>
+					<td>
+						<span class="date_fin">
+							{{ item.date_fin | date('d-m-Y') }}</span>
+					</td>
+				</tr>
+			{% endfor %}
 		</tbody>
 		<tfoot>
 			<tr>
-				<td colspan="4"><b>Total montant mensuel :</b></td>
-				<td><b>1231231</b><b style="margin-left:5px;">Ar</b></td>
+				<td colspan="3">
+					<b> Montant total: </b>
+				</td>
+				<td style="text-align:start;">
+					<b>{{ mj }}</b><b class="unite">Ar</b>
+				</td>
+				<td colspan="4"></td>
 			</tr>
 			<tr>
-				<td colspan="4"><b>Total montant général :</b></td>
-				<td><b>1231231</b><b style="margin-left:5px;">Ar</b></td>
+				<td colspan="4">
+					<b> Montant Mensuel total : </b>
+				</td>
+				<td style="text-align:start;">
+					<b>{{ mmj }}</b><b class="unite">Ar</b>
+				</td>
+				<td colspan="3"></td>
+			</tr>
+			<tr>
+				<td colspan="8"></td>
 			</tr>
 		</tfoot>
 	</table>
@@ -150,9 +162,14 @@
 		<tbody>
 			{% for item in items %}
 				<tr>
-					<td>
+					<td class="td-check">
 						<span>{{ item.matricule }}</span>
-						<b class=" check fa fa-check"></b>
+						{% if item.verifier == "oui" %}
+							<b class=" check fa fa-check"></b>
+						{% else %}
+							<b class=" check fa "></b>
+						{% endif %}
+						<b class=" check check-hide fa fa-check" style="display:none"></b>
 					</td>
 					<td>
 						<span>{{ item.nom }}</span><br>
@@ -175,18 +192,18 @@
 					<td>
 						<div class="action">
 								<div>
-									<a href="{{ path('edit_client', {'id': item.id }) }}" class="modif btn btn-info btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+									<a href="{{ path("edit_client", {"id": item.id }) }}" class="modif btn btn-info btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
 										<span class="fa fa-edit"></span>
 									</a>
-									<a href="#" data-id-client = "{{ item.id }}" class="suppr btn btn-danger btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+									<a href="#" data-id-client = "{{ item.id }}" class="suppr btn btn-danger btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
 										<span class="fa fa-trash-o"></span>
 									</a>
 								</div>
 								<div>
-									<a href="#" class="voir btn btn-primary btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+									<a href="#" data-id-client = "{{ item.id }}" class="verifier btn btn-primary btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
 										<span class = "fa fa-check-square-o"></span>
 									</a>
-									<a href="{{ path('single_page', {'id_client': item.id }) }}" class="voir btn btn-primary btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+									<a href="{{ path('single_page', {'id_client': item.id }) }}" class="voir btn btn-primary btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
 										<span>Voir</span>
 									</a>
 								</div>
@@ -202,10 +219,10 @@
 	<div class="div_footer_tab">
 		<div>
 			<div>
-				<span>Total montant mensuel : </span><span>1213032</span><span style="margin-left">Ar</span>
+				<span>Total montant mensuel : </span><span>{{ mm }}</span><span class="unite">Ar</span>
 			</div>
 			<div>
-				<span>Total montant : </span><span>1213032</span><span style="margin-left">Ar</span>
+				<span>Total montant : </span><span>{{ m }}</span><span class="unite">Ar</span>
 			</div>
 		</div>
 	</div>
@@ -261,6 +278,28 @@
 			new $.fn.dataTable.FixedHeader(table);
 			
 			// modal 
+
+			// verification 
+
+			$("tbody").on('click', ".verifier", function(e){
+				e.preventDefault()
+				var id_client = $(this).attr('data-id-client');
+				var tr = $(this).parent().parent().parent().parent();
+				var string = "";
+				$.ajax({
+					url : "/admin/verifier/"+id_client,
+					type : "GET",
+					success : function(response){
+						if(response=="ok"){
+							tr.children('.td-check').children(".check-hide").show();
+						}
+					},
+					error : function(){
+						alert('erreur ajax');
+					}
+					
+				})
+			})
 
 
         });

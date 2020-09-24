@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Client;
 use App\Entity\Pointage;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -45,6 +46,26 @@ class PointageRepository extends ServiceEntityRepository
 
         // returns an array of arrays (i.e. a raw data set)
         return $stmt->fetchAll();
+    }
+
+    // SELECT MAX(created_at) FROM `pointage` 
+
+    public function lastPointagePourUnClient(Client $client)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = '
+        SELECT * 
+        FROM pointage 
+        WHERE client_id = :client_id
+        ORDER BY id DESC
+        LIMIT 1
+        ';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['client_id' => $client->getId()]);
+
+        // returns an array of arrays (i.e. a raw data set)
+        return $stmt->fetch();
     }
     
 

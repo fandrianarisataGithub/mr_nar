@@ -24,17 +24,38 @@ class PageController extends AbstractController
     /**
      * @Route("/profile/client_present", name="client_present")
      */
-    public function client_present(ClientRepository $repoClient)
+    public function client_present(ClientRepository $repoClient, UserRepository $repoUser)
     {
         $user = new User();
         $items = $repoClient->countPresent('présent');
-        //dd($items);
+         $users = $repoUser->findAll();
+       $total_mj = 0;
+       $total_mmj = 0;
+       $nbr_client_du_jour = 0;
+        foreach($users as $itemUser){
+            $clients_du_jour_user = $repoClient->clientDuJour($itemUser);
+            $mj = 0;
+            $mmj = 0;
+            foreach ($clients_du_jour_user as $item) {
+                $mj += $item['montant'];
+                $mmj += $item['montant_mensuel'];  
+                $nbr_client_du_jour++;
+            }
+            $total_mj += $mj;
+            $total_mmj += $mmj;
+            
+        }
+
         return $this->render('page/client_present.html.twig', [
             'items' => $items,
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
             'impaye' => $this->count_impaye($repoClient),
              'paye' => $this->count_paye($repoClient),
+             "total_mj" => $total_mj,
+             "total_mmj" => $total_mmj,
+            "nbr_client_du_jour" => $nbr_client_du_jour,
+            "date_du_jour" => new \DateTime(),
         ]);
     }
     /**
@@ -44,6 +65,7 @@ class PageController extends AbstractController
     {
         $user = new User();
         $items = $repoClient->countPresent('présent');
+        
         // dompdf
         // Configure Dompdf according to your needs
         $pdfOptions = new Options();
@@ -243,10 +265,37 @@ class PageController extends AbstractController
     /**
      * @Route("/admin/pointage", name="pointage")
      */
-    public function pointage(ClientRepository $repoClient)
+    public function pointage(ClientRepository $repoClient, PointageRepository $repoPointage)
     {
         $user = new User();
-        $items = $repoClient->findAll();
+        $client = new Client();
+        $pointage = new Pointage();
+        $tabClient = $repoClient->valablePointage();
+        // atao objet
+        $items = [];
+        foreach($tabClient as $key){
+            $client = $repoClient->find($key['id']);
+            array_push($items, $client);
+        }
+
+
+        dd($items);
+        // tokony hanana pointage @ty mois ty 
+        $now = new \DateTime();
+        $now_s = date("m-Y",strtotime($now->format("j-m-Y")));
+        //dd($now_s);
+        $last_date = new \DateTime();
+        foreach($items as $item){
+            // on select son dernier pointage
+            $client = $repoClient->find($item->getId());
+            // le dernier pointage
+            $pointage = $repoPointage->lastPointagePourUnClient($client);
+           // $lastDateP = $pointage[0]["created_at"];
+           $last_date = $pointage["created_at"];
+             
+        }
+        //  dd($last_date);
+        //dd($pointage[0]["created_at"]);
         return $this->render('page/pointage.html.twig', [
             'items' => $items,
             'present' => $this->count_present($repoClient),

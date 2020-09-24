@@ -48,8 +48,14 @@
 			<tbody>
 				{% for item in items %}
 					<tr>
-						<td>
+						<td class="td-check">
 							<span>{{ item.matricule }}</span>
+							{% if item.verifier == "oui" %}
+								<b class=" check fa fa-check"></b>
+							{% else %}
+								<b class=" check fa "></b>
+							{% endif %}
+							<b class=" check check-hide fa fa-check" style="display:none"></b>
 						</td>
 						<td>
 							<span>{{ item.nom }}</span><br>
@@ -89,9 +95,6 @@
 									</a>
 								</div>
 								<div>
-									<a href="#" class="voir btn btn-primary btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
-										<span class = "fa fa-check-square-o"></span>
-									</a>
 									<a href="{{ path('single_page', {'id_client': item.id }) }}" class="voir btn btn-primary btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
 										<span>Voir</span>
 									</a>
