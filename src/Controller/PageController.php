@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use DateInterval;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use App\Entity\User;
@@ -13,8 +14,8 @@ use App\Repository\ClientRepository;
 use App\Repository\PointageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 // Include Dompdf required namespaces
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -22,106 +23,18 @@ class PageController extends AbstractController
 {
 
     /**
-     * @Route("/", name="triage")
+     * @Route("/", name="firstRedirect")
      */
     public function triage(ClientRepository $repoClient, PointageRepository $repoPointage, EntityManagerInterface $manager)
     {
-        //$clients_presents = $repoClient->countPresent('présent');
-        $clients_presents = $repoClient->findAll();
-        // le mois du jour 
-        /** test */
-
-            $date1 = "2021-02-15";
-            $date2 = "2021-02-16";
-            if ($date1 < $date2)
-            echo "$date1 est inférieur à $date2";
-            else
-            echo "$date1 est supérieur à $date2";
-
-        /** / test */
-        $now = new \Datetime();
-        $now_s = $now->format('d-m-Y');
-       // $now_s = date_parse_from_format("d-m-Y", $now);
-        $tab = explode("-",$now_s);
-        $now_month = $tab[1]."-".$tab[2];
-
-        $last_m_pointage = "";
-
-        if($tab[1]==1){
-            $last_m_pointage = "12-".($tab[2] - 1);
-        }
-        else{
-            $last_m_pointage =  ($tab[1] - 1) . "-" . $tab[2];
-        }
-
-        $client_a_pointer = [];
-        $client_a_nepas_pointer = [];
-        foreach($clients_presents as $item){
-            $liste_m_p = $this->liste_m_p($item);
-            if(in_array($now_month, $liste_m_p)){
-               
-               // jerena hoe nandoha t@ray volana sa tsia
-                  
-                if(in_array($last_m_pointage, $liste_m_p)){
-
-                    // on select le pointage pour ce nom là
-                    
-                    $pointage  = $repoPointage->findOneByNom($last_m_pointage); 
-                    $id_lastP = $pointage->getId();
-                    // est-ce que ce client là possede ce pointage ?
-                    $conn = $manager->getConnection();
-
-                    $sql = '
-                    SELECT * FROM `pointage_client` WHERE client_id =:id
-                    ';
-                    $stmt = $conn->prepare($sql);
-                    $stmt->execute(['id' => $item->getId()]);
-
-                    // returns an array of arrays (i.e. a raw data set)
-                    $tab =  $stmt->fetchAll();
-                    $last_indice = count($tab) - 1;
-                    // last pointage est id = $tab[$last_indice]['pointage_id'];
-                   if( $tab[$last_indice]['pointage_id'] >= $id_lastP){
-
-                        // ce client peut etre parmis les clients présent nandoha izy
-                        array_push($client_a_pointer, $item);
-                   }
-                   
-                   else{
-                       // jerena aloha ny date de debut any sao @ty izy vao tokony handoha
-                       $son_data_debut = $item->getDateDebut();
-                       $stringDate = $son_data_debut->format('d-m-Y');
-                        $tab = explode("-", $stringDate);
-                        $stringDate_mois_annee = $tab[1] . "-" . $tab[2];
-                        
-                        if($now_month == $stringDate_mois_annee){
-                            array_push($client_a_pointer, $item);
-                        }
-                        else{
-                            $item->setEtatClient("suspendu");
-                            $manager->persist($item);
-                            $manager->flush();
-                        }
-                        
-                   }
-                   
-                } 
-               
-            }
-            else{
-                // liste des client qui n'ont pas de pointage pour ce mois
-                array_push($client_a_nepas_pointer, $item);
-            }
-            
-        }
-        dd($client_a_pointer);
+       return $this->redirectToRoute("app_login");
         
     }
     
     /**
      * @Route("/profile/client_present", name="client_present")
      */
-    public function client_present(ClientRepository $repoClient, UserRepository $repoUser)
+    public function client_present(ClientRepository $repoClient, UserRepository $repoUser, PointageRepository $repoPointage)
     {
         $user = new User();
         $items = $repoClient->countPresent('présent');
@@ -129,6 +42,7 @@ class PageController extends AbstractController
        $total_mj = 0;
        $total_mmj = 0;
        $nbr_client_du_jour = 0;
+        $pointages = $repoPointage->findlesTenLastPointage();
         foreach($users as $itemUser){
             $clients_du_jour_user = $repoClient->clientDuJour($itemUser);
             $mj = 0;
@@ -145,6 +59,7 @@ class PageController extends AbstractController
 
         return $this->render('page/client_present.html.twig', [
             'items' => $items,
+            'pointages' => $pointages,
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
             'archived' => $this->count_archived($repoClient),
@@ -324,7 +239,7 @@ class PageController extends AbstractController
     /**
      * @Route("/profile/single_page/{id_client}", name="single_page")
      */
-   /* public function single_page($id_client, ClientRepository $repoClient, PointageRepository $repoPointage)
+    public function single_page($id_client, ClientRepository $repoClient, PointageRepository $repoPointage)
     {   
         $client = new Client();
         $client = $repoClient->find($id_client);
@@ -332,22 +247,23 @@ class PageController extends AbstractController
         $montant = $client->getMontant();
         $nbrMois = $client->getNbrVersement();
         $montant_mensuel = $client->getMontantMensuel();
-        //$pointage = $repoPointage->findByClient($client);
-       // $nbr_p_effectue = count($pointage);
-        //dd($nbr_p_effectue);
-        // nombre de mois restant
+        $pointages = $client->getPointages();
+        dd($pointages);
+        $nbr_p_effectue = count($pointage);
+       // dd($nbr_p_effectue);
+        //nombre de mois restant
 
-        // $nbr_mois_restant = $nbrMois - $nbr_p_effectue;
+        $nbr_mois_restant = $nbrMois - $nbr_p_effectue;
         
-        // // montant payé
-        // $montant_paye = $montant_mensuel * $nbr_p_effectue;
+        // montant payé
+        $montant_paye = $montant_mensuel * $nbr_p_effectue;
 
-        // // montant restant
-        // $montant_restant = $montant - $montant_paye;
+        // montant restant
+        $montant_restant = $montant - $montant_paye;
         
         return $this->render('page/single_page.html.twig', [
             'item' => $client,
-           /* 'montant_paye' => $montant_paye,
+            'montant_paye' => $montant_paye,
             'montant_restant' => $montant_restant,
             'nbr_p_effectue' => $nbr_p_effectue,
             'nbr_paiement_total' => $nbrMois,
@@ -358,9 +274,9 @@ class PageController extends AbstractController
             'archived' => $this->count_archived($repoClient),
             'pointed' => $this->count_pointed($repoClient),
         ]);
-    }*/
+    }
         
-    // famerenana ny client rehetra ho présent
+     //famerenana ny client rehetra ho présent
 
     public function retournAllToPresent()
     {

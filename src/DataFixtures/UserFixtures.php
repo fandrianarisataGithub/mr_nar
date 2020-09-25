@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use Faker;
+use DateInterval;
 use App\Entity\User;
 use App\Entity\Client;
 use Doctrine\ORM\EntityManagerInterface;
@@ -79,35 +80,29 @@ class UserFixtures extends Fixture
     }
     public function tab_mois(Client $client)
     {
-        $nbr_versement = $client->getNbrVersement();
-        $date_debut = $client->getDateDebut();
-        
-        $date_debut_s = $date_debut->format("d-m-Y");
-        $tab_date_complet = [$date_debut_s];
-        $tab_pointage = [];
-        $tab_pointage_s="";
-        for($i = 1; $i<= $nbr_versement; $i++){
-            $date_debut->add(new \DateInterval('P1M'));
-            $date_s = $date_debut->format("d-m-Y");
-            array_push($tab_date_complet, $date_s);
+        $now = $client->getDateDebut();
+        $n = $client->getNbrVersement();
+        $tab = [$now];
+        // dd($tab);
+        $tab_s = [];
+
+        for ($i = 1; $i < $n; $i++) {
+            $date = date_create($now->format("Y-m-d"));
+            date_add($date, date_interval_create_from_date_string($i . ' months'));
+            array_push($tab, $date);
         }
-
-        for($i = 0; $i< count($tab_date_complet); $i++){
-           $t = explode("-", $tab_date_complet[$i]);
-           $mois = $t[1]."-".$t[2];
-           array_push($tab_pointage, $mois);
+        //dd($tab);
+        for ($i = 0; $i < count($tab); $i++) {
+            $s = $tab[$i]->format('d-m-Y');
+            $t = explode("-", $s);
+            $mois = $t[1] . "-" . $t[2];
+            array_push($tab_s, $mois);
         }
-
-        for($i = 0; $i< count($tab_pointage); $i++){
-           $mois = $tab_pointage[$i];
-            $tab_pointage_s .= $mois."__";
-            if($i== count($tab_pointage)-1){
-                $tab_pointage_s .= $mois;
-            }
-         }
-
-        return $tab_pointage_s;
-
+        $string = $tab_s[0];
+        for ($i = 1; $i < count($tab_s); $i++) {
+            $string .= "__" . $tab_s[$i];
+        }
+        return $string;
     }
 }
 

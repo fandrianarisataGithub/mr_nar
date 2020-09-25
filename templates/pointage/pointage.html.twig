@@ -23,15 +23,16 @@
 		<div class="col-sm-2">
 			<label for="annee">Mois:</label>
 			<select name="mois_pointage" id="mois_pointage" class="form-control">
-				<option value="1">Janvier</option>
-				<option value="2">Février</option>
-				<option value="3">Mars</option>
-				<option value="4">Avril</option>
-				<option value="5">Mai</option>
-				<option value="6">Juin</option>
-				<option value="7">Juillet</option>
-				<option value="8">Août</option>
-				<option value="9">Septembre</option>
+				<option value="vide"></option>
+				<option value="01">Janvier</option>
+				<option value="02">Février</option>
+				<option value="03">Mars</option>
+				<option value="04">Avril</option>
+				<option value="05">Mai</option>
+				<option value="06">Juin</option>
+				<option value="07">Juillet</option>
+				<option value="08">Août</option>
+				<option value="09">Septembre</option>
 				<option value="10">Octobre</option>
 				<option value="11">Novembre</option>
 				<option value="12">décembre</option>
@@ -42,14 +43,23 @@
 			<select name="annee_pointage" id="annee_pointage" class="form-control"></select>
 		</div>
 		<div class="col-sm-12" style="margin-top:15px;">
+			<div class="dernier_mois_p">
+				<p>Dernier mois de pointage enregistré : 
+					<b>
+					{% if nom_last_p is defined %}
+						{{ nom_last_p }}
+					{% endif %} 
+					</b>
+				</p>
+			</div>
 			<button type="submit" class="btn btn-primary btn-md">
 				<span class="fa fa-plus" style="margin-right:5px;"></span>
 				<span class="unite">Ajouter ce mois de mointage</span></button>
 		</div>
 	</form>
 	<!-- tri -->
-	<form action="{{ path('trier') }}" class="row form_tri_pointage" method = "POST" >
-		<div class="titre_page" style="text-align:end;">
+	<form  class="row form_tri_pointage" >
+		<div class="titre_page">
 			<h2>Trier</h2>
 		</div>
 		<div class="form-group select">
@@ -124,6 +134,8 @@
 							<span>DATE DE DEBUT:</span><span class="unite">{{ item.getDateDebut() | date('Y-m-d') }}</span>
 							<br>
 							<span>DATE DE DEBUT:</span><span class="unite">{{  item.getDatefin() | date('Y-m-d') }}</span>
+							<br>
+							<span>POINTAGE DU MOIS : </span><sapn class="unite">{{ mois_actus }}</sapn>
 						</td>
 						<td>
 							<a href="#" data-id-client="{{ item.id }}" class="pointer btn btn-primary btn-xs">
@@ -154,6 +166,11 @@
 				</span>/<span>
 					2020</span>
 			</div>
+			<div class="last_etat">
+				<span>Etat du pointage :
+				</span>
+				<span class="p_fait"></span>/<span class="p_rest"></span>
+			</div>
 		</div>
 		<form action="">
 			<div class="form-group" style="width:50%; margin-left:auto;margin-right:auto;margin-top:10px;">
@@ -181,15 +198,15 @@
 			<div class="col-sm-6">
 				<div class="form-group">
 					<label for="">Nombre de mois restant:</label>
-					<p class="details_client">12
-						<span>mois</span>
+					<p class="details_client mois_restant">12
+						<span class="unite">mois</span>
 					</p>
 				</div>
 			</div>
 			<div class="col-sm-6">
 				<div class="form-group">
 					<label for="">Montant total restant:</label>
-					<p class="details_clientl">12 000<span>Ariary</span>
+					<p class="details_clientl montant_restant">12 000<span>Ariary</span>
 					</p>
 				</div>
 			</div>
@@ -205,7 +222,8 @@
 
 		$(document).ready(function(){
 
-			var table = $('#tab_client_heb').DataTable({
+			function loadTable(){
+				var table = $('#tab_client_heb').DataTable({
 				"language": {
 					"sEmptyTable": "Aucune donnée disponible dans le tableau",
 					"sInfo": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
@@ -245,6 +263,9 @@
 			});
 
 			new $.fn.dataTable.FixedHeader(table);
+			}
+
+			loadTable();
 
 
 			// function generate year
@@ -254,7 +275,7 @@
                 //alert(today);
                 var y = today.getFullYear();
                 //alert(y);
-                var html = "";
+                var html = "<option value = '" + y + "'>" + y + "</option>";
                 for (var index = 2009; index < y + 3; index++) {
                     html += "<option value = '" + index + "'>" + index + "</option>";
                 }
@@ -278,9 +299,45 @@
             // activation du modal 
            $('tbody').on('click', '.pointer', function(e){
 			   	e.preventDefault();
-				$(this).addClass('clicked');
-				$('#add_pointage').attr('data-id-client',$(this).attr('data-id-client'));
-				show_modal();
+
+				var id_client = $(this).attr('data-id-client');
+				//alert(id_client);
+				$.ajax({
+					url : "/admin/load_pointage",
+					type : "POST",
+					data : {
+						"id" : id_client,
+					},
+					success :  function(response){
+						if(response){
+							var matricule = response['0'];
+							var nbrPointageFait =  response['1'];
+							var nbrVersement =  response['2'];
+							var nomDernierPointage =  response['3'];
+							var montantRestant = response['4'];
+							var moisRestant =  response['5'];
+
+							$('.son_matricule').text(matricule);
+							$('.last_mois').text(nomDernierPointage);
+							$('.mois_restant').text(moisRestant);
+							$('.montant_restant').text(montantRestant);
+							$('.p_fait').text(nbrPointageFait);
+							$('.p_rest').text(nbrVersement);
+
+							
+						}
+						/* final*/
+						$(this).addClass('clicked');
+						$('#add_pointage').attr('data-id-client',$(this).attr('data-id-client'));
+						//show_modal();
+					},
+					error :  function(){
+						alert('erreur');
+					}
+				})
+
+
+				
 		   })
 			$('#add_pointage').click(function(e){
 				e.preventDefault();
@@ -321,7 +378,30 @@
                 hide_modal();
 			})
 			
-			//triage
+			
+
+			$("body").on("click", "#trier", function(e){
+				e.preventDefault();
+				var id_pointage = $("#id_pointage_trier").val();
+				$.ajax({
+					url: "/admin/trier",
+					type : "POST",
+					data : {
+						"id_pointage" : id_pointage
+					}, 
+					success :  function(response){
+						if(response){
+							$("tbody").html('');
+							$("tbody").html(response);
+							$('#tab_client_heb').DataTable().ajax.reload(null, false );
+						}
+						
+					},
+					error : function(){
+						alert('erreur ajax');
+					}
+				})
+			})
 
 			
 

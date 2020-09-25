@@ -311,6 +311,74 @@ class ClientController extends AbstractController
             return $response;
         }
     }
+
+    /**
+     * @Route("/admin/load_pointage", name="load_pointage")
+     */
+    public function load_pointage(Request $request, ClientRepository $repoClient)
+    {
+        $response = new Response();
+        if($request->isXmlHttpRequest()){
+
+            $id = $request->get('id');
+            $client = $repoClient->find($id);
+            $retour = "matricule__nbrPointageFait__nbrVersement__nomDernierPointage__montantRestant__moisRestant";
+            $n = $client->getNumeroPointage();
+            $matricule = $client->getMatricule();
+            $nbrPointageFait = $this->nbrPointageFait($client);
+             $nbrPointageFait++;
+            $nbrVersement = $client->getNbrVersement();
+            $nomDernierPointage = $this->lastPointageName($client);
+            $montantRestant = $this->montantRestant($client);
+            $moisRestant = $this->getNombreMoisRestant($client);
+            $retour = [$matricule, $nbrPointageFait, $nbrVersement, $nomDernierPointage, $montantRestant, $moisRestant];
+           
+            
+            $data = json_encode($retour); // formater le résultat de la requête en json
+
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setContent($data);
+            return $response;
+        }
+    }
+
+    // nombre poinatge fait
+    public function nbrPointageFait(Client $client)
+    {
+        $num = $client->getNumeroPointage();
+        return $num++;
+    }
+    // nom du dernier poinatge fait
+    public function lastPointageName(Client $client)
+    {
+        $num = $client->getNumeroPointage();
+        $tab = $client->getTabPointage();
+        $tabP = explode("__", $tab);
+        if($num != -1){
+            return $tab[$num];
+        }
+       else{
+            return "vide";
+       }
+    }
+
+    // nombrfe de mois restant
+    public function getNombreMoisRestant(Client $client)
+    {
+        $n = $this->nbrPointageFait($client);
+        $nbrV = $client->getNbrVersement();
+        return ($nbrV - $n);
+    }
+
+    // Montant restant
+
+    public function montantRestant(Client $client)
+    {
+        $n = $this->getNombreMoisRestant($client);
+        $montant_m = $client->getMontantMensuel();
+        return ($n * $montant_m);
+    }
+
     
     
     

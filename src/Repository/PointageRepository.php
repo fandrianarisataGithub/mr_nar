@@ -21,7 +21,7 @@ class PointageRepository extends ServiceEntityRepository
         parent::__construct($registry, Pointage::class);
     }
     /**
-     * @return Pointage[] Returns an array of Pointage objects
+     * @return Pointage[] Returns an array of Pointage objects findOneByNom
      */
     public function tous_les_pointages($value)
     {
@@ -32,6 +32,19 @@ class PointageRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    /**
+     * @return Pointage[] Returns an array of Pointage objects 
+     */
+    public function findOneByNom($value)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.nom = :val')
+            ->setParameter('val', $value)
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
     
     public function findLastDatePointageFor($client_id): array
@@ -83,7 +96,32 @@ class PointageRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+    /**
+     * @return Pointage[] Returns an array of Pointage objects  
+     */
     
+    public function lastPointage()
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return Pointage[] Returns an array of Pointage objects  
+     */
+
+    public function findlesTenLastPointage()
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.id', 'DESC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }
 
 
 

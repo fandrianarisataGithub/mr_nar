@@ -14115,7 +14115,7 @@ aside.user_action {
     background: rgba(61, 61, 63, 0.8);
     width: 100%;
     height: 100%;
-    position: absolute;
+    position: fixed;
     /* display: flex;*/
     display: none;
     top: 0;
@@ -14161,12 +14161,10 @@ aside.user_action {
 .form_tri_pointage h2{
     margin-top: 0;
 }
-.form_tri_pointage{
-    text-align: end;
-}
+
 .form_tri_pointage .form-group{
      display: flex;
-    justify-content: end;
+   
 }
 .form_tri_pointage .form-group.select{
    display: flex;
@@ -14557,6 +14555,9 @@ body tfoot tr td:last-child {
 
 .div_footer_tab span:not(:first-child) {
     margin-left: 5px;
+}
+.div__pointer .btn{
+    width: auto !important;
 }
 
 @media all and (max-width: 768px) {
