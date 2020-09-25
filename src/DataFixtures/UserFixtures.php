@@ -38,6 +38,7 @@ class UserFixtures extends Fixture
                 $client->setNom($faker->name);
                 $client->setPrenom($faker->lastName);
                 $n = rand(213 , 5846);
+
                 $client->setCin($n."2".$i.$j.$i);
                 $client->setImage1($faker->imageUrl(640,480));
                 $client->setImage2($faker->imageUrl(640, 480));
@@ -65,6 +66,10 @@ class UserFixtures extends Fixture
 
                 $df_dt = new \DateTime($df);
                 $client->setDateFin($df_dt);
+                $tab_pointage = $this->tab_mois($client);
+                $client->setTabPointage($tab_pointage);
+                $client->setNumeroPointage(-1);
+
                 $client->setUser($user);
                 $manager->persist($client);
 
@@ -72,4 +77,37 @@ class UserFixtures extends Fixture
             $manager->flush();
         }
     }
+    public function tab_mois(Client $client)
+    {
+        $nbr_versement = $client->getNbrVersement();
+        $date_debut = $client->getDateDebut();
+        
+        $date_debut_s = $date_debut->format("d-m-Y");
+        $tab_date_complet = [$date_debut_s];
+        $tab_pointage = [];
+        $tab_pointage_s="";
+        for($i = 1; $i<= $nbr_versement; $i++){
+            $date_debut->add(new \DateInterval('P1M'));
+            $date_s = $date_debut->format("d-m-Y");
+            array_push($tab_date_complet, $date_s);
+        }
+
+        for($i = 0; $i< count($tab_date_complet); $i++){
+           $t = explode("-", $tab_date_complet[$i]);
+           $mois = $t[1]."-".$t[2];
+           array_push($tab_pointage, $mois);
+        }
+
+        for($i = 0; $i< count($tab_pointage); $i++){
+           $mois = $tab_pointage[$i];
+            $tab_pointage_s .= $mois."__";
+            if($i== count($tab_pointage)-1){
+                $tab_pointage_s .= $mois;
+            }
+         }
+
+        return $tab_pointage_s;
+
+    }
 }
+

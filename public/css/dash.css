@@ -14155,6 +14155,27 @@ aside.user_action {
     transition: display 1.5s;
     transition-timing-function: cubic-bezier(0, 0.1, 0.7, 1);
 }
+.form_tri_pointage{
+    
+}
+.form_tri_pointage h2{
+    margin-top: 0;
+}
+.form_tri_pointage{
+    text-align: end;
+}
+.form_tri_pointage .form-group{
+     display: flex;
+    justify-content: end;
+}
+.form_tri_pointage .form-group.select{
+   display: flex;
+    align-items: center;
+}
+.form_tri_pointage select{
+    width: 200px;
+    margin-left: 10px;
+}
 
 .inner_modal {
     width: 50%;

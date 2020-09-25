@@ -134,6 +134,17 @@ class Client
      */
     private $pointages;
 
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $numero_pointage;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $tab_pointage;
+
     public function __construct()
     {
         $this->pointages = new ArrayCollection();
@@ -377,6 +388,31 @@ class Client
             $this->pointages->removeElement($pointage);
             $pointage->removeClient($this);
         }
+
+        return $this;
+    }
+
+
+    public function getNumeroPointage(): ?int
+    {
+        return $this->numero_pointage;
+    }
+
+    public function setNumeroPointage(int $numero_pointage): self
+    {
+        $this->numero_pointage = $numero_pointage;
+
+        return $this;
+    }
+
+    public function getTabPointage(): ?string
+    {
+        return $this->tab_pointage;
+    }
+
+    public function setTabPointage(string $tab_pointage): self
+    {
+        $this->tab_pointage = $tab_pointage;
 
         return $this;
     }

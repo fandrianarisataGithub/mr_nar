@@ -42,7 +42,26 @@
 			<select name="annee_pointage" id="annee_pointage" class="form-control"></select>
 		</div>
 		<div class="col-sm-12" style="margin-top:15px;">
-			<button type="submit" class="btn btn-primary btn-md">Executer</button>
+			<button type="submit" class="btn btn-primary btn-md">
+				<span class="fa fa-plus" style="margin-right:5px;"></span>
+				<span class="unite">Ajouter ce mois de mointage</span></button>
+		</div>
+	</form>
+	<!-- tri -->
+	<form action="{{ path('trier') }}" class="row form_tri_pointage" method = "POST" >
+		<div class="titre_page" style="text-align:end;">
+			<h2>Trier</h2>
+		</div>
+		<div class="form-group select">
+			<label for="annee">Selectionner le mois de pointage : </label>
+			<select class="form-control" name="id_pointage_trier" id="id_pointage_trier" >
+				{% for p in pointages %}
+					<option value="{{ p.id }}">{{ p.getNomLit() }}</option>
+				{% endfor %}
+			</select>
+		</div>
+		<div class="form-group">
+			<button type="submit" class="btn btn-success btn-md" id="trier"><span>Executer</span></button>
 		</div>
 	</form>
 </section>
@@ -300,7 +319,13 @@
             $('.modal_head button').click(function(e){
                 e.preventDefault();
                 hide_modal();
-            })
+			})
+			
+			//triage
+
+			
+
+
 		})
 	
 	</script>

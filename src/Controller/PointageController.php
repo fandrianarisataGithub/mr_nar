@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use DateInterval;
 use App\Entity\Client;
 use App\Entity\Pointage;
 use App\Repository\ClientRepository;
@@ -102,7 +103,7 @@ class PointageController extends AbstractController
         $year_now = $now->format('Y');
         // dd($year_now);
         $pointages = $repoPointage->findByAnneeActuelle($year_now);
-        
+        //dd($pointages);
         $items = $repoClient->countPresent('présent');
         return $this->render('pointage/pointage.html.twig', [
             "items" => $items,
@@ -148,6 +149,55 @@ class PointageController extends AbstractController
        $i = $n - 1 ;
         $mois = $tab[$i];
         return $mois;
+    }
+
+
+    /**
+     * @Route("/admin/trier", name="trier")
+     */
+    public function tri_pointage(Request $request, PointageRepository $repoPointage, ClientRepository $repoClient)
+    {
+        $pointage = new Pointage();
+        $client_present = $repoClient->countPresent('présent');
+        $client_a_pointer = [];
+        if($request->request->count()>0){
+             $id_pointage = $request->request->get('id_pointage_trier');
+             $pointage = $repoPointage->find($id_pointage);
+             //dd($pointage);
+             $nom_pointage = $pointage->getNom();
+            
+             foreach($client_present as $item){
+                /** test */
+                $date_debut = $item->getDateDebut();
+                $date_debut_s = $date_debut->format("Y-m-d");
+                $next = $date_debut->add(new \DateInterval('P10D'));
+                //dd($date_debut);
+                
+                /*$date_debut->add(new \DateInterval('P1M')); //Où 'P12M' indique 'Période de 12 Mois'
+                $date_debut->format('Y-m-d');
+                dd($date_debut);*/
+                $tab = [];
+                for($i = 1; $i<$item->getNbrVersement(); $i++){
+                    $date_debut->add(new \DateInterval('P1M'));
+                    array_push($tab, $date_debut);
+                }
+                dd($tab);
+                $tab_date_complet = [$date_debut_s];
+                $tab_pointage = [];
+                $tab_pointage_s="";
+                $date = date($date_debut_s, strtotime('+1 month'));
+                //array_push($tab_date_complet, $date);
+                dd($date);
+
+                /** test */
+               
+                 //si ce client devrait faire ce pointage là
+                 $son_liste_pointage = $item->getTabPointage();
+                 $tab_pointage = explode("__", $son_liste_pointage);
+                 //dd($son_liste_pointage);
+             }
+
+        }
     }
     
 }
