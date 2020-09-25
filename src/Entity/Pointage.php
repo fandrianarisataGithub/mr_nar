@@ -44,10 +44,6 @@ class Pointage
      */
     private $nom_lit;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $annee_actuelle;
 
     public function __construct()
     {
@@ -124,17 +120,6 @@ class Pointage
         return $this;
     }
 
-    public function getAnneeActuelle(): ?int
-    {
-        return $this->annee_actuelle;
-    }
-
-    public function setAnneeActuelle(int $annee_actuelle): self
-    {
-        $this->annee_actuelle = $annee_actuelle;
-
-        return $this;
-    }
 
 
 

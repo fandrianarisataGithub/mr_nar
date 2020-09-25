@@ -14,8 +14,12 @@
     </head>
     <body>
     {# load #}
-        <div class="se-pre-con"></div>
-        <!-- Ends -->
+    <div class="containers">
+        <div class="yellow bull"></div>
+        <div class="red bull"></div>
+        <div class="blue bull"></div>
+        <div class="violet bull"></div>
+    </div>
 
     {# / load #}
 
@@ -115,6 +119,18 @@
                                                     </a>
                                                     <ul class="nav lt">
                                                         <li>
+                                                            <a href="{{ path('client_nouveau') }}">
+                                                                <b class="badge bg-info pull-right">{{ nouveau }}</b>
+                                                                <i class="fa fa-angle-right"></i> <span>Nouveau client</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{ path('client_attente') }}">
+                                                                <b class="badge bg-info pull-right">{{ attente }}</b>
+                                                                <i class="fa fa-angle-right"></i> <span>Client en attente</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
                                                             <a href="{{ path('client_present') }}">
                                                                 <b class="badge bg-info pull-right">{{ present }}</b>
                                                                 <i class="fa fa-angle-right"></i> <span>Client présent</span>
@@ -136,6 +152,12 @@
                                                             <a href="{{ path('client_suspendu') }}">
                                                                 <b class="badge bg-info pull-right">{{ suspendu }}</b>
                                                                 <i class="fa fa-angle-right"></i> <span>Client suspendu</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{ path('client_impaye') }}">
+                                                                <b class="badge bg-info pull-right">{{ impaye }}</b>
+                                                                <i class="fa fa-angle-right"></i> <span>Client classé impayé</span>
                                                             </a>
                                                         </li>
                                                     </ul>
@@ -324,8 +346,10 @@
     <script src="https://cdn.datatables.net/responsive/2.2.4/js/responsive.bootstrap.min.js"></script>
     <script>
     $(window).load(function() {
-		// Animate loader off screen
-		$(".se-pre-con").fadeOut("slow");;
+        // Animate loader off screen
+        $('.bull').css("animation-play-state", "paused");
+        $("div.containers").fadeOut("slow");
+        
     });
     $(document).ready(function(){
 

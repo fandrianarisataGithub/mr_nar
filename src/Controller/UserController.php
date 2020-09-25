@@ -53,9 +53,36 @@ class UserController extends AbstractController
             'suspendu' => $this->count_suspendu($repoClient),
             'archived' => $this->count_archived($repoClient),
             'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
         ]);
     }
 
+    public function count_impaye(ClientRepository $repoClient)
+    {
+        $tabPresent = $repoClient->countPresent('impayé');
+        $n = count($tabPresent);
+        //dd($n);
+        return $n;
+        
+    }
+    public function count_attente(ClientRepository $repoClient)
+    {
+        $tabPresent = $repoClient->countPresent('attente');
+        $n = count($tabPresent);
+        //dd($n);
+        return $n;
+        
+    }
+    public function count_nouveau(ClientRepository $repoClient)
+    {
+        $tabPresent = $repoClient->countPresent('nouveau');
+        $n = count($tabPresent);
+        //dd($n);
+        return $n;
+        
+    }
 
 
     public function count_present(ClientRepository $repoClient)
@@ -86,6 +113,7 @@ class UserController extends AbstractController
         //dd($n);
         return $n;
     }
+
     /**
      * @Route("/admin/client_de/{user_id}", name="supprimer_client_de")
      */

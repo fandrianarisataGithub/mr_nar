@@ -27,8 +27,91 @@ class PageController extends AbstractController
      */
     public function triage(ClientRepository $repoClient, PointageRepository $repoPointage, EntityManagerInterface $manager)
     {
+        
        return $this->redirectToRoute("app_login");
         
+    }
+
+
+    public function triage_principal(ClientRepository $repoClient, EntityManagerInterface $manager)
+    {
+        $c = $repoClient->findAll();
+        $today = new \DateTime();
+        $tomoth = $today->format('m-Y');
+        foreach($c as $item){
+            // si nouveau client
+            if($item->getCreatedAt() == $today){
+                $item->setEtatClient('nouveau');
+                $manager->persist($item);
+                $manager->flush();
+            }
+            // si androany no nanomboka ny pointage -ny
+            $nextPointage = $item->getNomPointageAv();
+            if($tomoth == $nextPointage){
+                // client présent pour le pointage
+                $item->setEtatClient('présent');
+                $manager->persist($item);
+                $manager->flush();
+            }
+
+            // si tokony hanao pointage izy androany
+            $son_tab_pointage = $item->getTabPointage();
+            $t = explode("__", $son_tab_pointage);
+            if(in_array($tomoth, $t)){
+                // numero firy @ pointage-ny io
+                $key = array_search($tomoth, $t);
+                $numero = $item->getNumeroPointage();
+                if( $numero >= ($key - 1)){
+                    // nahaloha teo aloha
+                    $item->setEtatClient('présent');
+                    $manager->persist($item);
+                    $manager->flush();
+                }
+                elseif( $numero <= ($key - 3)){
+                    // nanjavona
+                    $item->setEtatClient('impayé');
+                    $manager->persist($item);
+                    $manager->flush();
+                }
+                else{
+                    // tsy nahaloha 
+                    $item->setEtatClient('suspendu');
+                    $manager->persist($item);
+                    $manager->flush();
+                }
+            }
+            // reo archivé
+            if($item->getDateFin() < $today){
+                $item->setEtatClient('archivé');
+                $manager->persist($item);
+                $manager->flush();
+            }
+
+            // ireo en attente 
+            $etat = $item->getEtatClient();
+            // premier jour du mois 
+            $tomoth = $today->format('m-Y');
+            $p = "1-".$tomoth;
+           
+            $date1 = new \DateTime($p);
+            //dd($date1);
+            $date = date_create($date1->format("Y-m-d"));
+
+            // raha ny 1 mois avant no hitsarana azy
+            
+            date_add($date, date_interval_create_from_date_string(1 . ' months'));
+            //dd($date);
+            $dd = $item->getDateDebut();
+            if($dd >= $date){
+                // en attente
+                $item->setEtatClient('attente');
+                $manager->persist($item);
+                $manager->flush();
+            }
+
+
+
+        }
     }
     
     /**
@@ -68,6 +151,9 @@ class PageController extends AbstractController
              "total_mmj" => $total_mmj,
             "nbr_client_du_jour" => $nbr_client_du_jour,
             "date_du_jour" => new \DateTime(),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
         ]);
     }
     /**
@@ -93,6 +179,9 @@ class PageController extends AbstractController
             'suspendu' => $this->count_suspendu($repoClient),
             'archived' => $this->count_archived($repoClient),
             'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
         ]);
         
         // Load HTML to Dompdf
@@ -132,6 +221,9 @@ class PageController extends AbstractController
             'suspendu' => $this->count_suspendu($repoClient),
             'archived' => $this->count_archived($repoClient),
             'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
         ]);
 
         // Load HTML to Dompdf
@@ -171,6 +263,9 @@ class PageController extends AbstractController
             'suspendu' => $this->count_suspendu($repoClient),
             'archived' => $this->count_archived($repoClient),
             'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
         ]);
 
         // Load HTML to Dompdf
@@ -202,6 +297,9 @@ class PageController extends AbstractController
             'suspendu' => $this->count_suspendu($repoClient),
             'archived' => $this->count_archived($repoClient),
             'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
         ]);
     }
     /**
@@ -217,13 +315,16 @@ class PageController extends AbstractController
             'suspendu' => $this->count_suspendu($repoClient),
             'archived' => $this->count_archived($repoClient),
             'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
         ]);
     }
 
     /**
      * @Route("/admin/client_paye", name="client_paye")
      */
-    public function client_pointed(ClientRepository $repoClient)
+    public function client_paye(ClientRepository $repoClient)
     {
         $user = new User();
         $items = $repoClient->countPresent('pointé');
@@ -233,6 +334,64 @@ class PageController extends AbstractController
             'suspendu' => $this->count_suspendu($repoClient),
             'archived' => $this->count_archived($repoClient),
             'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
+        ]);
+    }
+
+     /**
+     * @Route("/admin/client_nouveau", name="client_nouveau")
+     */
+    public function client_nouveau(ClientRepository $repoClient)
+    {
+        $user = new User();
+        $items = $repoClient->countPresent('nouveau');
+        return $this->render('page/client_nouveau.html.twig', [
+            'items' => $items,
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
+        ]);
+    }
+    /**
+     * @Route("/admin/client_attente", name="client_attente")
+     */
+    public function client_attente(ClientRepository $repoClient)
+    {
+        $user = new User();
+        $items = $repoClient->countPresent('attente');
+        return $this->render('page/client_attente.html.twig', [
+            'items' => $items,
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
+        ]);
+    }
+     /**
+     * @Route("/admin/client_impaye", name="client_impaye")
+     */
+    public function client_impaye(ClientRepository $repoClient)
+    {
+        $user = new User();
+        $items = $repoClient->countPresent('impayé');
+        return $this->render('page/client_impaye.html.twig', [
+            'items' => $items,
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
         ]);
     }
 
@@ -248,8 +407,8 @@ class PageController extends AbstractController
         $nbrMois = $client->getNbrVersement();
         $montant_mensuel = $client->getMontantMensuel();
         $pointages = $client->getPointages();
-        dd($pointages);
-        $nbr_p_effectue = count($pointage);
+        //dd($pointages);
+        $nbr_p_effectue = count($pointages);
        // dd($nbr_p_effectue);
         //nombre de mois restant
 
@@ -273,6 +432,9 @@ class PageController extends AbstractController
             'suspendu' => $this->count_suspendu($repoClient),
             'archived' => $this->count_archived($repoClient),
             'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
         ]);
     }
         
@@ -348,6 +510,9 @@ class PageController extends AbstractController
             'suspendu' => $this->count_suspendu($repoClient),
             'archived' => $this->count_archived($repoClient),
             'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
         ]);
     }
     
@@ -356,6 +521,30 @@ class PageController extends AbstractController
     public function count_present(ClientRepository $repoClient)
     {
         $tabPresent = $repoClient->countPresent('présent');
+        $n = count($tabPresent);
+        //dd($n);
+        return $n;
+        
+    }
+    public function count_impaye(ClientRepository $repoClient)
+    {
+        $tabPresent = $repoClient->countPresent('impayé');
+        $n = count($tabPresent);
+        //dd($n);
+        return $n;
+        
+    }
+    public function count_attente(ClientRepository $repoClient)
+    {
+        $tabPresent = $repoClient->countPresent('attente');
+        $n = count($tabPresent);
+        //dd($n);
+        return $n;
+        
+    }
+    public function count_nouveau(ClientRepository $repoClient)
+    {
+        $tabPresent = $repoClient->countPresent('nouveau');
         $n = count($tabPresent);
         //dd($n);
         return $n;

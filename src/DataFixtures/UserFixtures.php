@@ -67,6 +67,8 @@ class UserFixtures extends Fixture
 
                 $df_dt = new \DateTime($df);
                 $client->setDateFin($df_dt);
+                $date_fp = $dd->format('m-Y');
+                $client->setNomPointageAv($date_fp);
                 $tab_pointage = $this->tab_mois($client);
                 $client->setTabPointage($tab_pointage);
                 $client->setNumeroPointage(-1);

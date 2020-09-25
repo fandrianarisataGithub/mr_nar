@@ -4,7 +4,7 @@
 {% endblock %}
 {% block body %}
 	<div class="titre_page">
-		<h2>Liste des clients qui sont classé impayés</h2>
+		<h2>Liste des clients archivés</h2>
 	</div>
 
 	<div class="tableau tab_historique">
@@ -57,8 +57,7 @@
 							<br>
 							<span>MONTANT:</span><b class="unite">{{ item.montant }}</b><b class="unite">Ar</b>
 							<br>
-							<span>MONTANT MENS:</span><b class="unite">{{ item.getMontantMensuel() }}</b><b class="unite">Ar</b>
-							<br>
+							
 							<span>MONTANT MENS:</span><b class="unite">{{ item.getMontantMensuel() }}</b><b class="unite">Ar</b>
 							<br>
 							<span>NBR VERSEMENT:</span><b class="unite">{{ item.getNbrVersement() }}</b>

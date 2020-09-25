@@ -6,6 +6,7 @@ use DateTime;
 use DateInterval;
 use App\Entity\Client;
 use App\Entity\Pointage;
+use App\Form\PointageType;
 use App\Repository\ClientRepository;
 use App\Repository\PointageRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -82,10 +83,13 @@ class PointageController extends AbstractController
             'suspendu' => $this->count_suspendu($repoClient),
             'archived' => $this->count_archived($repoClient),
             'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
         ]);
     }
 
-    public function tabbleau_pointage(Client $client)
+    public function tableau_pointage(Client $client)
     {
         $n = $client->getNumeroPointage();
         $s = $client->getTabPointage();
@@ -116,7 +120,6 @@ class PointageController extends AbstractController
                     $pointage->setNom($nom);
                     $pointage->setNomLit($nom_lit);
                     $pointage->setCreatedAt($created_at);
-                    $pointage->setAnneeActuelle($annee);
                     $manager->persist($pointage);
                     $manager->flush();
                 } else {
@@ -141,8 +144,17 @@ class PointageController extends AbstractController
        // $mois_actus = $pointage2->getNomLit();
         $pointages = $repoPointage->findlesTenLastPointage();
         $last_p = $repoPointage->lastPointage();
+        //dd(count($last_p));
+        if(count($last_p)>0){
+            $lit = $last_p[0]->getNomLit();
+        }
+        else{
+            // mila mamorina pointage
+            return $this->redirectToRoute("create_pointage");
+
+        }
+       
         
-        $lit = $last_p[0]->getNomLit();
        // dd($lit);
         return $this->render('pointage/pointage.html.twig', [
             "items" => $items,
@@ -154,9 +166,39 @@ class PointageController extends AbstractController
             'suspendu' => $this->count_suspendu($repoClient),
             'archived' => $this->count_archived($repoClient),
             'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
         ]);
     }
 
+    /**
+     * @Route("/admin/create_pointage", name="create_pointage")
+     */
+    public function create_pointage(Request $request, ClientRepository $repoClient, EntityManagerInterface $manager)
+    {
+        $pointage = new Pointage();
+        $form = $this->createForm(PointageType::class, $pointage);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $pointage = $form->getData();
+            $pointage->setCreatedAt(new \DateTime());
+            $manager->persist($pointage);
+            $manager->flush();
+            return $this->redirectToRoute("pointage");
+        }
+        return $this->render('pointage/create_pointage.html.twig', [
+            "form"=> $form->createView(),
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
+        ]);
+        
+    }
     public function count_present(ClientRepository $repoClient)
     {
         $tabPresent = $repoClient->countPresent('présent');
@@ -287,6 +329,30 @@ class PointageController extends AbstractController
             $response->setContent($data);
             return $response;
         }
+    }
+    public function count_impaye(ClientRepository $repoClient)
+    {
+        $tabPresent = $repoClient->countPresent('impayé');
+        $n = count($tabPresent);
+        //dd($n);
+        return $n;
+        
+    }
+    public function count_attente(ClientRepository $repoClient)
+    {
+        $tabPresent = $repoClient->countPresent('attente');
+        $n = count($tabPresent);
+        //dd($n);
+        return $n;
+        
+    }
+    public function count_nouveau(ClientRepository $repoClient)
+    {
+        $tabPresent = $repoClient->countPresent('nouveau');
+        $n = count($tabPresent);
+        //dd($n);
+        return $n;
+        
     }
     
     public function test_etat(Client $client, \Datetime $x)

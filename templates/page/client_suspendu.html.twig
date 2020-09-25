@@ -55,8 +55,7 @@
 							<br>
 							<span>MONTANT MENS:</span><b class="unite">{{ item.getMontantMensuel() }}</b><b class="unite">Ar</b>
 							<br>
-							<span>MONTANT MENS:</span><b class="unite">{{ item.getMontantMensuel() }}</b><b class="unite">Ar</b>
-							<br>
+							
 							<span>NBR VERSEMENT:</span><b class="unite">{{ item.getNbrVersement() }}</b>
 						</td>
 						<td>
@@ -77,10 +76,6 @@
 								<div>
 									<a href="{{ path('single_page', {'id_client': item.id }) }}" class="voir btn btn-primary btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
 										<span>Voir</span>
-									</a>
-									<a href="#" data-id-client="{{ item.id }}" class="pointer btn btn-primary btn-xs">
-										<span>Pointer</span>
-										<span class="fa fa-check"></span>
 									</a>
 								</div>
 								<div class="div__pointer">

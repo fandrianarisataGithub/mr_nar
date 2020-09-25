@@ -145,6 +145,11 @@ class Client
      */
     private $tab_pointage;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $nom_pointage_av;
+
     public function __construct()
     {
         $this->pointages = new ArrayCollection();
@@ -413,6 +418,18 @@ class Client
     public function setTabPointage(string $tab_pointage): self
     {
         $this->tab_pointage = $tab_pointage;
+
+        return $this;
+    }
+
+    public function getNomPointageAv(): ?string
+    {
+        return $this->nom_pointage_av;
+    }
+
+    public function setNomPointageAv(string $nom_pointage_av): self
+    {
+        $this->nom_pointage_av = $nom_pointage_av;
 
         return $this;
     }
