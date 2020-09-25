@@ -15,7 +15,15 @@
 	</head>
 
 	<body>
-	
+	{# load #}
+    <div class="containers">
+        <div class="yellow bull"></div>
+        <div class="red bull"></div>
+        <div class="blue bull"></div>
+        <div class="violet bull"></div>
+    </div>
+
+    {# / load #}
 
 		<div class="container">
 			<div class="row">
@@ -74,9 +82,11 @@
 			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 			<script>
 				$(window).load(function() {
-						// Animate loader off screen
-						$(".se-pre-con").fadeOut("slow");;
-					});
+					// Animate loader off screen
+					$('.bull').css("animation-play-state", "paused");
+					$("div.containers").fadeOut("slow");
+					
+				});
 			</script>
 		</body>
 	</body>
