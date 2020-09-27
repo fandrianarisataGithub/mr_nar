@@ -12638,6 +12638,7 @@ fieldset[disabled] .btn-gplus.active {
 
 .bg-dark a {
     color: #adbece;
+    white-space: nowrap;
 }
 
 .bg-dark a:hover {

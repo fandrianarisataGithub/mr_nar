@@ -433,6 +433,32 @@ class Client
 
         return $this;
     }
+    public function tab_mois()
+    {
+        $now = $this->getDateDebut();
+        $n = $this->getNbrVersement();
+        $tab = [$now];
+        // dd($tab);
+        $tab_s = [];
+
+        for ($i = 1; $i < $n; $i++) {
+            $date = date_create($now->format("Y-m-d"));
+            date_add($date, date_interval_create_from_date_string($i . ' months'));
+            array_push($tab, $date);
+        }
+        //dd($tab);
+        for ($i = 0; $i < count($tab); $i++) {
+            $s = $tab[$i]->format('d-m-Y');
+            $t = explode("-", $s);
+            $mois = $t[1] . "-" . $t[2];
+            array_push($tab_s, $mois);
+        }
+        $string = $tab_s[0];
+        for ($i = 1; $i < count($tab_s); $i++) {
+            $string .= "__" . $tab_s[$i];
+        }
+        return $string;
+    }
 
    
 

@@ -29,7 +29,7 @@
                             <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen,open" data-target="#nav,html">
                                 <i class="fa fa-bars"></i>
                             </a>
-                            <a href="#" class="navbar-brand" data-toggle="fullscreen">Groupe</a>
+                            <a href="#" class="navbar-brand" data-toggle="fullscreen">TRANOMBAROTRA RASOLONDRAINIBE</a>
                             <a class="btn btn-link visible-xs" id="btn_menu" data-toggle="class:nav-off-screen,open" data-target="#nav,html">
                                 <i class="fa fa-times"></i>
                             </a>
@@ -56,10 +56,10 @@
                                         <!-- nav -->
                                         <nav class="nav-primary hidden-xs">
                                             <ul class="nav">
-                                                <li class="active">
+                                                <li class="li_profil">
                                                     <a href="#" class="active">
                                                         <i class="fa fa-user icon">
-                                                        </i> <span>Nom du user</span>
+                                                        </i> <span>{{ app.user.nom }}</span>
                                                     </a>
                                                 </li>
                                                 <li {% if is_granted('ROLE_ADMIN') %}
@@ -207,7 +207,13 @@
 
                                             </ul>
                                         </nav>
-                                         <div class="div__form">
+                                         <div class="div__form" {% if is_granted('ROLE_ADMIN') %}
+                                         style = "display:block;"
+                                         
+                                         {% else %}
+                                         style = "display:none;"
+
+                                     {% endif %}>
                                                 <form action="">
                                                 <input type="text" placeholder="Rechercher un matricule">
                                                 <a href="#" class="btn btn-primary btn btn-xs"><i class="fa fa-search"></i></a>
@@ -409,12 +415,13 @@
 					type : "POST",
 					data : data,
 					success : function(response){
-						if(response=="0"){
+						/*if(response=="0"){
 							window.location.href = "{{ path('pointage') }}";
 						}
 						else{
 							alert('Le montant entré n\'est incorrect ')
-						}
+                        }*/
+                        alert(response);
 					},
 					error : function(){
 						alert('erreur ajax');

@@ -114,11 +114,11 @@ class PointageRepository extends ServiceEntityRepository
      * @return Pointage[] Returns an array of Pointage objects  
      */
 
-    public function findlesTenLastPointage()
+    public function findlesTwelveLastPointage()
     {
         return $this->createQueryBuilder('p')
             ->orderBy('p.id', 'DESC')
-            ->setMaxResults(10)
+            ->setMaxResults(36)
             ->getQuery()
             ->getResult();
     }

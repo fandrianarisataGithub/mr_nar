@@ -81,7 +81,14 @@ class ClientController extends AbstractController
                     $client->setCreatedAt(new \DateTime());
                     $client->setImage1($newFilename1);
                     $client->setImage2($newFilename2);
-                    $client->setEtatClient("présent");
+                    $client->setEtatClient("nouveau");
+                    $client->setNumeroPointage('-1');
+                    $s = $client->tab_mois();
+                    $client->setTabPointage($s);
+                    $dd = $form_register->get('date_debut')->getData();
+                    $date_fp = $dd->format('m-Y');
+                    $client->setNomPointageAv($date_fp);
+                    //dd($client);
                 }
                 // calcul de la date 
                 $dd = $form_register->get('date_debut')->getData();
@@ -100,6 +107,10 @@ class ClientController extends AbstractController
                 $client->setDateFin($df_dt);
                 $etat = $client->getEtatClient();
                 $client->setEtatClient($etat);
+                $date_fp = $dd->format('m-Y');
+                $client->setNomPointageAv($date_fp);
+                $client->setEtatClient("nouveau");
+                $client->setNumeroPointage('-1');
               
             }
             //  dd($client);
@@ -194,48 +205,63 @@ class ClientController extends AbstractController
         $today = new \DateTime();
         $tomoth = $today->format('m-Y');
         foreach($c as $item){
-            // si nouveau client
-            if($item->getCreatedAt() == $today){
-                $item->setEtatClient('nouveau');
-                $manager->persist($item);
-                $manager->flush();
-            }
+            
             // si androany no nanomboka ny pointage -ny
             $nextPointage = $item->getNomPointageAv();
+            $n = $item->getNumeroPointage();
+            // tokony hanao pointage ve izy @ty?
             if($tomoth == $nextPointage){
-                // client présent pour le pointage
-                $item->setEtatClient('présent');
-                $manager->persist($item);
-                $manager->flush();
-            }
-
-            // si tokony hanao pointage izy androany
-            $son_tab_pointage = $item->getTabPointage();
-            $t = explode("__", $son_tab_pointage);
-            if(in_array($tomoth, $t)){
-                // numero firy @ pointage-ny io
-                $key = array_search($tomoth, $t);
-                $numero = $item->getNumeroPointage();
-                if( $numero >= ($key - 1)){
-                    // nahaloha teo aloha
+                // si le pointage est le premier
+                if($n == '-1'){
+                    // client présent pour le pointage
                     $item->setEtatClient('présent');
                     $manager->persist($item);
                     $manager->flush();
-                }
-                elseif( $numero <= ($key - 3)){
-                    // nanjavona
-                    $item->setEtatClient('impayé');
-                    $manager->persist($item);
-                    $manager->flush();
+                
                 }
                 else{
-                    // tsy nahaloha 
-                    $item->setEtatClient('suspendu');
-                    $manager->persist($item);
-                    $manager->flush();
+                    // nandoha ve teo aloha ?
+                    // on liste les pointage de ce client 
+                    $tabPoint = $this->liste_pointage_du_client($client);
+                    // le mois dernier 
+                    $s = $this->nom_dernier_mois();
+                    // nanao pointage ve izy t@io 
+                    if(in_array($s, $tabPoint)){
+                        //nanao izy
+                        //atao client présent
+                        $item->setEtatClient('présent');
+                        $manager->persist($item);
+                        $manager->flush();
+                    }
+                    else{
+                        
+                        // suspendu izy
+                        /* $item->setEtatClient('suspendu');
+                        $manager->persist($item);
+                        $manager->flush();*/
+                        // impiry izy no tsy nandoha ?
+                        // alaina aloha ny liste pointage tokony ho ataony 
+                        $list = $item->getTabPointage();
+                        $ls = explode("__", $list);
+                        // tadaviko oe indice firy ao ty mois ty $tomoth
+                        $key = array_search($tomoth, $list);
+                        if($key >= 3){
+                            $item->setEtatClient('impayé');
+                            $manager->persist($item);
+                            $manager->flush();
+                        }
+                        else{
+                            $item->setEtatClient('suspendu');
+                            $manager->persist($item);
+                            $manager->flush();
+                        }
+
+
+                    }
                 }
+
+                
             }
-            // reo archivé
             if($item->getDateFin() < $today){
                 $item->setEtatClient('archivé');
                 $manager->persist($item);
@@ -263,6 +289,7 @@ class ClientController extends AbstractController
                 $manager->persist($item);
                 $manager->flush();
             }
+
 
 
         }
@@ -496,8 +523,18 @@ class ClientController extends AbstractController
     }
     public function count_nouveau(ClientRepository $repoClient)
     {
-        $tabPresent = $repoClient->countPresent('nouveau');
-        $n = count($tabPresent);
+        $tabPresent = $repoClient->findAll();
+        $tab = [];
+        foreach($tabPresent as $item){
+            $c = $item->getCreatedAt();
+            $today = new \DateTime();
+            $today_s = $today->format('d-m-Y');
+            $c_s = $c->format("d-m-Y");
+            if($c_s == $today_s){
+               array_push($tab, $item);
+            }
+        }
+        $n = count($tab);
         //dd($n);
         return $n;
         

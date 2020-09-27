@@ -95,6 +95,20 @@ class ClientRepository extends ServiceEntityRepository
         return $stmt->fetchAll();
     }
 
+    public function findOneByIdJoinedToPointage($clientId)
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT c, p
+            FROM App\Entity\Client c
+            INNER JOIN c.pointages p
+            WHERE c.id = :id'
+        )->setParameter('id', $clientId);
+
+        return $query->getOneOrNullResult();
+    }
+
 
     /**
      * @return Client[] Returns an array of Client objects

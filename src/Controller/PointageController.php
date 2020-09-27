@@ -39,30 +39,22 @@ class PointageController extends AbstractController
                 $error = 1;
             }
             else{
-                
-                $pointage->addClient($client);
-                $manager->persist($pointage);
 
-               
+                // atao le pointage
+                $pointage->addClient($client);
                 $n = $client->getNumeroPointage();
                 $n++;
                 $client->setNumeroPointage($n);
-                // si son num point correspond au mois actuels
-                $tab = $this->tabbleau_pointage($client);
-                $mois_actus = $this->getMoisText(new \DateTime());
-                if($mois_actus == $client->getNumeroPointage()){
-                    // mettre ce client parmis les pointé
-                    $client->setEtatClient('pointé');
-                }
-                else{
-                    // mettre ce client parmis les présent
-                    $client->setEtatClient('présent');
-                }
-
-
+                $s = $client->getTabPointage();
+                $tab = explode("__", $s);
+                $n++;
+                $client->setNomPointageAv($tab[$n]);
+                $client->setEtatClient("pointé");
+                $manager->persist($pointage);
                 $manager->persist($client);
                 $manager->flush();
-                
+
+
                
             }
             $data = json_encode($error); // formater le résultat de la requête en json
@@ -142,7 +134,7 @@ class PointageController extends AbstractController
         $mois_actus = $this->getMoisText($now);
        
        // $mois_actus = $pointage2->getNomLit();
-        $pointages = $repoPointage->findlesTenLastPointage();
+        $pointages = $repoPointage->findlesTwelveLastPointage();
         $last_p = $repoPointage->lastPointage();
         //dd(count($last_p));
         if(count($last_p)>0){
@@ -348,12 +340,23 @@ class PointageController extends AbstractController
     }
     public function count_nouveau(ClientRepository $repoClient)
     {
-        $tabPresent = $repoClient->countPresent('nouveau');
-        $n = count($tabPresent);
+        $tabPresent = $repoClient->findAll();
+        $tab = [];
+        foreach($tabPresent as $item){
+            $c = $item->getCreatedAt();
+            $today = new \DateTime();
+            $today_s = $today->format('d-m-Y');
+            $c_s = $c->format("d-m-Y");
+            if($c_s == $today_s){
+               array_push($tab, $item);
+            }
+        }
+        $n = count($tab);
         //dd($n);
         return $n;
         
     }
+
     
     public function test_etat(Client $client, \Datetime $x)
     {   
