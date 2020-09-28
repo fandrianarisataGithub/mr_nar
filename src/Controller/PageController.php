@@ -56,7 +56,7 @@ class PageController extends AbstractController
                 else{
                     // nandoha ve teo aloha ?
                     // on liste les pointage effectué par ce client 
-                    $tabPoint = $this->liste_pointage_du_client($client);
+                    $tabPoint = $this->liste_pointage_du_client($item, $repoClient);
                     // le mois dernier 
                     $s = $this->nom_dernier_mois();
                     // nanao pointage ve izy t@io 
@@ -76,7 +76,7 @@ class PageController extends AbstractController
                         // impiry izy no tsy nandoha ?
                         // alaina aloha ny liste pointage tokony ho ataony 
                         $list = $item->getTabPointage();
-                        $ls = explode("__", $list);
+                        $list = explode("__", $list);
                         // tadaviko oe indice firy ao ty mois ty $tomoth
                         $key = array_search($tomoth, $list);
                         if($key >= 3){
@@ -132,11 +132,10 @@ class PageController extends AbstractController
     /**
      * @Route("/test", name = "test")
      */
-    public function liste_pointage_du_client(Client $client)
+    public function liste_pointage_du_client(Client $client, ClientRepository $repoClient)
     {   
 
         
-        $repoClient = $this->getDoctrine()->getRepository(Client::class);
         $le_client = $repoClient->findOneByIdJoinedToPointage($client->getId());
         // si ce client a  des pointages
         if($le_client != null){
@@ -473,7 +472,7 @@ class PageController extends AbstractController
     public function single_page($id_client, ClientRepository $repoClient, PointageRepository $repoPointage)
     {   
         $client = new Client();
-       $client = $repoClient->find(id_client);
+       $client = $repoClient->find($id_client);
       
        $pointage = new Pointage();
         $montant = $client->getMontant();
@@ -486,7 +485,7 @@ class PageController extends AbstractController
         //dd($liste);
         //liste pointage effectué
         $liste_pointage_e = [];
-        $pointages = $this->liste_pointage_du_client($client);
+        $pointages = $this->liste_pointage_du_client($client, $repoClient);
        if($pointages != "vide"){
             for($i=0; $i<count($pointages); $i++){
                 array_push($liste_pointage_e, $pointages[$i]);

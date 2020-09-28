@@ -119,32 +119,46 @@ class ClientController extends AbstractController
             return $this->redirectToRoute("register_client");
 
         }
-        $clients_du_jour = $repoClient->clientDuJour($user);
-        $items = $repoClient->chercherTous($user);
-        
         // calcul des montant journalier
 
-        $mj = 0 ;
+       
+        $allClient = $repoClient->findByUser($user);
+        //dd($allClient);
+        $tab1 = [];
+        foreach($allClient as $cu){
+            $createdAt = $cu->getCreatedAt();
+            $createdAt = $createdAt->format("d-m-Y");
+            //dd($createdAt);
+            // raha vao androany
+            $now = new \DateTime();
+            $now = $now->format("d-m-Y");
+           // dd($now);
+            if($now == $createdAt){
+                array_push($tab1, $cu);
+              
+            }  
+        }
+        //dd($tab1);
+        $mj = 0;
         $mmj = 0;
-        foreach($clients_du_jour as $item){
-            $mj += $item['montant'];
-            $mmj += $item['montant_mensuel'];
+        foreach ($tab1 as $item) {
+            $mj += $item->getMontant();
+            $mmj += $item->getMontantMensuel();
         }
        
 
         return $this->render('client/register.html.twig', [
             "form" => $form_register->createView(),
-            "items" => $items,
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
             'archived' => $this->count_archived($repoClient),
             'pointed' => $this->count_pointed($repoClient),
             "date_du_jour" => $date_du_jour,
             "misy" => $misy,
-            "clients_du_jour" => $clients_du_jour,
+            "clients_du_jour" => $tab1,
             "mmj" => $mmj,
             "mj" => $mj,
-            "nbr_client_jour" => count($clients_du_jour),
+            "nbr_client_jour" => count($tab1),
             'nouveau' => $this->count_nouveau($repoClient),
             'impaye' => $this->count_impaye($repoClient),
             'attente' => $this->count_attente($repoClient),
@@ -162,13 +176,25 @@ class ClientController extends AbstractController
 
         $user = $repos->find($user_id);
         $nom = $user->getNom();
-        $clients_du_jour = $repoClient->clientDuJour($user);
+        $clients_du_jour = [];
         $items = $repoClient->findByUser($user);
+        foreach ($items as $cu) {
+            $createdAt = $cu->getCreatedAt();
+            $createdAt = $createdAt->format("d-m-Y");
+            //dd($createdAt);
+            // raha vao androany
+            $now = new \DateTime();
+            $now = $now->format("d-m-Y");
+            // dd($now);
+            if ($now == $createdAt) {
+                array_push($clients_du_jour, $cu);
+            }
+        }
         $mj = 0;
         $mmj = 0;
         foreach ($clients_du_jour as $item) {
-            $mj += $item['montant'];
-            $mmj += $item['montant_mensuel'];
+            $mj += $item->getMontant();
+            $mmj += $item->getMontantMensuel();
         }
         //Total be 
         $m = 0;
@@ -177,7 +203,6 @@ class ClientController extends AbstractController
             $m += $item->getMontant();
             $mm += $item->getMontantMensuel();
         }
-        $this->triage_principal($repoClient, $manager);
        
         //dd($items);
         return $this->render("client/listeClientUser.html.twig",[
@@ -222,7 +247,7 @@ class ClientController extends AbstractController
                 else{
                     // nandoha ve teo aloha ?
                     // on liste les pointage de ce client 
-                    $tabPoint = $this->liste_pointage_du_client($client);
+                    $tabPoint = $this->liste_pointage_du_client($item, $repoClient);
                     // le mois dernier 
                     $s = $this->nom_dernier_mois();
                     // nanao pointage ve izy t@io 
@@ -242,7 +267,7 @@ class ClientController extends AbstractController
                         // impiry izy no tsy nandoha ?
                         // alaina aloha ny liste pointage tokony ho ataony 
                         $list = $item->getTabPointage();
-                        $ls = explode("__", $list);
+                        $list = explode("__", $list);
                         // tadaviko oe indice firy ao ty mois ty $tomoth
                         $key = array_search($tomoth, $list);
                         if($key >= 3){
@@ -294,6 +319,49 @@ class ClientController extends AbstractController
 
         }
     }
+    /**
+     * @Route("/test", name = "test")
+     */
+    public function liste_pointage_du_client(Client $client, ClientRepository $repoClient)
+    {
+
+
+        $le_client = $repoClient->findOneByIdJoinedToPointage($client->getId());
+        // si ce client a  des pointages
+        if ($le_client != null) {
+            //dd($sesPointages);
+            $tab = $le_client->getPointages();
+
+            $tabNom = [];
+            for ($i = 0; $i < count($tab); $i++) {
+                $n = $tab[$i]->getNom();
+                array_push($tabNom, $n);
+            }
+            //dd($tabNom);
+            return $tabNom;
+        } else {
+            return 'vide';
+        }
+    }
+
+    public function nom_dernier_mois()
+    {
+        $today = new \DateTime();
+        $tomoth = $today->format('m-Y');
+        $p = "1-" . $tomoth;
+
+        $date1 = new \DateTime($p);
+        //dd($date1);
+        $date = date_create($date1->format("Y-m-d"));
+
+        // raha ny 1 mois avant no hitsarana azy
+
+        date_add($date, date_interval_create_from_date_string(-1 . ' months'));
+        $s = $date->format("m-Y");
+
+        return $s;
+    }
+    
     /**
      * @Route("/admin/count", name="count")
      */

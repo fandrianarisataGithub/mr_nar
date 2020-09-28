@@ -73,26 +73,26 @@
 					</td>
 					<td>
 						<span class="numero_bl">
-							{{ item.numero_bl | raw }}</span>
+							{{ item.getNumeroBl() | raw }}</span>
 					</td>
 					<td>
 						<sapn class="montant_client">{{ item.montant }}</sapn>
 						<span style="margin-left:5px;">Ar</span>
 					</td>
 					<td>
-						<sapn class="montant_mens_client">{{ item.montant_mensuel }}</sapn>
+						<sapn class="montant_mens_client">{{ item.getMontantMensuel() }}</sapn>
 						<span style="margin-left:5px;">Ar</span>
 					</td>
 					<td>
-						<sapn class="nbr_versement_client">{{ item.nbr_versement }}</sapn>
+						<sapn class="nbr_versement_client">{{ item.getNbrVersement() }}</sapn>
 					</td>
 					<td>
 						<span class="date_debut">
-							{{ item.date_debut | date('d-m-Y') }}</span>
+							{{ item.getDateDebut() | date('d-m-Y') }}</span>
 					</td>
 					<td>
 						<span class="date_fin">
-							{{ item.date_fin | date('d-m-Y') }}</span>
+							{{ item.getDateFin() | date('d-m-Y') }}</span>
 					</td>
 				</tr>
 			{% endfor %}
