@@ -137,18 +137,18 @@ class PageController extends AbstractController
 
         
         $le_client = $repoClient->findOneByIdJoinedToPointage($client->getId());
+        //dd($le_client);
         // si ce client a  des pointages
         if($le_client != null){
             //dd($sesPointages);
             $tab = $le_client->getPointages();
-            
-            $tabNom = [];
-            for($i=0; $i<count($tab); $i++){
-                $n = $tab[$i]->getNom();
-                array_push($tabNom, $n);
-            }
+            // $tabNom = [];
+            // for($i=0; $i<count($tab); $i++){
+            //     $n = $tab[$i]->getNom();
+            //     array_push($tabNom, $n);
+            // }
             //dd($tabNom);
-            return $tabNom;
+            return $tab;
         }
         else{
             return 'vide';
@@ -473,27 +473,27 @@ class PageController extends AbstractController
     {   
         $client = new Client();
        $client = $repoClient->find($id_client);
-      
+        
        $pointage = new Pointage();
         $montant = $client->getMontant();
         $nbrMois = $client->getNbrVersement();
         $montant_mensuel = $client->getMontantMensuel();
         // liste des pointages t0kony atao
         $liste_point_lit = $client->getTabPointage();
-        //dd($liste);
-        //$liste = explode("__", $liste);
-        //dd($liste);
+        //dd($liste_point_lit);
+        $tableauPointageAeff = explode("__", $liste_point_lit);
+        //dd($tableauPointageAeff);
         //liste pointage effectué
         $liste_pointage_e = [];
         $pointages = $this->liste_pointage_du_client($client, $repoClient);
-       if($pointages != "vide"){
-            for($i=0; $i<count($pointages); $i++){
-                array_push($liste_pointage_e, $pointages[$i]);
-            }
-       }
+        if($pointages != "vide"){
+                for($i=0; $i<count($pointages); $i++){
+                    array_push($liste_pointage_e, $pointages[$i]);
+                }
+        }
        //dd(count($liste_pointage_e));
       
-
+        //dd($pointages);
         //dd($pointages['nom']);
         $nbr_p_effectue = count($liste_pointage_e);
         //dd($nbr_p_effectue);
@@ -522,8 +522,8 @@ class PageController extends AbstractController
             'nouveau' => $this->count_nouveau($repoClient),
             'impaye' => $this->count_impaye($repoClient),
             'attente' => $this->count_attente($repoClient),
-            'liste' =>$liste_point_lit,
-            "liste_pointage_e" => $liste_pointage_e,
+            'tableauAEff' => $tableauPointageAeff,
+            "liste_pointage_e" => $pointages,
         ]);
     }
         

@@ -99,49 +99,23 @@
 		<div class="titre_page">
 			<h2>Etat actuel du paiement effectué</h2>
 		</div>
-		<div class="tableau_etat">
-			<ul>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-			</ul>
-			<ul>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-			</ul>
-			<ul>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-				<li>TTT</li>
-			</ul>
+		<div class="tableau_etat col-sm-8">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Mois du Pointage effectué</th>
+						<th>Date Du pointage</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for item in liste_pointage_e %}
+						<tr>
+							<td>{{ item.getNomLit() }}</td>
+							<td>{{ item.getCreatedAt() | date('d-m-Y') }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
 		</div>
 		<div class="action_dangeureux">
 			<a href="{{ path('suspendre_client', {'id':item.id}) }}" class="btn btn-danger btn-sm">Suspendre ce client</a>
