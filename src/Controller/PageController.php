@@ -55,7 +55,7 @@ class PageController extends AbstractController
                 }
                 else{
                     // nandoha ve teo aloha ?
-                    // on liste les pointage de ce client 
+                    // on liste les pointage effectué par ce client 
                     $tabPoint = $this->liste_pointage_du_client($client);
                     // le mois dernier 
                     $s = $this->nom_dernier_mois();
@@ -132,23 +132,29 @@ class PageController extends AbstractController
     /**
      * @Route("/test", name = "test")
      */
-    public function liste_pointage_du_client(Client $client = null)
+    public function liste_pointage_du_client(Client $client)
     {   
 
         
-
-        
         $repoClient = $this->getDoctrine()->getRepository(Client::class);
-        $le_client = $repoClient->findOneByIdJoinedToPointage('4');
-        //dd($sesPointages);
-        $tab = $le_client->getPointages();
-        $tabNom = [];
-        for($i=0; $i<count($tab); $i++){
-            $n = $tab[$i]->getNom();
-            array_push($tabNom, $n);
+        $le_client = $repoClient->findOneByIdJoinedToPointage($client->getId());
+        // si ce client a  des pointages
+        if($le_client != null){
+            //dd($sesPointages);
+            $tab = $le_client->getPointages();
+            
+            $tabNom = [];
+            for($i=0; $i<count($tab); $i++){
+                $n = $tab[$i]->getNom();
+                array_push($tabNom, $n);
+            }
+            //dd($tabNom);
+            return $tabNom;
         }
-        //dd($tabNom);
-        return $tabNom;
+        else{
+            return 'vide';
+        }
+       
     }
 
     public function nom_dernier_mois()
@@ -180,7 +186,7 @@ class PageController extends AbstractController
        $total_mj = 0;
        $total_mmj = 0;
        $nbr_client_du_jour = 0;
-        $pointages = $repoPointage->findlesTenLastPointage();
+        $pointages = $repoPointage->findlesTwelveLastPointage();
         foreach($users as $itemUser){
             $clients_du_jour_user = $repoClient->clientDuJour($itemUser);
             $mj = 0;
@@ -467,15 +473,31 @@ class PageController extends AbstractController
     public function single_page($id_client, ClientRepository $repoClient, PointageRepository $repoPointage)
     {   
         $client = new Client();
-        $client = $repoClient->find($id_client);
-        $pointage = new Pointage();
+       $client = $repoClient->find(id_client);
+      
+       $pointage = new Pointage();
         $montant = $client->getMontant();
         $nbrMois = $client->getNbrVersement();
         $montant_mensuel = $client->getMontantMensuel();
-        $pointages = $client->getPointages();
-        //dd($pointages);
-        $nbr_p_effectue = count($pointages);
-       // dd($nbr_p_effectue);
+        // liste des pointages t0kony atao
+        $liste_point_lit = $client->getTabPointage();
+        //dd($liste);
+        //$liste = explode("__", $liste);
+        //dd($liste);
+        //liste pointage effectué
+        $liste_pointage_e = [];
+        $pointages = $this->liste_pointage_du_client($client);
+       if($pointages != "vide"){
+            for($i=0; $i<count($pointages); $i++){
+                array_push($liste_pointage_e, $pointages[$i]);
+            }
+       }
+       //dd(count($liste_pointage_e));
+      
+
+        //dd($pointages['nom']);
+        $nbr_p_effectue = count($liste_pointage_e);
+        //dd($nbr_p_effectue);
         //nombre de mois restant
 
         $nbr_mois_restant = $nbrMois - $nbr_p_effectue;
@@ -501,6 +523,8 @@ class PageController extends AbstractController
             'nouveau' => $this->count_nouveau($repoClient),
             'impaye' => $this->count_impaye($repoClient),
             'attente' => $this->count_attente($repoClient),
+            'liste' =>$liste_point_lit,
+            "liste_pointage_e" => $liste_pointage_e,
         ]);
     }
         

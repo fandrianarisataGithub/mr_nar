@@ -101,6 +101,46 @@
 		</div>
 		<div class="tableau_etat">
 			<ul>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+			</ul>
+			<ul>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+			</ul>
+			<ul>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
+				<li>TTT</li>
 			</ul>
 		</div>
 		<div class="action_dangeureux">
@@ -155,34 +195,7 @@
 				'Décembre']
 
 
-			// pour le calcul
-			/*for (var i = 5; i <=19; i++) { // 19 = (5 + 15) - 1 où 15 = nma et 5 = debut de mois
-				if(i<=11){
-					//console.log(mois[i])
-					tab_mois.push(mois[i]+"-"+annee2);
-				}
-				if( i>= 12){
-					// supposon que le nma = 15
-					var j = i % 12 ;
-						//console.log(mois[j])
-						tab_mois.push(mois[j]+"-"+annee);
-				}
-			}
-			//console.log(tab_mois)
-			// design
-			$('.tableau_etat ul').html('');
-			var string = "";
-			for (var i = 0; i < tab_mois.length; i++) {
-				if(i<5){ // ex 5 = nbr de pointage effectué avant
-					string+='<li><span>'+tab_mois[i]+'</span><span><i class="fa fa-check"></i></span></li>'
-				}
-				else{
-					string+='<li><span>'+tab_mois[i]+'</span><span></span></li>'
-				}
-				
-			}
-			$('.tableau_etat ul').html(string);*/
-
+			
 			// en pratique 
 			var fin_boucle = (dm + nma) - 1;
 			var debut_boucle = dm;
@@ -198,20 +211,7 @@
 						tab_mois.push(mois[j]+"-"+annee);
 				}
 			}
-			//console.log(tab_mois)
-			// design
-			$('.tableau_etat ul').html('');
-			var string = "";
-			for (var i = 0; i < tab_mois.length; i++) {
-				if(i<nbr_pointage_e){ // ex 5 = nbr de pointage effectué avant
-					string+='<li><span>'+tab_mois[i]+'</span><span><i class="fa fa-check"></i></span></li>'
-				}
-				else{
-					string+='<li><span>'+tab_mois[i]+'</span><span></span></li>'
-				}
-				
-			}
-			$('.tableau_etat ul').html(string);
+			// atao tableau fa tsy ul le liste
 			
 
 		})
