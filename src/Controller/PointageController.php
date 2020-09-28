@@ -22,7 +22,7 @@ class PointageController extends AbstractController
     /**
      * @Route("/admin/pointer_client" , name="pointer_client")
      */
-    public function pointer_client(Request $request, ClientRepository $repoClient, EntityManagerInterface $manager, PointageRepository $repoPointage)
+    public function pointer_client_dans_pointage(Request $request, ClientRepository $repoClient, EntityManagerInterface $manager, PointageRepository $repoPointage)
     {
         $response = new Response();
         
@@ -87,6 +87,175 @@ class PointageController extends AbstractController
         $s = $client->getTabPointage();
         $tab = explode("__", $s);
         return $tab;
+    }
+
+    /**
+     * @Route("/admin/autrepointage/{id_client}", name="autrepointage")
+     */
+    public function pointer_dehors($id_client, Request $request, ClientRepository $repoClient, PointageRepository $repoPointage, EntityManagerInterface $manager)
+    {
+       
+        $client = $repoClient->find($id_client);
+        // liste des pointage prévu
+        $tabPointage = $this->tableau_pointage($client);
+        $listeP_tsotra = $tabPointage;
+        $mois = [
+				'Janvier',
+				'Février',
+				 'Mars',
+				 'Avril',
+				'Mai',
+				'Juin',
+				'Juillet',
+				'Août',
+				'Septembre',
+				'Octobre',
+				'Novembre',
+                'Décembre'];
+           //dd($tabPointage[0]);  
+           $tab = [];   
+        for($i = 0; $i<count($tabPointage); $i++){
+            $s = explode("-", $tabPointage[$i]);
+            $n = $s[0] - 1;
+
+           $tabPointage[''.$i.''] = $mois[$n]."-".$s[1];
+            
+        }
+       // dd($tabPointage);
+        // liste des poinatge eff
+        $liste_p_eff = $this->liste_pointage_du_client($client, $repoClient);
+        $nouveau = "";
+        if (count($request->request) > 0) {
+           $nom_pointage = $request->request->get('pointage');
+           //dd($nom_poinatge);
+           // on select ce pointage 
+           $pointage = $repoPointage->findByNom($nom_pointage);
+           //dd($pointage);
+           // raha tsy mbola nisy iny pointage iny 
+           if(count($pointage)==0){
+              
+                return $this->render("pointage/autrepointage.html.twig", [
+                    "liste_p_p" => $tabPointage,
+                    'liste_tsotra' => $listeP_tsotra,
+                    "client" => $client,
+                    "liste_p_eff" => $liste_p_eff,
+                    'present' => $this->count_present($repoClient),
+                    'suspendu' => $this->count_suspendu($repoClient),
+                    'archived' => $this->count_archived($repoClient),
+                    'pointed' => $this->count_pointed($repoClient),
+                    'nouveau' => $this->count_nouveau($repoClient),
+                    'impaye' => $this->count_impaye($repoClient),
+                    'attente' => $this->count_attente($repoClient),
+                    'erreur' => "Veuiller créer un nouveau mois de pointage pour le mois : ". $nom_pointage,
+                ]);
+           }else{
+                // on fait le pointage
+                //si ce client n'a pas encore ce pointage 
+                $point_eff = $this->liste_pointage_du_client($client, $repoClient);
+                $sonNom_pointage = [];
+                for($i=0; $i<count($point_eff); $i++){
+                    array_push($sonNom_pointage, $point_eff[$i]->getNom());
+                }
+                //dd($sonNom_pointage);
+                if(in_array($nom_pointage, $sonNom_pointage)){
+                    // efa nahavita an'ion izy
+                    return $this->render("pointage/autrepointage.html.twig", [
+                        "liste_p_p" => $tabPointage,
+                        'liste_tsotra' => $listeP_tsotra,
+                        "client" => $client,
+                        "liste_p_eff" => $liste_p_eff,
+                        'present' => $this->count_present($repoClient),
+                        'suspendu' => $this->count_suspendu($repoClient),
+                        'archived' => $this->count_archived($repoClient),
+                        'pointed' => $this->count_pointed($repoClient),
+                        'nouveau' => $this->count_nouveau($repoClient),
+                        'impaye' => $this->count_impaye($repoClient),
+                        'attente' => $this->count_attente($repoClient),
+                        'erreur2' => "Ce client a déjà fait ce pointage",
+                    ]);
+                }
+               else{
+                    $client->addPointage($pointage[0]);
+                    $n = $client->getNumeroPointage();
+                    $n++;
+                    $client->setNumeroPointage($n);
+                    $n++;
+
+                    if ($n >= count($tabPointage)) {
+                        // pointé
+                    }
+                    else{
+                        $next = $tabPointage[$n];
+                        $client->setNomPointageAv($next);
+                    }
+                   
+                    $client->setEtatClient('pointé');
+               } 
+               $manager->persist($client);
+               $manager->flush();
+              
+
+           }
+        }
+
+       
+        return $this->render("pointage/autrepointage.html.twig", [
+            "liste_p_p"=>$tabPointage,
+            'liste_tsotra' => $listeP_tsotra,
+            "client" =>$client,
+            "liste_p_eff" => $liste_p_eff,
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
+            
+        ]);
+    }
+
+    /**
+     * @Route("/test", name = "test")
+     */
+    public function liste_pointage_du_client(Client $client, ClientRepository $repoClient)
+    {
+
+
+        $le_client = $repoClient->findOneByIdJoinedToPointage($client->getId());
+        //dd($le_client);
+        // si ce client a  des pointages
+        if ($le_client != null) {
+            //dd($sesPointages);
+            $tab = $le_client->getPointages();
+            // $tabNom = [];
+            // for($i=0; $i<count($tab); $i++){
+            //     $n = $tab[$i]->getNom();
+            //     array_push($tabNom, $n);
+            // }
+            //dd($tabNom);
+            return $tab;
+        } else {
+            return 'vide';
+        }
+    }
+
+    public function nom_dernier_mois()
+    {
+        $today = new \DateTime();
+        $tomoth = $today->format('m-Y');
+        $p = "1-" . $tomoth;
+
+        $date1 = new \DateTime($p);
+        //dd($date1);
+        $date = date_create($date1->format("Y-m-d"));
+
+        // raha ny 1 mois avant no hitsarana azy
+
+        date_add($date, date_interval_create_from_date_string(-1 . ' months'));
+        $s = $date->format("m-Y");
+
+        return $s;
     }
 
     /**

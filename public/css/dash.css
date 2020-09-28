@@ -14131,7 +14131,7 @@ aside.user_action {
     background: rgba(61, 61, 63, 0.8);
     width: 100%;
     height: 100%;
-    position: absolute;
+    position: fixed;
     /* display: flex;*/
     display: none;
     top: 0;
@@ -14177,13 +14177,16 @@ aside.user_action {
 .inner_modal {
     width: 50%;
     position: relative;
-    top: 10%;
+    top: 20%;
     background: #f1f2f6;
     border-radius: 5px;
     box-shadow: 0px 1px 3px #41586e;
     transform: scale(0);
     transition: transform 1.5s;
     transition-timing-function: cubic-bezier(0, 0.1, 0.7, 1);
+}
+.inner_modal.supprimer_client{
+    width: 360px !important;
 }
 
 .modal_liste_btn {
@@ -14426,6 +14429,30 @@ body tfoot tr td:last-child {
     text-align: start;
 }
 
+#details_client_p .col-sm-6 ul{
+    background: #4cc0c1;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    width: 320px;
+    border-radius: 5px;
+}
+#details_client_p .col-sm-6 .sous-titre-details h4{
+    padding-left: 15px;
+    border-bottom: 1px solid rgba(200,200,200,0.35);
+    padding-bottom: 15px;
+    margin-top: 15px;
+}
+.list_p{
+     padding-left: 25px;
+}
+#details_client_p .col-sm-6 ul li{
+    color: #fff;
+}
+#details_client_p .col-sm-6 ul li span:first-child{
+    display: inline-block;
+    width: 100px;
+}
+
 #cover_form_user {
     background: rgba(65, 88, 110, 0.9);
     width: 100% !important;
@@ -14614,7 +14641,24 @@ div.containers {
 	background-color: var(--violet);
 	animation-delay: 0.3s;
 }
-
+.form_pointage{
+    background: #4cc0c1;
+    padding: 15px;
+    margin-top: 25px;
+    border-radius: 5px;
+}
+.form_pointage label{
+    color: #fff;
+}
+.form_pointage button.btn{
+    background: #41586e;
+    border-radius: 3px;
+    border-color: transparent;
+}
+.form_pointage .form-control{
+     border-radius: 3px;
+    border-color: transparent;
+}
 @keyframes bounce {
 	0%, 50%, 100% {
 		transform: scale(1);

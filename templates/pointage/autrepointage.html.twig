@@ -1,0 +1,99 @@
+{% extends "base.html.twig" %}
+{% block title %}
+	client en regle
+{% endblock %}
+{% block body %}
+	<div class="titre_page">
+		<h2>Ajouter un pointage supplémentaire pour ce client</h2>
+	</div>
+    <div class="row" id="details_client_p">
+        <div class="col-sm-6">
+            <ul>
+                <li><span>Matricule : </span><span class="unite">{{ client.matricule }}</span> </li>
+                <li><span>Nom : </span><span class="unite">{{ client.nom }}</span> </li>
+                <li><span>Prénom : </span><span class="unite">
+                    {% if client.prenom is defined %}
+                        {{client.prenom}}
+                    {% endif %}
+                
+                </span> 
+                </li>
+            </ul>
+            <div class="sous-titre-details">
+                <h4>Liste des mois de pointages prévue</h4>
+            </div>
+            <div class="list_p">
+               {% for item in liste_p_p %}
+                   <span style="margin-right:5px;">{{ item }}</span><span>/</span>
+               {% endfor %}
+            </div>
+            <div class="sous-titre-details">
+                 <h4>Liste des mois de pointages effectués</h4>
+            </div>
+            <div class="tableau_etat col-sm-8">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Mois du Pointage effectué</th>
+                            <th>Date Du pointage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in liste_p_eff %}
+                            <tr>
+                                <td>{{ item.getNomLit() }}</td>
+                                <td>{{ item.getCreatedAt() | date('d-m-Y') }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="sous-titre-details">
+                <h4>Enregistrer un pointage</h4>
+            </div>
+           {% if erreur is defined %}
+               <div class="erreur">
+                    <p style="color:red;">
+                        {{ erreur }}
+                    </p>
+                    <a href="{{ path('create_pointage') }}" class="btn btn-primary btn-md">
+                        <span class="fa fa-plus" style="margin-right:5px"></span>
+                        <span class="unite">Ajouter un nouveau mois</span>
+                    </a>
+               </div>
+           {% endif %}
+            {% if erreur2 is defined %}
+               <div class="erreur">
+                    <p style="color:red;">
+                        {{ erreur2 }}
+                    </p>
+               </div>
+           {% endif %}
+            <form action="/admin/autrepointage/{{ client.id }}" method="POST" class="form_pointage">
+                <div class="form-group">
+                    <label for="">Sélectionner le poinatage</label>
+                    <select name="pointage" id="pointage_select" class="form-control">
+                        {% for item in liste_tsotra %}
+                            <option value="{{ item }}">{{ item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary form-control">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+{% block javascripts %}
+	<script>
+    
+    
+    </script>
+{% endblock %}
+

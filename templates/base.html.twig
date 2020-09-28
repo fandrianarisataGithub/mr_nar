@@ -240,7 +240,7 @@
                                     </div>
                                     {# modal suppr  #}
                                         <div id="modal_suppression">
-                                            <section class="inner_modal">
+                                            <section class="inner_modal supprimer_client">
                                                 <h3 class="modal_titre">Voulez-vous vraiment supprimer ce client?</h3>
                                                 <div class="modal_liste_btn">
                                                     <form>
@@ -351,7 +351,7 @@
 			$('.suppr').click(function(e){
 				e.preventDefault();
 				var id = $(this).attr('data-id-client');
-				//alert(id);
+				alert(id);
 				// on pose ce id dans le bouton suppr
 				$("#btn_supprimer_client").attr('data-id-client',id);
 				show_modal_suppression();
