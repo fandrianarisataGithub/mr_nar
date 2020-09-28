@@ -207,17 +207,32 @@
 
                                             </ul>
                                         </nav>
-                                         <div class="div__form" {% if is_granted('ROLE_ADMIN') %}
+                                         <div class="div__form" 
+                                         {% if is_granted('ROLE_ADMIN') %}
                                          style = "display:block;"
                                          
                                          {% else %}
                                          style = "display:none;"
 
-                                     {% endif %}>
+                                        {% endif %}>
                                                 <form action="">
-                                                <input type="text" placeholder="Rechercher un matricule">
-                                                <a href="#" class="btn btn-primary btn btn-xs"><i class="fa fa-search"></i></a>
+                                                    <input type="text" placeholder="Rechercher un matricule">
+                                                    <a href="#" class="btn btn-primary btn btn-xs"><i class="fa fa-search"></i></a>
                                                 </form>
+                                                <ul class="result_search">
+                                                    {# <li>
+                                                        <a href="#"><span>mat14</span></a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#"><span>mat14</span></a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#"><span>mat14</span></a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#"><span>mat14</span></a>
+                                                    </li> #}
+                                                </ul>
                                             </div>
                                         <!-- / nav -->
                                     </div>

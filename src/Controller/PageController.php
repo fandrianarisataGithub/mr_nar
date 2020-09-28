@@ -197,6 +197,18 @@ class PageController extends AbstractController
             
             return $s;
     }
+
+    /**
+     * @Route("/admin/search/{matricule}", name = "search")
+     */
+    public function search($matricule, Request $request, ClientRepository $repoClient)
+    {
+        $client = $repoClient->findByMatricule($matricule);
+        return $this->render("page/search.html.twig",[
+            "client" => $client,
+        ]);
+        
+    }
     
     /**
      * @Route("/profile/client_present", name="client_present")

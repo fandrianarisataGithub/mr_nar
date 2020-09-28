@@ -12674,7 +12674,27 @@ fieldset[disabled] .btn-gplus.active {
 .bg-dark .nav .open>a {
     background-color: #25313e;
 }
-
+ul.result_search{
+    list-style: none;
+    margin: 0;
+    padding:0;
+    margin-top: 15px;
+   
+    height: 180px;
+    overflow-y: hidden;
+}
+ul.result_search li{
+    height: 30px;
+    border-bottom: 0.5px solid rgba(200,200,200,0.5);
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+}
+ul.result_search li a{
+    display: block;
+     height: 30px;
+    padding-top: 5px;
+}
 .bg-dark.navbar .nav>li.active>a {
     color: #fff;
     background-color: #25313e;
