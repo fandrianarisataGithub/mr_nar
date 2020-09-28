@@ -32,14 +32,33 @@ class PageController extends AbstractController
         
     }
 
-
     public function triage_principal(ClientRepository $repoClient, EntityManagerInterface $manager)
     {
         $c = $repoClient->findAll();
         $today = new \DateTime();
         $tomoth = $today->format('m-Y');
         foreach($c as $item){
-            
+
+            /** ze nahavita pointage t@ty */
+
+            // ny pointage efa vitany
+            $tabPointEff = $this->liste_pointage_du_client($item, $repoClient);
+            $tabNom = [];
+            for ($i = 0; $i < count($tabPointEff); $i++) {
+                $n = $tabPointEff[$i]->getNom();
+                array_push($tabNom, $n);
+            }
+            dd($tabNom);
+
+            if (in_array($tomoth, $tabNom)) {
+                // nahavita izy zany 
+                $item->setEtatClient('pointé');
+                $manager->persist($item);
+                $manager->flush();
+            }
+
+
+            /** /ze nahavita pointage t@ty */
             // si androany no nanomboka ny pointage -ny
             $nextPointage = $item->getNomPointageAv();
             $n = $item->getNumeroPointage();
@@ -106,6 +125,11 @@ class PageController extends AbstractController
             $etat = $item->getEtatClient();
             // premier jour du mois 
             $tomoth = $today->format('m-Y');
+
+           
+
+
+
             $p = "1-".$tomoth;
            
             $date1 = new \DateTime($p);
@@ -345,7 +369,7 @@ class PageController extends AbstractController
 
 
     /**
-     * @Route("/admin/client_impaye", name="client_impaye")
+     * @Route("/admin/client_impaye", name="client_archived")
      */
     public function client_archived(ClientRepository $repoClient)
     { 
@@ -382,9 +406,9 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/admin/client_paye", name="client_paye")
+     * @Route("/admin/client_paye", name="client_pointed")
      */
-    public function client_paye(ClientRepository $repoClient)
+    public function client_pointed(ClientRepository $repoClient)
     {
         $user = new User();
         $items = $repoClient->countPresent('pointé');

@@ -230,6 +230,32 @@ class ClientController extends AbstractController
         $today = new \DateTime();
         $tomoth = $today->format('m-Y');
         foreach($c as $item){
+
+            /** ze nahavita pointage t@ty */
+
+            // ny pointage efa vitany
+            $tabPointEff = $this->liste_pointage_du_client($item, $repoClient);
+            $tabNom = [];
+            if($tabPointEff != "vide"){
+                for ($i = 0; $i < count($tabPointEff); $i++) {
+                    //dd($tabPointEff);
+                    $n = $tabPointEff[$i];
+                    array_push($tabNom, $n);
+                }
+               
+            }
+          
+
+            if (in_array($tomoth, $tabNom)) {
+               // dd($tabNom);
+                // nahavita izy zany 
+                $item->setEtatClient('pointé');
+                $manager->persist($item);
+                $manager->flush();
+            }
+
+
+            /** /ze nahavita pointage t@ty */
             
             // si androany no nanomboka ny pointage -ny
             $nextPointage = $item->getNomPointageAv();

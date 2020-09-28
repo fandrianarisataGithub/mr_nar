@@ -18,20 +18,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class PointageController extends AbstractController
 {
 
-    /**
-     * @Route("/admin/checkPointage" , name = "checkpointage")
-     */
-    public function checkpointage(Request $request, ClientRepository $repoClient, PointageRepository $repoPointage)
-    {
-        $response = new Response();
-        if($request->isXmlHttpRequest()){
-            $data = json_encode("ok"); // formater le résultat de la requête en json
-            $response->headers->set('Content-Type', 'application/json');
-            $response->setContent($data);
-            return $response;
-        }
-    }
-
 
     /**
      * @Route("/admin/pointer_client" , name="pointer_client")
@@ -69,8 +55,6 @@ class PointageController extends AbstractController
                 $manager->persist($pointage);
                 $manager->persist($client);
                 $manager->flush();
-
-
                
             }
             $data = json_encode($error); // formater le résultat de la requête en json

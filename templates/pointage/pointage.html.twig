@@ -326,7 +326,7 @@
 					 }
 					 /* final*/
 					 $(this).addClass('clicked');
-					 $('#add_pointage').attr('data-id-client',$(this).attr('data-id-client'));
+					 $('#add_pointage').attr('data-id-client',id_client);
 					 show_modal();
 				 },
 				 error :  function(){
@@ -353,13 +353,12 @@
 					type : "POST",
 					data : data,
 					success : function(response){
-						/*if(response=="0"){
+						if(response=="0"){
 							window.location.href = "{{ path('pointage') }}";
 						}
 						else{
 							alert('Le montant entré n\'est incorrect ')
-						}*/
-						alert(response);
+						}
 					},
 					error : function(){
 						alert('erreur ajax');
