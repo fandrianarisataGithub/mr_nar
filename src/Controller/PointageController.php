@@ -127,11 +127,31 @@ class PointageController extends AbstractController
         $nouveau = "";
         if (count($request->request) > 0) {
            $nom_pointage = $request->request->get('pointage');
+           $montant =  $request->request->get('montant_mensuel');
+           if($montant != $client->getMontantMensuel()){
+                return $this->render("pointage/autrepointage.html.twig", [
+                    "liste_p_p" => $tabPointage,
+                    'liste_tsotra' => $listeP_tsotra,
+                    "client" => $client,
+                    'montant' => $client->getMontantMensuel(),
+                    "liste_p_eff" => $liste_p_eff,
+                    'present' => $this->count_present($repoClient),
+                    'suspendu' => $this->count_suspendu($repoClient),
+                    'archived' => $this->count_archived($repoClient),
+                    'pointed' => $this->count_pointed($repoClient),
+                    'nouveau' => $this->count_nouveau($repoClient),
+                    'impaye' => $this->count_impaye($repoClient),
+                    'attente' => $this->count_attente($repoClient),
+                    'erreur2' => "Le montant renseigné est inexact",
+                ]);
+           }
            //dd($nom_poinatge);
            // on select ce pointage 
            $pointage = $repoPointage->findByNom($nom_pointage);
+           
            //dd($pointage);
            // raha tsy mbola nisy iny pointage iny 
+
            if(count($pointage)==0){
               
                 return $this->render("pointage/autrepointage.html.twig", [
@@ -150,6 +170,7 @@ class PointageController extends AbstractController
                 ]);
            }
            else{
+               
                 // on fait le pointage
                 //si ce client n'a pas encore ce pointage 
                 $point_eff = $this->liste_pointage_du_client($client, $repoClient);
@@ -174,6 +195,7 @@ class PointageController extends AbstractController
                             'impaye' => $this->count_impaye($repoClient),
                             'attente' => $this->count_attente($repoClient),
                             'erreur2' => "Ce client a déjà fait ce pointage",
+                            'montant' => $client->getMontantMensuel(),
                         ]);
                     } else {
                         $client->addPointage($pointage[0]);
@@ -209,11 +231,13 @@ class PointageController extends AbstractController
                     $client->setEtatClient('pointé');
                 }
                
+                    
+                    $manager->persist($client);
+                    $manager->flush();
+                    return $this->redirectToRoute("autrepointage", ["id_client" => $id_client]);
                 
                
-               $manager->persist($client);
-               $manager->flush();
-               return $this->redirectToRoute("autrepointage", ["id_client" => $id_client]);
+               
            }
             return $this->render("pointage/autrepointage.html.twig", [
                 "liste_p_p" => $tabPointage,
@@ -227,6 +251,7 @@ class PointageController extends AbstractController
                 'nouveau' => $this->count_nouveau($repoClient),
                 'impaye' => $this->count_impaye($repoClient),
                 'attente' => $this->count_attente($repoClient),
+                'montant' => $client->getMontantMensuel(),
 
             ]);
         }
@@ -244,6 +269,7 @@ class PointageController extends AbstractController
             'nouveau' => $this->count_nouveau($repoClient),
             'impaye' => $this->count_impaye($repoClient),
             'attente' => $this->count_attente($repoClient),
+            'montant' => $client->getMontantMensuel(),
             
         ]);
     }
