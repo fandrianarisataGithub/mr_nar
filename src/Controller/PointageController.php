@@ -148,33 +148,51 @@ class PointageController extends AbstractController
                     'attente' => $this->count_attente($repoClient),
                     'erreur' => "Veuiller créer un nouveau mois de pointage pour le mois : ". $nom_pointage,
                 ]);
-           }else{
+           }
+           else{
                 // on fait le pointage
                 //si ce client n'a pas encore ce pointage 
                 $point_eff = $this->liste_pointage_du_client($client, $repoClient);
                 $sonNom_pointage = [];
-                for($i=0; $i<count($point_eff); $i++){
-                    array_push($sonNom_pointage, $point_eff[$i]->getNom());
+                if($point_eff != "vide"){
+                    for ($i = 0; $i < count($point_eff); $i++) {
+                        array_push($sonNom_pointage, $point_eff[$i]->getNom());
+                    }
+                    //dd($sonNom_pointage);
+                    if (in_array($nom_pointage, $sonNom_pointage)) {
+                        // efa nahavita an'ion izy
+                        return $this->render("pointage/autrepointage.html.twig", [
+                            "liste_p_p" => $tabPointage,
+                            'liste_tsotra' => $listeP_tsotra,
+                            "client" => $client,
+                            "liste_p_eff" => $liste_p_eff,
+                            'present' => $this->count_present($repoClient),
+                            'suspendu' => $this->count_suspendu($repoClient),
+                            'archived' => $this->count_archived($repoClient),
+                            'pointed' => $this->count_pointed($repoClient),
+                            'nouveau' => $this->count_nouveau($repoClient),
+                            'impaye' => $this->count_impaye($repoClient),
+                            'attente' => $this->count_attente($repoClient),
+                            'erreur2' => "Ce client a déjà fait ce pointage",
+                        ]);
+                    } else {
+                        $client->addPointage($pointage[0]);
+                        $n = $client->getNumeroPointage();
+                        $n++;
+                        $client->setNumeroPointage($n);
+                        $n++;
+
+                        if ($n >= count($tabPointage)) {
+                            // pointé
+                        } else {
+                            $next = $tabPointage[$n];
+                            $client->setNomPointageAv($next);
+                        }
+
+                        $client->setEtatClient('pointé');
+                    } 
                 }
-                //dd($sonNom_pointage);
-                if(in_array($nom_pointage, $sonNom_pointage)){
-                    // efa nahavita an'ion izy
-                    return $this->render("pointage/autrepointage.html.twig", [
-                        "liste_p_p" => $tabPointage,
-                        'liste_tsotra' => $listeP_tsotra,
-                        "client" => $client,
-                        "liste_p_eff" => $liste_p_eff,
-                        'present' => $this->count_present($repoClient),
-                        'suspendu' => $this->count_suspendu($repoClient),
-                        'archived' => $this->count_archived($repoClient),
-                        'pointed' => $this->count_pointed($repoClient),
-                        'nouveau' => $this->count_nouveau($repoClient),
-                        'impaye' => $this->count_impaye($repoClient),
-                        'attente' => $this->count_attente($repoClient),
-                        'erreur2' => "Ce client a déjà fait ce pointage",
-                    ]);
-                }
-               else{
+                else{
                     $client->addPointage($pointage[0]);
                     $n = $client->getNumeroPointage();
                     $n++;
@@ -183,19 +201,34 @@ class PointageController extends AbstractController
 
                     if ($n >= count($tabPointage)) {
                         // pointé
-                    }
-                    else{
+                    } else {
                         $next = $tabPointage[$n];
                         $client->setNomPointageAv($next);
                     }
-                   
+
                     $client->setEtatClient('pointé');
-               } 
+                }
+               
+                
+               
                $manager->persist($client);
                $manager->flush();
-              
-
+               return $this->redirectToRoute("autrepointage", ["id_client" => $id_client]);
            }
+            return $this->render("pointage/autrepointage.html.twig", [
+                "liste_p_p" => $tabPointage,
+                'liste_tsotra' => $listeP_tsotra,
+                "client" => $client,
+                "liste_p_eff" => $liste_p_eff,
+                'present' => $this->count_present($repoClient),
+                'suspendu' => $this->count_suspendu($repoClient),
+                'archived' => $this->count_archived($repoClient),
+                'pointed' => $this->count_pointed($repoClient),
+                'nouveau' => $this->count_nouveau($repoClient),
+                'impaye' => $this->count_impaye($repoClient),
+                'attente' => $this->count_attente($repoClient),
+
+            ]);
         }
 
        
