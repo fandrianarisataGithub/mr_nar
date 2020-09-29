@@ -381,7 +381,7 @@ class PageController extends AbstractController
 
 
     /**
-     * @Route("/admin/client_impaye", name="client_archived")
+     * @Route("/admin/client_archived", name="client_archived")
      */
     public function client_archived(ClientRepository $repoClient)
     { 
