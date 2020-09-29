@@ -97,7 +97,7 @@
 						<span>DETAIL DU PAIEMENT</span>
 					</td>
 					<td>
-						<span>DATES</span>
+						<span>POINTAGES</span>
 					</td>
 					<td>
 						<span>ACTIONS</span>
@@ -109,6 +109,12 @@
 					<tr>
 						<td class="td-check">
 							<span>{{ item.matricule }}</span>
+							{% if item.verifier == "oui" %}
+								<b class=" check fa fa-check"></b>
+							{% else %}
+								<b class=" check fa "></b>
+							{% endif %}
+							<b class=" check check-hide fa fa-check" style="display:none"></b>
 						</td>
 						<td>
 							<span>{{ item.nom }}</span><br>
@@ -119,6 +125,8 @@
 							(<span>{{ item.getUser().username }}</span>)
 						</td>
 						<td>
+						<span>Ajouté le : </span><span class="unite">{{ item.getCreatedAt() | date('d-m-Y') }}</span>
+							<br>
 							<span>N° BL:</span>
 							<span class="unite">{{ item.getNumeroBl() }}</span>
 							<br>
@@ -126,14 +134,19 @@
 							<br>
 							<span>MONTANT MENS:</span><b class="unite">{{ item.getMontantMensuel() }}</b><b class="unite">Ar</b>
 							<br>
-							<span>NBR VERSEMENT:</span><b class="unite">{{ item.getNbrVersement() }}</b>
-						</td>
-						<td>
+							<span>NBR VERSEMENT:</span><b class="unite">{{ item.getNbrVersement() }}</b><br>
 							<span>DATE DE DEBUT:</span><span class="unite">{{ item.getDateDebut() | date('Y-m-d') }}</span>
 							<br>
-							<span>DATE DE DEBUT:</span><span class="unite">{{  item.getDatefin() | date('Y-m-d') }}</span>
-							<br>
-							<span>POINTAGE DU MOIS : </span><sapn class="unite">{{ mois_actus }}</sapn>
+							<span>DATE DE FIN:</span><span class="unite">{{  item.getDatefin() | date('Y-m-d') }}</span>
+							
+						</td>
+						<td>
+							<span>
+								{% for p in item.pointages %}
+									<span>{{ p.getNomLit() }} </span>par <span>{{ p.getNomUser() }}</span>/
+								{% endfor %}
+							
+							 </span>
 						</td>
 						<td>
 							<div class="action">

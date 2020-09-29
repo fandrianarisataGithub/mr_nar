@@ -132,7 +132,7 @@
 
 <div class="tableau tab_historique">
 	<table class="display" id="tab_client_heb" style="width:100%">
-		<thead>
+			<thead>
 				<tr>
 					<td>
 						<span>MATRICULE</span>
@@ -147,7 +147,7 @@
 						<span>DETAIL DU PAIEMENT</span>
 					</td>
 					<td>
-						<span>DATES</span>
+						<span>POINTAGES</span>
 					</td>
 					<td>
 						<span>ACTIONS</span>
@@ -175,6 +175,8 @@
 							(<span>{{ item.getUser().username }}</span>)
 						</td>
 						<td>
+							<span>Ajouté le : </span><span class="unite">{{ item.getCreatedAt() | date('d-m-Y') }}</span>
+							<br>
 							<span>N° BL:</span>
 							<span class="unite">{{ item.getNumeroBl() }}</span>
 							<br>
@@ -182,13 +184,19 @@
 							<br>
 							<span>MONTANT MENS:</span><b class="unite">{{ item.getMontantMensuel() }}</b><b class="unite">Ar</b>
 							<br>
-							
-							<span>NBR VERSEMENT:</span><b class="unite">{{ item.getNbrVersement() }}</b>
-						</td>
-						<td>
+							<span>NBR VERSEMENT:</span><b class="unite">{{ item.getNbrVersement() }}</b><br>
 							<span>DATE DE DEBUT:</span><span class="unite">{{ item.getDateDebut() | date('Y-m-d') }}</span>
 							<br>
-							<span>DATE DE DEBUT:</span><span class="unite">{{  item.getDatefin() | date('Y-m-d') }}</span>
+							<span>DATE DE FIN:</span><span class="unite">{{  item.getDatefin() | date('Y-m-d') }}</span>
+							
+						</td>
+						<td>
+							<span>
+								{% for p in item.pointages %}
+									<span>{{ p.getNomLit() }} </span>par <span>{{ p.getNomUser() }}</span>/
+								{% endfor %}
+							
+							 </span>
 						</td>
 					<td>
 						<div class="action">

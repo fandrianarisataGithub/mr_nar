@@ -487,7 +487,8 @@ class ClientController extends AbstractController
 
             if ($ses_p != "vide") {
                 foreach ($ses_p as $p) {
-                    $nom = $p->getNom();
+                    
+                    $nom = $p;
                     if ($nom == $tomoth) {
                         $item->setEtatClient('pointé');
                         array_push($cp, $item);

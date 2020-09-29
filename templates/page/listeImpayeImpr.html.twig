@@ -14,63 +14,62 @@
 						<span>NOM ET PRENOM</span>
 					</td>
 					<td>
-						<span>CIN</span>
+						<span>CLIENT DE</span>
 					</td>
 					<td>
-						<span>ADRESSE</span>
+						<span>DETAIL DU PAIEMENT</span>
 					</td>
 					<td>
-						<span>MONTANT</span>
+						<span>POINTAGES</span>
 					</td>
 					<td>
-						<span>MONTANT
-							<br>
-							MENSUEL</span>
-					</td>
-					<td>
-						<span>NBR VERSEMENT</span>
-					</td>
-					<td>
-						<span>DATE DE DEBUT</span>
-					</td>
-					<td>
-						<span>DATE DE FIN</span>
+						<span>ACTIONS</span>
 					</td>
 				</tr>
 			</thead>
 			<tbody>
 				{% for item in items %}
 					<tr>
-						<td>
+						<td class="td-check">
 							<span>{{ item.matricule }}</span>
+							{% if item.verifier == "oui" %}
+								<b class=" check fa fa-check"></b>
+							{% else %}
+								<b class=" check fa "></b>
+							{% endif %}
+							<b class=" check check-hide fa fa-check" style="display:none"></b>
 						</td>
 						<td>
 							<span>{{ item.nom }}</span><br>
 							<span>{{  item.prenom }}</span>
 						</td>
 						<td>
-							<span>{{ item.cin }}</span>
+							<span>{{ item.getUser().nom }}</span><br>
+							(<span>{{ item.getUser().username }}</span>)
 						</td>
 						<td>
-							<span>{{ item.adresse }}</span>
+						<span>Ajouté le : </span><span class="unite">{{ item.getCreatedAt() | date('d-m-Y') }}</span>
+							<br>
+							<span>N° BL:</span>
+							<span class="unite">{{ item.getNumeroBl() }}</span>
+							<br>
+							<span>MONTANT:</span><b class="unite">{{ item.montant }}</b><b class="unite">Ar</b>
+							<br>
+							<span>MONTANT MENS:</span><b class="unite">{{ item.getMontantMensuel() }}</b><b class="unite">Ar</b>
+							<br>
+							<span>NBR VERSEMENT:</span><b class="unite">{{ item.getNbrVersement() }}</b><br>
+							<span>DATE DE DEBUT:</span><span class="unite">{{ item.getDateDebut() | date('Y-m-d') }}</span>
+							<br>
+							<span>DATE DE FIN:</span><span class="unite">{{  item.getDatefin() | date('Y-m-d') }}</span>
+							
 						</td>
 						<td>
-							<span>{{ item.montant }}</span>
-							<span>Ar</span>
-						</td>
-						<td>
-							<span>{{ item.getMontantMensuel() }}</span>
-							<span>Ar</span>
-						</td>
-						<td>
-							<span>{{ item.getNbrVersement() }}</span>
-							<span>Ar</span>
-						</td>
-						<td>
-							<span>{{ item.getDateDebut() | date('Y,m,d') }}</span>
-						</td>
-						<td>
-							<span>{{ item.getDatefin() | date('Y,m,d') }}</span>
+							<span>
+								{% for p in item.pointages %}
+									<span>{{ p.getNomLit() }} </span>par <span>{{ p.getNomUser() }}</span>/
+								{% endfor %}
+							
+							 </span>
 						</td>
 					</tr>
 				{% endfor %}

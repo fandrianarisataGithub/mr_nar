@@ -461,6 +461,7 @@ class PageController extends AbstractController
                }
             }
         }
+        //dd($cp);
 
         return $this->render('page/client_pointed.html.twig', [
             'items' => $cp,
@@ -667,7 +668,34 @@ class PageController extends AbstractController
      */
     public function graph(ClientRepository $repoClient)
     {
-       
+        
+        return $this->render('page/graph.html.twig', [
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
+        ]);
+    }
+    
+    /**
+     * @Route("/io/{mois}", name="io")
+     */
+    public function client_enregistre_mois($mois, ClientRepository $repoClient)
+    {
+        $clients = $repoClient->findAll();
+        $items = [];
+        foreach($clients as $item){
+            $createdAt = $item->getCreatedAt();
+            $ddm = '1-'.$mois;
+            $ddm = new \DateTime($ddm);
+            $dfm = '31-'.$mois;
+            $dfm = new \DateTime($dfm);
+           dd($dfm);
+        }
+        
         return $this->render('page/graph.html.twig', [
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),

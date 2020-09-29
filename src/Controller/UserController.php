@@ -45,9 +45,21 @@ class UserController extends AbstractController
             $manager->flush();
             return $this->redirectToRoute("editeurs");
         }
-        //dd($items);
+        $tabPresent = $repoClient->findAll();
+        $nouveau = [];
+        foreach ($tabPresent as $item) {
+            $c = $item->getCreatedAt();
+            $today = new \DateTime();
+            $today_s = $today->format('d-m-Y');
+            $c_s = $c->format("d-m-Y");
+            if ($c_s == $today_s) {
+                array_push($nouveau, $item);
+            }
+        }
+        
         return $this->render('user/editeurs.html.twig', [
             'items' => $items,
+            'nouveau' => $nouveau,
             'form' => $form->createView(),
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
@@ -77,11 +89,20 @@ class UserController extends AbstractController
     }
     public function count_nouveau(ClientRepository $repoClient)
     {
-        $tabPresent = $repoClient->countPresent('nouveau');
-        $n = count($tabPresent);
+        $tabPresent = $repoClient->findAll();
+        $tab = [];
+        foreach ($tabPresent as $item) {
+            $c = $item->getCreatedAt();
+            $today = new \DateTime();
+            $today_s = $today->format('d-m-Y');
+            $c_s = $c->format("d-m-Y");
+            if ($c_s == $today_s) {
+                array_push($tab, $item);
+            }
+        }
+        $n = count($tab);
         //dd($n);
         return $n;
-        
     }
 
 
