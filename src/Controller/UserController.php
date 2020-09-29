@@ -94,11 +94,69 @@ class UserController extends AbstractController
     }
     public function count_pointed(ClientRepository $repoClient)
     {
-        $tabPaye = $repoClient->countPresent('pointé');
-        $n = count($tabPaye);
-        //dd($n);
-        return $n;
+        $tous = $repoClient->findAll();
+        $today = new \DateTime();
+        $tomoth = $today->format('m-Y');
+
+        $cp = [];
+        foreach ($tous as $item) {
+            $ses_p = $this->liste_pointage_du_client($item, $repoClient);
+
+            if ($ses_p != "vide") {
+                foreach ($ses_p as $p) {
+                    $nom = $p->getNom();
+                    if ($nom == $tomoth) {
+                        $item->setEtatClient('pointé');
+                        array_push($cp, $item);
+                    }
+                }
+            }
+        }
+        return count($cp);
     }
+    /**
+     * @Route("/test", name = "test")
+     */
+    public function liste_pointage_du_client(Client $client, ClientRepository $repoClient)
+    {
+
+
+        $le_client = $repoClient->findOneByIdJoinedToPointage($client->getId());
+        //dd($le_client);
+        // si ce client a  des pointages
+        if ($le_client != null) {
+            //dd($sesPointages);
+            $tab = $le_client->getPointages();
+            // $tabNom = [];
+            // for($i=0; $i<count($tab); $i++){
+            //     $n = $tab[$i]->getNom();
+            //     array_push($tabNom, $n);
+            // }
+            //dd($tabNom);
+            return $tab;
+        } else {
+            return 'vide';
+        }
+    }
+
+    public function nom_dernier_mois()
+    {
+        $today = new \DateTime();
+        $tomoth = $today->format('m-Y');
+        $p = "1-" . $tomoth;
+
+        $date1 = new \DateTime($p);
+        //dd($date1);
+        $date = date_create($date1->format("Y-m-d"));
+
+        // raha ny 1 mois avant no hitsarana azy
+
+        date_add($date, date_interval_create_from_date_string(-1 . ' months'));
+        $s = $date->format("m-Y");
+
+        return $s;
+    }
+
     public function count_suspendu(ClientRepository $repoClient)
     {
         $tabPresent = $repoClient->countPresent('suspendu');

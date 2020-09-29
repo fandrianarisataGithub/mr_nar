@@ -7,7 +7,7 @@
 		<h2>Ajouter un pointage supplémentaire pour ce client</h2>
 	</div>
     <div class="row" id="details_client_p">
-        <div class="col-sm-6">
+        <div class="col-sm-7">
             <ul>
                 <li><span>Matricule : </span><span class="unite">{{ client.matricule }}</span> </li>
                 <li><span>Nom : </span><span class="unite">{{ client.nom }}</span> </li>
@@ -36,6 +36,7 @@
                         <tr>
                             <th>Mois du Pointage effectué</th>
                             <th>Date Du pointage</th>
+                            <th>Pointé par</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -43,6 +44,7 @@
                             <tr>
                                 <td>{{ item.getNomLit() }}</td>
                                 <td>{{ item.getCreatedAt() | date('d-m-Y') }}</td>
+                                <td>{{ item.getNomUser() }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -79,6 +81,7 @@
                             <option value="{{ item }}">{{ item }}</option>
                         {% endfor %}
                     </select>
+                    <input type="hidden" name="nom_user" value="{{ app.user.nom }}">
                 </div>
                 <div class="form-group">
                     <label for="">Montant mensuel</label>

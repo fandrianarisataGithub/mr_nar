@@ -19,68 +19,6 @@ class PointageController extends AbstractController
 {
 
 
-    /**
-     * @Route("/admin/pointer_client" , name="pointer_client")
-     */
-    public function pointer_client_dans_pointage(Request $request, ClientRepository $repoClient, EntityManagerInterface $manager, PointageRepository $repoPointage)
-    {
-        $response = new Response();
-        
-        if($request->isXmlHttpRequest()){
-            $error = 0;
-            $client_id = $request->get('client_id');
-            $pointage_id = $request->get('pointage_id');
-            $montant_mensuel = $request->get('montant_mensuel');
-            $client = new Client();
-            $pointage = new Pointage();
-            $client = $repoClient->find($client_id);
-            $pointage = $repoPointage->find($pointage_id);
-            $son_mm = $client->getMontantMensuel();
-            if($son_mm != $montant_mensuel){
-                // erreur de montant
-                $error = 1;
-            }
-            else{
-
-                // atao le pointage
-                $pointage->addClient($client);
-                $n = $client->getNumeroPointage();
-                $n++;
-                $client->setNumeroPointage($n);
-                $s = $client->getTabPointage();
-                $tab = explode("__", $s);
-                $n++;
-                $client->setNomPointageAv($tab[$n]);
-                $client->setEtatClient("pointé");
-                $manager->persist($pointage);
-                $manager->persist($client);
-                $manager->flush();
-               
-            }
-            $data = json_encode($error); // formater le résultat de la requête en json
-            $response->headers->set('Content-Type', 'application/json');
-            $response->setContent($data);
-            return $response;
-        }
-
-        $items = $repoClient->findAll();
-        $now = new \DateTime();
-        $year_now = $now->format('Y');
-        // dd($year_now);
-        $pointages = $repoPointage->findByAnneeActuelle($year_now);
-        return $this->render('pointage/pointage.html.twig',[
-            "items" => $items,
-            "pointages" => $pointages,
-            'present' => $this->count_present($repoClient),
-            'suspendu' => $this->count_suspendu($repoClient),
-            'archived' => $this->count_archived($repoClient),
-            'pointed' => $this->count_pointed($repoClient),
-            'nouveau' => $this->count_nouveau($repoClient),
-            'impaye' => $this->count_impaye($repoClient),
-            'attente' => $this->count_attente($repoClient),
-        ]);
-    }
-
     public function tableau_pointage(Client $client)
     {
         $n = $client->getNumeroPointage();
@@ -121,13 +59,24 @@ class PointageController extends AbstractController
            $tabPointage[''.$i.''] = $mois[$n]."-".$s[1];
             
         }
-       // dd($tabPointage);
+       //dd($tabPointage);
         // liste des poinatge eff
         $liste_p_eff = $this->liste_pointage_du_client($client, $repoClient);
+        
         $nouveau = "";
         if (count($request->request) > 0) {
            $nom_pointage = $request->request->get('pointage');
            $montant =  $request->request->get('montant_mensuel');
+           $nom_user =  $request->request->get('nom_user');
+            $pointage1 = new Pointage();
+            $pointage1->setNom($nom_pointage);
+            $sl = explode("-", $nom_pointage);
+            $n = $sl[0] - 1;
+            $sl =  $mois[$n] . "-" . $sl[1];
+            $pointage1->setNomLit($sl);
+            $pointage1->setNomUser($nom_user);
+            $pointage1->setCreatedAt(new \Datetime());
+           
            if($montant != $client->getMontantMensuel()){
                 return $this->render("pointage/autrepointage.html.twig", [
                     "liste_p_p" => $tabPointage,
@@ -145,31 +94,6 @@ class PointageController extends AbstractController
                     'erreur2' => "Le montant renseigné est inexact",
                 ]);
            }
-           //dd($nom_poinatge);
-           // on select ce pointage 
-           $pointage = $repoPointage->findByNom($nom_pointage);
-           
-           //dd($pointage);
-           // raha tsy mbola nisy iny pointage iny 
-
-           if(count($pointage)==0){
-              
-                return $this->render("pointage/autrepointage.html.twig", [
-                    "liste_p_p" => $tabPointage,
-                    'liste_tsotra' => $listeP_tsotra,
-                    "client" => $client,
-                    "liste_p_eff" => $liste_p_eff,
-                    'present' => $this->count_present($repoClient),
-                    'suspendu' => $this->count_suspendu($repoClient),
-                    'archived' => $this->count_archived($repoClient),
-                    'pointed' => $this->count_pointed($repoClient),
-                    'nouveau' => $this->count_nouveau($repoClient),
-                    'impaye' => $this->count_impaye($repoClient),
-                    'attente' => $this->count_attente($repoClient),
-                    'erreur' => "Veuiller créer un nouveau mois de pointage pour le mois : ". $nom_pointage,
-                ]);
-           }
-           else{
                
                 // on fait le pointage
                 //si ce client n'a pas encore ce pointage 
@@ -181,7 +105,7 @@ class PointageController extends AbstractController
                     }
                     //dd($sonNom_pointage);
                     if (in_array($nom_pointage, $sonNom_pointage)) {
-                        // efa nahavita an'ion izy
+                        // efa nahavita an'io izy
                         return $this->render("pointage/autrepointage.html.twig", [
                             "liste_p_p" => $tabPointage,
                             'liste_tsotra' => $listeP_tsotra,
@@ -198,7 +122,9 @@ class PointageController extends AbstractController
                             'montant' => $client->getMontantMensuel(),
                         ]);
                     } else {
-                        $client->addPointage($pointage[0]);
+                       
+                        $client->addPointage($pointage1);
+                        
                         $n = $client->getNumeroPointage();
                         $n++;
                         $client->setNumeroPointage($n);
@@ -215,7 +141,7 @@ class PointageController extends AbstractController
                     } 
                 }
                 else{
-                    $client->addPointage($pointage[0]);
+                    $client->addPointage($pointage1);
                     $n = $client->getNumeroPointage();
                     $n++;
                     $client->setNumeroPointage($n);
@@ -229,16 +155,17 @@ class PointageController extends AbstractController
                     }
 
                     $client->setEtatClient('pointé');
+                    
                 }
                
-                    
+                    $manager->persist($pointage1);
                     $manager->persist($client);
                     $manager->flush();
                     return $this->redirectToRoute("autrepointage", ["id_client" => $id_client]);
                 
                
                
-           }
+          
             return $this->render("pointage/autrepointage.html.twig", [
                 "liste_p_p" => $tabPointage,
                 'liste_tsotra' => $listeP_tsotra,
@@ -428,10 +355,25 @@ class PointageController extends AbstractController
     }
     public function count_pointed(ClientRepository $repoClient)
     {
-        $tabPaye = $repoClient->countPresent('pointé');
-        $n = count($tabPaye);
-        //dd($n);
-        return $n;
+        $tous = $repoClient->findAll();
+        $today = new \DateTime();
+        $tomoth = $today->format('m-Y');
+
+        $cp = [];
+        foreach ($tous as $item) {
+            $ses_p = $this->liste_pointage_du_client($item, $repoClient);
+
+            if ($ses_p != "vide") {
+                foreach ($ses_p as $p) {
+                    $nom = $p->getNom();
+                    if ($nom == $tomoth) {
+                        $item->setEtatClient('pointé');
+                        array_push($cp, $item);
+                    }
+                }
+            }
+        }
+        return count($cp);
     }
     public function count_suspendu(ClientRepository $repoClient)
     {

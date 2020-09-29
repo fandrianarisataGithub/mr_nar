@@ -215,9 +215,9 @@
                                          style = "display:none;"
 
                                         {% endif %}>
-                                                <form action="">
-                                                    <input type="text" placeholder="Rechercher un matricule">
-                                                    <a href="#" class="btn btn-primary btn btn-xs"><i class="fa fa-search"></i></a>
+                                                <form action="{{ path('search') }}" method="POST">
+                                                    <input type="text" placeholder="Rechercher un matricule" name="matricule">
+                                                    <button type="submit" class="btn btn-primary btn btn-xs"><i class="fa fa-search"></i></button>
                                                 </form>
                                                 <ul class="result_search">
                                                     {# <li>
@@ -366,7 +366,6 @@
 			$('.suppr').click(function(e){
 				e.preventDefault();
 				var id = $(this).attr('data-id-client');
-				alert(id);
 				// on pose ce id dans le bouton suppr
 				$("#btn_supprimer_client").attr('data-id-client',id);
 				show_modal_suppression();

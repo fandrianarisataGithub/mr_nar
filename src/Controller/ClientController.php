@@ -406,25 +406,14 @@ class ClientController extends AbstractController
     /**
      * @Route("/admin/supprimer_client/{id}", name="supprimer_client")
      */
-    public function supprimer_client($id, Request $request, EntityManagerInterface $manager, PointageRepository $repoPointage)
+    public function supprimer_client($id, Request $request, EntityManagerInterface $manager, PointageRepository $repoPointage, ClientRepository $repoClient)
     {
         $response = new Response();
         if($request->isXmlHttpRequest()){
             
             $action = $request->get('action');
             if($action== "suppression"){
-                // on select le client
-                $client = new Client();
-                $client = $this->getDoctrine()->getRepository(Client::class)->find($id);
-                // on supprime le client
-                    // mais d'abord il faaut enlever les champs des tables fille
-                    // suppr de son pointage
-                    $pointage = new Pointage(); 
-                    $pointages = $repoPointage->findByClient($client);
-                    foreach ($pointages as $pointage) {
-                        $manager->remove($pointage);
-                    }
-                // maintenant le client
+                $client = $repoClient->find($id);
                 $manager->remove($client);
                 $manager->flush();
                 $data = json_encode("ok"); // formater le résultat de la requête en json
@@ -444,6 +433,7 @@ class ClientController extends AbstractController
     {
         $client = new Client();
         $client =$repoClient->find($id);
+        $client->setEtatClient('suspendu');
         $manager->flush();
         return $this->redirectToRoute('client_suspendu', [
             'present' => $this->count_present($repoClient),
@@ -463,6 +453,7 @@ class ClientController extends AbstractController
     {
         $client = new Client();
         $client = $repoClient->find($id);
+        $client->setEtatClient('impayé');
         $manager->flush();
         return $this->redirectToRoute('client_impaye', [
             'present' => $this->count_present($repoClient),
@@ -483,13 +474,28 @@ class ClientController extends AbstractController
         //dd($n);
         return $n;
     }
-    
+
     public function count_pointed(ClientRepository $repoClient)
     {
-        $tabPaye = $repoClient->countPresent('pointé');
-        $n = count($tabPaye);
-        //dd($n);
-        return $n;
+        $tous = $repoClient->findAll();
+        $today = new \DateTime();
+        $tomoth = $today->format('m-Y');
+
+        $cp = [];
+        foreach ($tous as $item) {
+            $ses_p = $this->liste_pointage_du_client($item, $repoClient);
+
+            if ($ses_p != "vide") {
+                foreach ($ses_p as $p) {
+                    $nom = $p->getNom();
+                    if ($nom == $tomoth) {
+                        $item->setEtatClient('pointé');
+                        array_push($cp, $item);
+                    }
+                }
+            }
+        }
+        return count($cp);
     }
     public function count_suspendu(ClientRepository $repoClient)
     {

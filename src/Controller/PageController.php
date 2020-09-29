@@ -25,7 +25,7 @@ class PageController extends AbstractController
     /**
      * @Route("/", name="firstRedirect")
      */
-    public function triage(ClientRepository $repoClient, PointageRepository $repoPointage, EntityManagerInterface $manager)
+    public function home(ClientRepository $repoClient, PointageRepository $repoPointage, EntityManagerInterface $manager)
     {
         
        return $this->redirectToRoute("app_login");
@@ -48,7 +48,7 @@ class PageController extends AbstractController
                 $n = $tabPointEff[$i]->getNom();
                 array_push($tabNom, $n);
             }
-            dd($tabNom);
+           
 
             if (in_array($tomoth, $tabNom)) {
                 // nahavita izy zany 
@@ -199,13 +199,30 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/admin/search/{matricule}", name = "search")
+     * @Route("/admin/search", name = "search")
      */
-    public function search($matricule, Request $request, ClientRepository $repoClient)
-    {
-        $client = $repoClient->findByMatricule($matricule);
+    public function search(Request $request, ClientRepository $repoClient)
+    {   
+        $result = [];
+        if(count($request->request)>0){
+            $text = $request->request->get('matricule');
+            $result = $repoClient->createQueryBuilder('c')
+            ->where('c.matricule LIKE :text')
+            ->setParameter('text', '%'.$text.'%')
+            ->getQuery()
+            ->getResult();
+           // dd($result);
+        }
+        
         return $this->render("page/search.html.twig",[
-            "client" => $client,
+            "client" => $result,
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
         ]);
         
     }
@@ -420,12 +437,33 @@ class PageController extends AbstractController
     /**
      * @Route("/admin/client_paye", name="client_pointed")
      */
-    public function client_pointed(ClientRepository $repoClient)
+    public function client_pointed(ClientRepository $repoClient, PointageRepository $repoPointage, EntityManagerInterface $manager)
     {
-        $user = new User();
-        $items = $repoClient->countPresent('pointé');
+        
+        $tous = $repoClient->findAll();
+        $today = new \DateTime();
+        $tomoth = $today->format('m-Y');
+        
+        $cp = [];
+        foreach($tous as $item){
+            $ses_p = $this->liste_pointage_du_client($item, $repoClient);
+           
+            if($ses_p != "vide"){
+               foreach($ses_p as $p){
+                   $nom = $p->getNom();
+                   if($nom == $tomoth){
+                        $item->setEtatClient('pointé');
+                        $manager->persist($item);
+                        $manager->flush();
+                        array_push($cp, $item);
+
+                   }
+               }
+            }
+        }
+
         return $this->render('page/client_pointed.html.twig', [
-            'items' => $items,
+            'items' => $cp,
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
             'archived' => $this->count_archived($repoClient),
@@ -688,10 +726,25 @@ class PageController extends AbstractController
 
     public function count_pointed(ClientRepository $repoClient)
     {
-        $tabPaye = $repoClient->countPresent('pointé');
-        $n = count($tabPaye);
-        //dd($n);
-        return $n;
+        $tous = $repoClient->findAll();
+        $today = new \DateTime();
+        $tomoth = $today->format('m-Y');
+
+        $cp = [];
+        foreach ($tous as $item) {
+            $ses_p = $this->liste_pointage_du_client($item, $repoClient);
+
+            if ($ses_p != "vide") {
+                foreach ($ses_p as $p) {
+                    $nom = $p->getNom();
+                    if ($nom == $tomoth) {
+                        $item->setEtatClient('pointé');
+                        array_push($cp, $item);
+                    }
+                }
+            }
+        }
+        return count($cp);
     }
     public function count_suspendu(ClientRepository $repoClient)
     {

@@ -100,6 +100,7 @@
 					<tr>
 						<th>Mois du Pointage effectué</th>
 						<th>Date Du pointage</th>
+						<th>Pointé par</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -107,6 +108,7 @@
 						<tr>
 							<td>{{ item.getNomLit() }}</td>
 							<td>{{ item.getCreatedAt() | date('d-m-Y') }}</td>
+							<td>{{ item.getNomUser() }}</td>
 						</tr>
 					{% endfor %}
 				</tbody>

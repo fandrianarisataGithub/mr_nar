@@ -44,6 +44,11 @@ class Pointage
      */
     private $nom_lit;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $nom_user;
+
 
     public function __construct()
     {
@@ -116,6 +121,18 @@ class Pointage
     public function setNomLit(string $nom_lit): self
     {
         $this->nom_lit = $nom_lit;
+
+        return $this;
+    }
+
+    public function getNomUser(): ?string
+    {
+        return $this->nom_user;
+    }
+
+    public function setNomUser(string $nom_user): self
+    {
+        $this->nom_user = $nom_user;
 
         return $this;
     }
