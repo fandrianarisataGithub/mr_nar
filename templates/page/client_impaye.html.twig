@@ -12,10 +12,7 @@
 			<thead>
 				<tr>
 					<td>
-						<span>MATRICULE</span>
-					</td>
-					<td>
-						<span>NOM ET PRENOM</span>
+						<span>CLIENT</span>
 					</td>
 					<td>
 						<span>CLIENT DE</span>
@@ -35,7 +32,24 @@
 				{% for item in items %}
 					<tr>
 						<td class="td-check">
-							<span>{{ item.matricule }}</span>
+							<span>Matricule : </span>
+							<span class="unite">{{ item.matricule }}</span>
+							<br>
+							<span>Nom et prénom : </span>
+							<span>{{ item.nom }}</span>
+							<span>{% if item.prenom is defined %}
+								{{ item.prenom }}
+							{% endif %}</span>
+							<br>
+							<span>Budget : </span>
+							<span class="unite">{{ item.budget }}</span>
+							<br>
+							<span>Chapitre : </span>
+							<span class="unite">{{ item.chapitre }}</span>
+							<br>
+							<span>Article : </span>
+							<span class="unite">{{ item.article }}</span>
+
 							{% if item.verifier == "oui" %}
 								<b class=" check fa fa-check"></b>
 							{% else %}
@@ -44,15 +58,11 @@
 							<b class=" check check-hide fa fa-check" style="display:none"></b>
 						</td>
 						<td>
-							<span>{{ item.nom }}</span><br>
-							<span>{{  item.prenom }}</span>
-						</td>
-						<td>
 							<span>{{ item.getUser().nom }}</span><br>
 							(<span>{{ item.getUser().username }}</span>)
 						</td>
 						<td>
-						<span>Ajouté le : </span><span class="unite">{{ item.getCreatedAt() | date('d-m-Y') }}</span>
+							<span>Ajouté le : </span><span class="unite">{{ item.getCreatedAt() | date('d-m-Y') }}</span>
 							<br>
 							<span>N° BL:</span>
 							<span class="unite">{{ item.getNumeroBl() }}</span>
@@ -75,35 +85,39 @@
 							
 							 </span>
 						</td>
-						<td>
-							<div class="action">
-								<div>
-									<a href="{{ path('edit_client', {'id': item.id }) }}" class="modif btn btn-info btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
-										<span class="fa fa-edit"></span>
-									</a>
-									<a href="#" data-id-client = "{{ item.id }}" class="suppr btn btn-danger btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
-										<span class="fa fa-trash-o"></span>
-									</a>
-								</div>
-								<div>
-									<a href="{{ path('single_page', {'id_client': item.id }) }}" class="voir btn btn-primary btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
-										<span>Voir</span>
-									</a>
-								</div>
-								<div class="div__pointer">
+					<td>
+						<div class="action">
+							<div>
+								<a href="{{ path("edit_client", {"id": item.id }) }}" class="modif btn btn-info btn-xs" {% if is_granted("ROLE_SUPER_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+									<span class="fa fa-edit"></span>
+								</a>
+								<a href="#" data-id-client = "{{ item.id }}" class="suppr btn btn-danger btn-xs" {% if is_granted("ROLE_SUPER_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+									<span class="fa fa-trash-o"></span>
+								</a>
+							</div>
+							<div>
+								<a href="#" data-id-client = "{{ item.id }}" class="verifier btn btn-primary btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+									<span class = "fa fa-check-square-o"></span>
+								</a>
+								<a href="{{ path('single_page', {'id_client': item.id }) }}" class="voir btn btn-primary btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+									<span>Voir</span>
+								</a>
+							</div>
+							<div class="div__pointer">
 									<a href="{{ path('autrepointage', {'id_client': item.id }) }}" data-id-client="{{ item.id }}" class=" btn btn-primary btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
 										<span>Pointer</span>
 										<span class="fa fa-check"></span>
 									</a>
 								</div>
-							</div>
-						</td>
+						</div>
+					</td>
 
-					</tr>
-				{% endfor %}
-
-			</tbody>
-		</table>
+				</tr>
+			{% endfor %} 
+		</tbody>
+		
+		
+	</table>
 		<div class="titre_page footer">
 			<h2>
 				<a href="{{ path('imprimer_client_impaye') }}" class="btn btn-primary">Imprimer la liste</a>

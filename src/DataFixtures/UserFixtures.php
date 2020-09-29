@@ -50,6 +50,9 @@ class UserFixtures extends Fixture
                 $client->setEtatClient('présent');
                 $client->setCreatedAt($faker->dateTimeBetween('-3 years', 'now'));
                 $client->setVerifier("non");
+                $client->setChapitre("0811");
+                $client->setBudget('00');
+                $client->setArticle('110');
                 $client->setNumeroBl(112458);
                 $client->setDateDebut(new \DateTime("2020-".rand(1,12)."-".rand(1,29)));
                 // dateFin

@@ -26,9 +26,14 @@
                             <li><i><u>Rôle:</u> </i>
                                 {% if item.roles[0] == "ROLE_ADMIN" %}
                                     Administrateur
-                                {% else %}
-                                    Editeurs
                                 {% endif %}
+                                {% if item.roles[0] == "ROLE_SUPER_ADMIN" %}
+                                    Administrateur
+                                {% endif %}
+                                {% if item.roles[0] != "ROLE_SUPER_ADMIN" and item.roles[0] != "ROLE_ADMIN"  %}
+                                    Editeur
+                                {% endif %}
+                               
                             </li>
                         </ul>
                     </a>

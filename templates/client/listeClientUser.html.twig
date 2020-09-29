@@ -46,7 +46,7 @@
 					<span>Date du jour</span>
 				</th>
 				<th>
-					<span>Matricule du client</span>
+					<span>Client</span>
 				</th>
 				<th>
 					<span>Numéro BL</span>
@@ -57,6 +57,11 @@
 				<th>
 					<span>Montant mensuel</span>
 				</th>
+				<th>
+					<span>Nbr. Versement</span>
+				</th>
+				<th><sapn>Date de debut</sapn></th>
+				<th><sapn>Date de fin</sapn></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -68,8 +73,23 @@
 						</span>
 					</td>
 					<td>
-						<span class="matricule_client">
-							{{ item.matricule }}</span>
+						<span>Matricule : </span>
+							<span class="unite">{{ item.matricule }}</span>
+							<br>
+							<span>Nom et prénom : </span>
+							<span>{{ item.nom }}</span>
+							<span>{% if item.prenom is defined %}
+								{{ item.prenom }}
+							{% endif %}</span>
+							<br>
+							<span>Budget : </span>
+							<span class="unite">{{ item.budget }}</span>
+							<br>
+							<span>Chapitre : </span>
+							<span class="unite">{{ item.chapitre }}</span>
+							<br>
+							<span>Article : </span>
+							<span class="unite">{{ item.article }}</span>
 					</td>
 					<td>
 						<span class="numero_bl">
@@ -135,10 +155,7 @@
 			<thead>
 				<tr>
 					<td>
-						<span>MATRICULE</span>
-					</td>
-					<td>
-						<span>NOM ET PRENOM</span>
+						<span>CLIENT</span>
 					</td>
 					<td>
 						<span>CLIENT DE</span>
@@ -158,17 +175,30 @@
 				{% for item in items %}
 					<tr>
 						<td class="td-check">
-							<span>{{ item.matricule }}</span>
+							<span>Matricule : </span>
+							<span class="unite">{{ item.matricule }}</span>
+							<br>
+							<span>Nom et prénom : </span>
+							<span>{{ item.nom }}</span>
+							<span>{% if item.prenom is defined %}
+								{{ item.prenom }}
+							{% endif %}</span>
+							<br>
+							<span>Budget : </span>
+							<span class="unite">{{ item.budget }}</span>
+							<br>
+							<span>Chapitre : </span>
+							<span class="unite">{{ item.chapitre }}</span>
+							<br>
+							<span>Article : </span>
+							<span class="unite">{{ item.article }}</span>
+
 							{% if item.verifier == "oui" %}
 								<b class=" check fa fa-check"></b>
 							{% else %}
 								<b class=" check fa "></b>
 							{% endif %}
 							<b class=" check check-hide fa fa-check" style="display:none"></b>
-						</td>
-						<td>
-							<span>{{ item.nom }}</span><br>
-							<span>{{  item.prenom }}</span>
 						</td>
 						<td>
 							<span>{{ item.getUser().nom }}</span><br>
@@ -201,10 +231,10 @@
 					<td>
 						<div class="action">
 							<div>
-								<a href="{{ path("edit_client", {"id": item.id }) }}" class="modif btn btn-info btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+								<a href="{{ path("edit_client", {"id": item.id }) }}" class="modif btn btn-info btn-xs" {% if is_granted("ROLE_SUPER_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
 									<span class="fa fa-edit"></span>
 								</a>
-								<a href="#" data-id-client = "{{ item.id }}" class="suppr btn btn-danger btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+								<a href="#" data-id-client = "{{ item.id }}" class="suppr btn btn-danger btn-xs" {% if is_granted("ROLE_SUPER_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
 									<span class="fa fa-trash-o"></span>
 								</a>
 							</div>

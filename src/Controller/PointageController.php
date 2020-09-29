@@ -253,38 +253,12 @@ class PointageController extends AbstractController
         // creer le nom_pointage  de pointage
         $error = 0;
         $nom_lit = "";
-            if ($request->request->count() > 0) {
-                $m = $request->request->get('mois_pointage');
-                $annee = $request->request->get('annee_pointage');
-                $nom = $m . "-" . $annee;
-                $mois = $this->generateNameMonth($m);
-                $nom_lit = $mois . "-" . $annee;
-                $pointage = $repoPointage->findOneByNom($nom);
-                
-                if (!$pointage) {
-                    $created_at = new \DateTime();
-                    $pointage = new Pointage();
-                    $pointage->setNom($nom);
-                    $pointage->setNomLit($nom_lit);
-                    $pointage->setCreatedAt($created_at);
-                    $manager->persist($pointage);
-                    $manager->flush();
-                } else {
-                    $error = 1;
-                }
-            }
+           
         
         
        
-        $presents = $repoClient->countPresent('présent');
-        // le tokony ho pointena
-        $items = [];
-        foreach($presents as $item){
-            $res = $this->test_etat($item, new \DateTime());
-            if($res=="pointable"){
-                array_push($items, $item);
-            }
-        }
+        $items = $repoClient->countPresent('présent');
+       
         $now = new \DateTime();
         $mois_actus = $this->getMoisText($now);
        
@@ -295,17 +269,12 @@ class PointageController extends AbstractController
         if(count($last_p)>0){
             $lit = $last_p[0]->getNomLit();
         }
-        else{
-            // mila mamorina pointage
-            return $this->redirectToRoute("create_pointage");
-
-        }
        
         
        // dd($lit);
         return $this->render('pointage/pointage.html.twig', [
             "items" => $items,
-            "nom_last_p" => $lit,
+           
             "pointages" => $pointages,
             "error" => $error,
             "mois_actus" => $mois_actus,

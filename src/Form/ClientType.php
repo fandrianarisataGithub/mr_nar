@@ -34,6 +34,27 @@ class ClientType extends AbstractType
                     "class" => "form-control"
                 ]
             ])
+            ->add('chapitre', TextType::class, [
+                "label" => "Chapitre du client:",
+                "attr" => [
+                    "placeholder" => "ex : 0811...",
+                    "class" => "form-control"
+                ]
+            ])
+            ->add('budget', TextType::class, [
+                "label" => "Budget du client:",
+                "attr" => [
+                    "placeholder" => "ex : 000...",
+                    "class" => "form-control"
+                ]
+            ])
+            ->add('article', TextType::class, [
+                "label" => "Article du client:",
+                "attr" => [
+                    "placeholder" => "ex : 110...",
+                    "class" => "form-control"
+                ]
+            ])
             ->add('prenom', TextType::class, [
                 "label" => "Prénom du client:",
                 "attr" => [

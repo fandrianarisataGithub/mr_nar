@@ -54,7 +54,25 @@
                     'label':"Matricule du client:"
                 }) }}
             </div>
-            <div class="form-group">
+			<div class="form-group ">
+                {{ form_row(form.budget, {
+                    'label':"Budget du client:"
+                }) }}
+            </div>
+			<div class="form-group ">
+                {{ form_row(form.chapitre, {
+                    'label':"Chapitre du client:"
+                }) }}
+            </div>
+			<div class="form-group ">
+                {{ form_row(form.article, {
+                    'label':"Article du client:"
+                }) }}
+            </div>
+            
+        </div>
+        <div class="col-md-4">
+			<div class="form-group">
                 {{ form_row(form.nom, {
                     'label':"Nom du client:"
                 }) }}
@@ -69,8 +87,6 @@
                     'label':"Adresse exacte du client:"
                 }) }}
             </div>
-        </div>
-        <div class="col-md-4">
             <div class="form-group">
                 {{ form_row(form.cin, {
                     'label':"Numéro CIN:"
@@ -141,7 +157,7 @@
 					<span>Date du jour</span>
 				</th>
 				<th>
-					<span>Matricule du client</span>
+					<span>Client</span>
 				</th>
 				<th>
 					<span>Numéro BL</span>
@@ -168,8 +184,23 @@
 						</span>
 					</td>
 					<td>
-						<span class="matricule_client">
-							{{ item.matricule }}</span>
+						<span>Matricule : </span>
+							<span class="unite">{{ item.matricule }}</span>
+							<br>
+							<span>Nom et prénom : </span>
+							<span>{{ item.nom }}</span>
+							<span>{% if item.prenom is defined %}
+								{{ item.prenom }}
+							{% endif %}</span>
+							<br>
+							<span>Budget : </span>
+							<span class="unite">{{ item.budget }}</span>
+							<br>
+							<span>Chapitre : </span>
+							<span class="unite">{{ item.chapitre }}</span>
+							<br>
+							<span>Article : </span>
+							<span class="unite">{{ item.article }}</span>
 					</td>
 					<td>
 						<span class="numero_bl">

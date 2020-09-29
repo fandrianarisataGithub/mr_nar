@@ -3,61 +3,11 @@
     pointage
 {% endblock %}
 {% block body %}
-<div class="titre_page">
+{# <div class="titre_page">
 	<h2>Ajouter un mois de pointage</h2>
-</div>
+</div> #}
 <section class="mois_pointage container">
-<form action="/admin/pointage" class="row" method = "POST">
-		<div class="error_pointage" 
-			{% if error == 1 %}
-				style="display:block;"
-			{% else %}
-				style = "display:none;"
-			{% endif %}
-		
-		>
-			<p style="color:red;">
-				Ce mois de pointage existe déjà
-			</p>
-		</div>
-		<div class="col-sm-2">
-			<label for="annee">Mois:</label>
-			<select name="mois_pointage" id="mois_pointage" class="form-control">
-				<option value="vide"></option>
-				<option value="01">Janvier</option>
-				<option value="02">Février</option>
-				<option value="03">Mars</option>
-				<option value="04">Avril</option>
-				<option value="05">Mai</option>
-				<option value="06">Juin</option>
-				<option value="07">Juillet</option>
-				<option value="08">Août</option>
-				<option value="09">Septembre</option>
-				<option value="10">Octobre</option>
-				<option value="11">Novembre</option>
-				<option value="12">décembre</option>
-			</select>
-		</div>
-		<div class="col-sm-2">
-			<label for="annee">Année:</label>
-			<select name="annee_pointage" id="annee_pointage" class="form-control"></select>
-		</div>
-		<div class="col-sm-12" style="margin-top:15px;">
-			<div class="dernier_mois_p">
-				<p>Dernier mois de pointage enregistré : 
-					<b>
-					{% if nom_last_p is defined %}
-						{{ nom_last_p }}
-					{% endif %} 
-					</b>
-				</p>
-			</div>
-			<button type="submit" class="btn btn-primary btn-md">
-				<span class="fa fa-plus" style="margin-right:5px;"></span>
-				<span class="unite">Ajouter ce mois de mointage</span></button>
-		</div>
-	</form>
-	<!-- tri -->
+	{# <!-- tri -->
 	<form  class="row form_tri_pointage" >
 		<div class="titre_page">
 			<h2>Trier</h2>
@@ -73,7 +23,7 @@
 		<div class="form-group">
 			<button type="submit" class="btn btn-success btn-md" id="trier"><span>Executer</span></button>
 		</div>
-	</form>
+	</form> #}
 </section>
 
 <div class="titre_page">
@@ -85,10 +35,7 @@
 			<thead>
 				<tr>
 					<td>
-						<span>MATRICULE</span>
-					</td>
-					<td>
-						<span>NOM ET PRENOM</span>
+						<span>CLIENT</span>
 					</td>
 					<td>
 						<span>CLIENT DE</span>
@@ -108,7 +55,24 @@
 				{% for item in items %}
 					<tr>
 						<td class="td-check">
-							<span>{{ item.matricule }}</span>
+							<span>Matricule : </span>
+							<span class="unite">{{ item.matricule }}</span>
+							<br>
+							<span>Nom et prénom : </span>
+							<span>{{ item.nom }}</span>
+							<span>{% if item.prenom is defined %}
+								{{ item.prenom }}
+							{% endif %}</span>
+							<br>
+							<span>Budget : </span>
+							<span class="unite">{{ item.budget }}</span>
+							<br>
+							<span>Chapitre : </span>
+							<span class="unite">{{ item.chapitre }}</span>
+							<br>
+							<span>Article : </span>
+							<span class="unite">{{ item.article }}</span>
+
 							{% if item.verifier == "oui" %}
 								<b class=" check fa fa-check"></b>
 							{% else %}
@@ -117,15 +81,11 @@
 							<b class=" check check-hide fa fa-check" style="display:none"></b>
 						</td>
 						<td>
-							<span>{{ item.nom }}</span><br>
-							<span>{{  item.prenom }}</span>
-						</td>
-						<td>
 							<span>{{ item.getUser().nom }}</span><br>
 							(<span>{{ item.getUser().username }}</span>)
 						</td>
 						<td>
-						<span>Ajouté le : </span><span class="unite">{{ item.getCreatedAt() | date('d-m-Y') }}</span>
+							<span>Ajouté le : </span><span class="unite">{{ item.getCreatedAt() | date('d-m-Y') }}</span>
 							<br>
 							<span>N° BL:</span>
 							<span class="unite">{{ item.getNumeroBl() }}</span>
@@ -148,33 +108,28 @@
 							
 							 </span>
 						</td>
-						<td>
-							<div class="action">
-								<div>
-									<a href="{{ path('edit_client', {'id': item.id }) }}" class="modif btn btn-info btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
-										<span class="fa fa-edit"></span>
-									</a>
-									<a href="#" data-id-client = "{{ item.id }}" class="suppr btn btn-danger btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
-										<span class="fa fa-trash-o"></span>
-									</a>
-								</div>
-								<div>
-									<a href="{{ path('single_page', {'id_client': item.id }) }}" class="voir btn btn-primary btn-xs" {% if is_granted('ROLE_ADMIN') %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
-										<span>Voir</span>
-									</a>
-								</div>
-								<div class="div__pointer">
+					<td>
+						<div class="action">
+							
+							<div>
+								<a href="{{ path('single_page', {'id_client': item.id }) }}" class="voir btn btn-primary btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+									<span>Voir</span>
+								</a>
+							</div>
+							<div class="div__pointer">
 									<a href="{{ path('autrepointage', {'id_client': item.id }) }}" data-id-client="{{ item.id }}" class=" btn btn-primary btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
 										<span>Pointer</span>
 										<span class="fa fa-check"></span>
 									</a>
 								</div>
-							</div>
-						</td>
+						</div>
+					</td>
 
-					</tr>
-				{% endfor %}
+				</tr>
+			{% endfor %} 
 		</tbody>
+		
+		
 	</table>
 </div>
 <div id="modal_pointage">

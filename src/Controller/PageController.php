@@ -37,7 +37,7 @@ class PageController extends AbstractController
         $c = $repoClient->findAll();
         $today = new \DateTime();
         $tomoth = $today->format('m-Y');
-        foreach($c as $item){
+        foreach ($c as $item) {
 
             /** ze nahavita pointage t@ty */
 
@@ -48,7 +48,7 @@ class PageController extends AbstractController
                 $n = $tabPointEff[$i]->getNom();
                 array_push($tabNom, $n);
             }
-           
+
 
             if (in_array($tomoth, $tabNom)) {
                 // nahavita izy zany 
@@ -63,31 +63,28 @@ class PageController extends AbstractController
             $nextPointage = $item->getNomPointageAv();
             $n = $item->getNumeroPointage();
             // tokony hanao pointage ve izy @ty?
-            if($tomoth == $nextPointage){
+            if ($tomoth == $nextPointage) {
                 // si le pointage est le premier
-                if($n == '-1'){
+                if ($n == '-1') {
                     // client présent pour le pointage
                     $item->setEtatClient('présent');
                     $manager->persist($item);
                     $manager->flush();
-                
-                }
-                else{
+                } else {
                     // nandoha ve teo aloha ?
                     // on liste les pointage effectué par ce client 
                     $tabPoint = $this->liste_pointage_du_client($item, $repoClient);
                     // le mois dernier 
                     $s = $this->nom_dernier_mois();
                     // nanao pointage ve izy t@io 
-                    if(in_array($s, $tabPoint)){
+                    if (in_array($s, $tabPoint)) {
                         //nanao izy
                         //atao client présent
                         $item->setEtatClient('présent');
                         $manager->persist($item);
                         $manager->flush();
-                    }
-                    else{
-                        
+                    } else {
+
                         // suspendu izy
                         /* $item->setEtatClient('suspendu');
                         $manager->persist($item);
@@ -98,24 +95,19 @@ class PageController extends AbstractController
                         $list = explode("__", $list);
                         // tadaviko oe indice firy ao ty mois ty $tomoth
                         $key = array_search($tomoth, $list);
-                        if($key >= 3){
+                        if ($key >= 3) {
                             $item->setEtatClient('impayé');
                             $manager->persist($item);
                             $manager->flush();
-                        }
-                        else{
+                        } else {
                             $item->setEtatClient('suspendu');
                             $manager->persist($item);
                             $manager->flush();
                         }
-
-
                     }
                 }
-
-                
             }
-            if($item->getDateFin() < $today){
+            if ($item->getDateFin() < $today) {
                 $item->setEtatClient('archivé');
                 $manager->persist($item);
                 $manager->flush();
@@ -126,33 +118,29 @@ class PageController extends AbstractController
             // premier jour du mois 
             $tomoth = $today->format('m-Y');
 
-           
 
 
 
-            $p = "1-".$tomoth;
-           
+
+            $p = "1-" . $tomoth;
+
             $date1 = new \DateTime($p);
             //dd($date1);
             $date = date_create($date1->format("Y-m-d"));
 
             // raha ny 1 mois avant no hitsarana azy
-            
+
             date_add($date, date_interval_create_from_date_string(1 . ' months'));
             //dd($date);
             $dd = $item->getDateDebut();
-            if($dd >= $date){
+            if ($dd >= $date) {
                 // en attente
                 $item->setEtatClient('attente');
                 $manager->persist($item);
                 $manager->flush();
             }
-
-
-
         }
     }
-
     /**
      * @Route("/test", name = "test")
      */
@@ -204,6 +192,7 @@ class PageController extends AbstractController
     public function search(Request $request, ClientRepository $repoClient)
     {   
         $result = [];
+        $client = new Client();
         if(count($request->request)>0){
             $text = $request->request->get('matricule');
             $result = $repoClient->createQueryBuilder('c')
@@ -212,10 +201,16 @@ class PageController extends AbstractController
             ->getQuery()
             ->getResult();
            // dd($result);
+            $client = $repoClient->findOneByMatricule($text);
+            if (!$client) {
+                return $this->redirectToRoute("search");
+            } else {
+                return $this->redirectToRoute("single_page", ["id_client" => $client->getId()]);
+            }
         }
         
         return $this->render("page/search.html.twig",[
-            "client" => $result,
+            "items" => $result,
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
             'archived' => $this->count_archived($repoClient),

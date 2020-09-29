@@ -8,10 +8,7 @@
 			<thead>
 				<tr>
 					<td>
-						<span>MATRICULE</span>
-					</td>
-					<td>
-						<span>NOM ET PRENOM</span>
+						<span>CLIENT</span>
 					</td>
 					<td>
 						<span>CLIENT DE</span>
@@ -31,7 +28,24 @@
 				{% for item in items %}
 					<tr>
 						<td class="td-check">
-							<span>{{ item.matricule }}</span>
+							<span>Matricule : </span>
+							<span class="unite">{{ item.matricule }}</span>
+							<br>
+							<span>Nom et prénom : </span>
+							<span>{{ item.nom }}</span>
+							<span>{% if item.prenom is defined %}
+								{{ item.prenom }}
+							{% endif %}</span>
+							<br>
+							<span>Budget : </span>
+							<span class="unite">{{ item.budget }}</span>
+							<br>
+							<span>Chapitre : </span>
+							<span class="unite">{{ item.chapitre }}</span>
+							<br>
+							<span>Article : </span>
+							<span class="unite">{{ item.article }}</span>
+
 							{% if item.verifier == "oui" %}
 								<b class=" check fa fa-check"></b>
 							{% else %}
@@ -40,15 +54,11 @@
 							<b class=" check check-hide fa fa-check" style="display:none"></b>
 						</td>
 						<td>
-							<span>{{ item.nom }}</span><br>
-							<span>{{  item.prenom }}</span>
-						</td>
-						<td>
 							<span>{{ item.getUser().nom }}</span><br>
 							(<span>{{ item.getUser().username }}</span>)
 						</td>
 						<td>
-						<span>Ajouté le : </span><span class="unite">{{ item.getCreatedAt() | date('d-m-Y') }}</span>
+							<span>Ajouté le : </span><span class="unite">{{ item.getCreatedAt() | date('d-m-Y') }}</span>
 							<br>
 							<span>N° BL:</span>
 							<span class="unite">{{ item.getNumeroBl() }}</span>

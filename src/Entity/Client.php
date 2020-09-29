@@ -150,6 +150,24 @@ class Client
      */
     private $nom_pointage_av;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     */
+    private $budget;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     */
+    private $article;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     */
+    private $chapitre;
+
     public function __construct()
     {
         $this->pointages = new ArrayCollection();
@@ -458,6 +476,42 @@ class Client
             $string .= "__" . $tab_s[$i];
         }
         return $string;
+    }
+
+    public function getBudget(): ?string
+    {
+        return $this->budget;
+    }
+
+    public function setBudget(string $budget): self
+    {
+        $this->budget = $budget;
+
+        return $this;
+    }
+
+    public function getArticle(): ?string
+    {
+        return $this->article;
+    }
+
+    public function setArticle(string $article): self
+    {
+        $this->article = $article;
+
+        return $this;
+    }
+
+    public function getChapitre(): ?string
+    {
+        return $this->chapitre;
+    }
+
+    public function setChapitre(string $chapitre): self
+    {
+        $this->chapitre = $chapitre;
+
+        return $this;
     }
 
    
