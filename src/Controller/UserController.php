@@ -113,27 +113,28 @@ class UserController extends AbstractController
         //dd($n);
         return $n;
     }
+   
     public function count_pointed(ClientRepository $repoClient)
     {
-        $tous = $repoClient->findAll();
+        $clients = $repoClient->findAll();
         $today = new \DateTime();
-        $tomoth = $today->format('m-Y');
-
-        $cp = [];
-        foreach ($tous as $item) {
-            $ses_p = $this->liste_pointage_du_client($item, $repoClient);
-
-            if ($ses_p != "vide") {
-                foreach ($ses_p as $p) {
-                    $nom = $p->getNom();
-                    if ($nom == $tomoth) {
-                        $item->setEtatClient('pointé');
-                        array_push($cp, $item);
-                    }
+        $today_moth = $today->format('m-Y');
+        $n=0;
+        foreach($clients as $client){
+            $ses_pointages_fait = $this->liste_pointage_du_client($client, $repoClient);
+            $tab = array();
+           if($ses_pointages_fait != 'vide'){
+                foreach ($ses_pointages_fait as $pointage) {
+                    array_push($tab, $pointage->getNom());
                 }
-            }
+           }
+           if(in_array($today_moth, $tab)){
+               $n++;
+           }
+           
         }
-        return count($cp);
+        return $n;
+       
     }
     /**
      * @Route("/test", name = "test")

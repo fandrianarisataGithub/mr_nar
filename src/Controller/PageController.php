@@ -31,116 +31,6 @@ class PageController extends AbstractController
        return $this->redirectToRoute("app_login");
         
     }
-
-    public function triage_principal(ClientRepository $repoClient, EntityManagerInterface $manager)
-    {
-        $c = $repoClient->findAll();
-        $today = new \DateTime();
-        $tomoth = $today->format('m-Y');
-        foreach ($c as $item) {
-
-            /** ze nahavita pointage t@ty */
-
-            // ny pointage efa vitany
-            $tabPointEff = $this->liste_pointage_du_client($item, $repoClient);
-            $tabNom = [];
-            for ($i = 0; $i < count($tabPointEff); $i++) {
-                $n = $tabPointEff[$i]->getNom();
-                array_push($tabNom, $n);
-            }
-
-
-            if (in_array($tomoth, $tabNom)) {
-                // nahavita izy zany 
-                $item->setEtatClient('pointé');
-                $manager->persist($item);
-                $manager->flush();
-            }
-
-
-            /** /ze nahavita pointage t@ty */
-            // si androany no nanomboka ny pointage -ny
-            $nextPointage = $item->getNomPointageAv();
-            $n = $item->getNumeroPointage();
-            // tokony hanao pointage ve izy @ty?
-            if ($tomoth == $nextPointage) {
-                // si le pointage est le premier
-                if ($n == '-1') {
-                    // client présent pour le pointage
-                    $item->setEtatClient('présent');
-                    $manager->persist($item);
-                    $manager->flush();
-                } else {
-                    // nandoha ve teo aloha ?
-                    // on liste les pointage effectué par ce client 
-                    $tabPoint = $this->liste_pointage_du_client($item, $repoClient);
-                    // le mois dernier 
-                    $s = $this->nom_dernier_mois();
-                    // nanao pointage ve izy t@io 
-                    if (in_array($s, $tabPoint)) {
-                        //nanao izy
-                        //atao client présent
-                        $item->setEtatClient('présent');
-                        $manager->persist($item);
-                        $manager->flush();
-                    } else {
-
-                        // suspendu izy
-                        /* $item->setEtatClient('suspendu');
-                        $manager->persist($item);
-                        $manager->flush();*/
-                        // impiry izy no tsy nandoha ?
-                        // alaina aloha ny liste pointage tokony ho ataony 
-                        $list = $item->getTabPointage();
-                        $list = explode("__", $list);
-                        // tadaviko oe indice firy ao ty mois ty $tomoth
-                        $key = array_search($tomoth, $list);
-                        if ($key >= 3) {
-                            $item->setEtatClient('impayé');
-                            $manager->persist($item);
-                            $manager->flush();
-                        } else {
-                            $item->setEtatClient('suspendu');
-                            $manager->persist($item);
-                            $manager->flush();
-                        }
-                    }
-                }
-            }
-            if ($item->getDateFin() < $today) {
-                $item->setEtatClient('archivé');
-                $manager->persist($item);
-                $manager->flush();
-            }
-
-            // ireo en attente 
-            $etat = $item->getEtatClient();
-            // premier jour du mois 
-            $tomoth = $today->format('m-Y');
-
-
-
-
-
-            $p = "1-" . $tomoth;
-
-            $date1 = new \DateTime($p);
-            //dd($date1);
-            $date = date_create($date1->format("Y-m-d"));
-
-            // raha ny 1 mois avant no hitsarana azy
-
-            date_add($date, date_interval_create_from_date_string(1 . ' months'));
-            //dd($date);
-            $dd = $item->getDateDebut();
-            if ($dd >= $date) {
-                // en attente
-                $item->setEtatClient('attente');
-                $manager->persist($item);
-                $manager->flush();
-            }
-        }
-    }
     /**
      * @Route("/test", name = "test")
      */
@@ -746,36 +636,34 @@ class PageController extends AbstractController
         return $n;
         
     }
-
     public function count_pointed(ClientRepository $repoClient)
     {
-        $tous = $repoClient->findAll();
+        $clients = $repoClient->findAll();
         $today = new \DateTime();
-        $tomoth = $today->format('m-Y');
-
-        $cp = [];
-        foreach ($tous as $item) {
-            $ses_p = $this->liste_pointage_du_client($item, $repoClient);
-
-            if ($ses_p != "vide") {
-                foreach ($ses_p as $p) {
-                    $nom = $p->getNom();
-                    if ($nom == $tomoth) {
-                        $item->setEtatClient('pointé');
-                        array_push($cp, $item);
-                    }
+        $today_moth = $today->format('m-Y');
+        $n = 0;
+        foreach ($clients as $client) {
+            $ses_pointages_fait = $this->liste_pointage_du_client($client, $repoClient);
+            $tab = array();
+            if ($ses_pointages_fait != 'vide') {
+                foreach ($ses_pointages_fait as $pointage) {
+                    array_push($tab, $pointage->getNom());
                 }
             }
+            if (in_array($today_moth, $tab)) {
+                $n++;
+            }
         }
-        return count($cp);
+        return $n;
     }
     public function count_suspendu(ClientRepository $repoClient)
     {
         $tabPresent = $repoClient->countPresent('suspendu');
         $n = count($tabPresent);
-      
+        //dd($n);
         return $n;
     }
+    
     public function count_archived(ClientRepository $repoClient)
     {
         $tabPresent = $repoClient->countPresent('archivé');

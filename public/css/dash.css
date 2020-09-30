@@ -10474,6 +10474,16 @@ a:hover .caret-white {
     border-top: 1px solid #eaedef;
 }
 
+.navbar-brand {
+    float: none;
+    text-align: center;
+    font-size: 12px;
+    line-height: 50px;
+    display: inline-block;
+    padding: 0 15px;
+    font-weight: bold;
+}
+
 .open {
     z-index: 1050;
     position: relative;
@@ -10731,14 +10741,14 @@ a:hover .caret-white {
         border-spacing: 0;
         width: 100%;
     }
-    .hbox>aside, .hbox>section {
+    .hbox>aside,
+    .hbox>section {
         display: table-cell;
         vertical-align: top;
         height: 100%;
         padding: 0;
         float: none;
     }
-   
     .hbox>aside.show,
     .hbox>aside.hidden-sm,
     .hbox>section.show,
@@ -10981,7 +10991,7 @@ body.container {
 .navbar-brand {
     float: none;
     text-align: center;
-    font-size: 20px;
+    font-size: 12px;
     line-height: 50px;
     display: inline-block;
     padding: 0 15px;
@@ -11554,8 +11564,8 @@ fieldset[disabled] .btn-default.active {
 
 .btn-primary {
     color: #fff !important;
-    background-color: #65bd77;
-    border-color: #65bd77;
+    background-color: #4cc0c1;
+    border-color: #4cc0c1;
 }
 
 .btn-primary:hover,
@@ -12674,27 +12684,30 @@ fieldset[disabled] .btn-gplus.active {
 .bg-dark .nav .open>a {
     background-color: #25313e;
 }
-ul.result_search{
+
+ul.result_search {
     list-style: none;
     margin: 0;
-    padding:0;
+    padding: 0;
     margin-top: 15px;
-   
     height: 180px;
     overflow-y: hidden;
 }
-ul.result_search li{
+
+ul.result_search li {
     height: 30px;
-    border-bottom: 0.5px solid rgba(200,200,200,0.5);
+    border-bottom: 0.5px solid rgba(200, 200, 200, 0.5);
     width: 85%;
     margin-left: auto;
     margin-right: auto;
 }
-ul.result_search li a{
+
+ul.result_search li a {
     display: block;
-     height: 30px;
+    height: 30px;
     padding-top: 5px;
 }
+
 .bg-dark.navbar .nav>li.active>a {
     color: #fff;
     background-color: #25313e;
@@ -13970,7 +13983,6 @@ ul.result_search li a{
 
 
 /* Mes css */
- 
 
 #btn_menu {
     display: none !important;
@@ -14177,19 +14189,20 @@ aside.user_action {
     transition-timing-function: cubic-bezier(0, 0.1, 0.7, 1);
 }
 
-.form_tri_pointage h2{
+.form_tri_pointage h2 {
     margin-top: 0;
 }
 
-.form_tri_pointage .form-group{
-     display: flex;
-   
+.form_tri_pointage .form-group {
+    display: flex;
 }
-.form_tri_pointage .form-group.select{
-   display: flex;
+
+.form_tri_pointage .form-group.select {
+    display: flex;
     align-items: center;
 }
-.form_tri_pointage select{
+
+.form_tri_pointage select {
     width: 200px;
     margin-left: 10px;
 }
@@ -14205,7 +14218,8 @@ aside.user_action {
     transition: transform 1.5s;
     transition-timing-function: cubic-bezier(0, 0.1, 0.7, 1);
 }
-.inner_modal.supprimer_client{
+
+.inner_modal.supprimer_client {
     width: 360px !important;
 }
 
@@ -14449,26 +14463,30 @@ body tfoot tr td:last-child {
     text-align: start;
 }
 
-#details_client_p .col-sm-6 ul{
+#details_client_p .col-sm-6 ul {
     background: #4cc0c1;
     padding-top: 15px;
     padding-bottom: 15px;
     width: 320px;
     border-radius: 5px;
 }
-#details_client_p .col-sm-6 .sous-titre-details h4{
+
+#details_client_p .col-sm-6 .sous-titre-details h4 {
     padding-left: 15px;
-    border-bottom: 1px solid rgba(200,200,200,0.35);
+    border-bottom: 1px solid rgba(200, 200, 200, 0.35);
     padding-bottom: 15px;
     margin-top: 15px;
 }
-.list_p{
-     padding-left: 25px;
+
+.list_p {
+    padding-left: 25px;
 }
-#details_client_p .col-sm-6 ul li{
+
+#details_client_p .col-sm-6 ul li {
     color: #fff;
 }
-#details_client_p .col-sm-6 ul li span:first-child{
+
+#details_client_p .col-sm-6 ul li span:first-child {
     display: inline-block;
     width: 100px;
 }
@@ -14554,7 +14572,7 @@ body tfoot tr td:last-child {
     padding-left: 5px;
 }
 
-.div__form form a.btn {
+.div__form form button.btn {
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
     background: #4cc0c1;
@@ -14602,7 +14620,8 @@ body tfoot tr td:last-child {
 .div_footer_tab span:not(:first-child) {
     margin-left: 5px;
 }
-.div__pointer .btn{
+
+.div__pointer .btn {
     width: auto !important;
 }
 
@@ -14617,12 +14636,12 @@ body tfoot tr td:last-child {
 }
 
 :root {
-	--yellow: #feb60a;
-	--red: #ff0062;
-	--blue: #00dbf9;
-	--violet: #da00f7;
+    --yellow: #feb60a;
+    --red: #ff0062;
+    --blue: #00dbf9;
+    --violet: #da00f7;
 }
-	
+
 div.containers {
     position: fixed;
     background: #112435;
@@ -14630,68 +14649,77 @@ div.containers {
     height: 100%;
     left: 0px;
     top: 0px;
-	display: flex;
-	justify-content: center;
+    display: flex;
+    justify-content: center;
     align-items: center;
     z-index: 10000 !important;
 }
+
 .bull {
-	width: 3vw;
-	height: 3vw;
-	border-radius: 100%;
-	margin: 2vw;
-	background-image: linear-gradient(145deg, rgba(255,255,255,0.5) 0%, rgba(0,0,0,0) 100%);
-	animation: bounce 1.5s 0.5s linear infinite;
+    width: 3vw;
+    height: 3vw;
+    border-radius: 100%;
+    margin: 2vw;
+    background-image: linear-gradient(145deg, rgba(255, 255, 255, 0.5) 0%, rgba(0, 0, 0, 0) 100%);
+    animation: bounce 1.5s 0.5s linear infinite;
 }
+
 .yellow {
-	background-color: var(--yellow);
+    background-color: var(--yellow);
 }
 
 .red {
-	background-color: var(--red);
-	animation-delay: 0.1s;
+    background-color: var(--red);
+    animation-delay: 0.1s;
 }
 
 .blue {
-	background-color: var(--blue);
-	animation-delay: 0.2s;
+    background-color: var(--blue);
+    animation-delay: 0.2s;
 }
 
 .violet {
-	background-color: var(--violet);
-	animation-delay: 0.3s;
+    background-color: var(--violet);
+    animation-delay: 0.3s;
 }
-.form_pointage{
+
+.form_pointage {
     background: #4cc0c1;
     padding: 15px;
     margin-top: 25px;
     border-radius: 5px;
 }
-.form_pointage label{
+
+.form_pointage label {
     color: #fff;
 }
-.form_pointage button.btn{
+
+.form_pointage button.btn {
     background: #41586e;
     border-radius: 3px;
     border-color: transparent;
 }
-.form_pointage .form-control{
-     border-radius: 3px;
+
+.form_pointage .form-control {
+    border-radius: 3px;
     border-color: transparent;
 }
+
 @keyframes bounce {
-	0%, 50%, 100% {
-		transform: scale(1);
-		filter: blur(0px);
-	}
-	25% {
-		transform: scale(0.6);
-		filter: blur(3px);
-	}
-	75% {
-		filter: blur(3px);
-		transform: scale(1.4);
-	}
+    0%,
+    50%,
+    100% {
+        transform: scale(1);
+        filter: blur(0px);
+    }
+    25% {
+        transform: scale(0.6);
+        filter: blur(3px);
+    }
+    75% {
+        filter: blur(3px);
+        transform: scale(1.4);
+    }
 }
 
 
