@@ -357,6 +357,7 @@ class PageController extends AbstractController
             'nouveau' => $this->count_nouveau($repoClient),
             'impaye' => $this->count_impaye($repoClient),
             'attente' => $this->count_attente($repoClient),
+            'liste' => 'autre'
         ]);
     }
 
@@ -549,11 +550,128 @@ class PageController extends AbstractController
     
 
     /**
-     * @Route("/admin/graph", name="graph")
+     * @Route("/admin/graph/", name="graph")
      */
-    public function graph(ClientRepository $repoClient)
+    public function graph(ClientRepository $repoClient, Request $request)
     {
+        // les client présent
+        $all_client = $repoClient->findAll();
+        $tab_client_mois = [];
+        $tab_client_montant = [];
+        $jan = 0;
+        $fev = 0;
+        $mars = 0;
+        $avr = 0;
+        $mai = 0;
+        $juin = 0;
+        $jul = 0;
+        $aou = 0;
+        $sep = 0;
+        $oct = 0;
+        $nov = 0;
+        $dec  = 0;
+        // montant
+        $m_jan = 0;
+        $m_fev = 0;
+        $m_mars = 0;
+        $m_avr = 0;
+        $m_mai = 0;
+        $m_juin = 0;
+        $m_jul = 0;
+        $m_aou = 0;
+        $m_sep = 0;
+        $m_oct = 0;
+        $m_nov = 0;
+        $m_dec  = 0;
+
+        $annee = '';
+        $today = new \DateTime();
+        $ppa = $today->format('Y');
+        if($request->request->count()>0){
+            $annee = $request->request->get('annee');
+        }
+        else{
+
+            $today = new \DateTime();
+            $annee = $today->format('Y');
+            
+        }
+        foreach ($all_client as $item) {
+            // les clients de cet année là
+            $sa_created_at = $item->getCreatedAt();
+            $sa_created_at_mois = $sa_created_at->format('m-Y');
+            $son_num_mois =  $sa_created_at->format('m');
+            $sa_created_at_annee = $sa_created_at->format('Y');
+            if ($sa_created_at_annee == $annee) {
+                if ($son_num_mois == '01') {
+                    $jan++;
+                    $m_jan+= $item->getMontant();
+                }
+                if ($son_num_mois == '02') {
+                    $fev++;
+                    $m_fev+=$item->getMontant();
+                }
+                if ($son_num_mois == '03') {
+                    $mars++;
+                    $m_mars+= $item->getMontant();
+                }
+                if ($son_num_mois == '04') {
+                    $avr++;
+                    $m_avr += $item->getMontant();
+                }
+                if ($son_num_mois == '05') {
+                    $mai++;
+                    $m_mai += $item->getMontant();
+                }
+                if ($son_num_mois == '06') {
+                    $juin++;
+                    $m_juin += $item->getMontant();
+                }
+                if ($son_num_mois == '07') {
+                    $jul++;
+                    $m_jul += $item->getMontant();
+                }
+                if ($son_num_mois == '08') {
+                    $aou++;
+                    $m_aou += $item->getMontant();
+                }
+                if ($son_num_mois == '09') {
+                    $sep++;
+                    $m_sep += $item->getMontant();
+                }
+                if ($son_num_mois == '10') {
+                    $oct++;
+                    $m_oct += $item->getMontant();
+                }
+                if ($son_num_mois == '11') {
+                    $nov++;
+                    $m_nov += $item->getMontant();
+                }
+                if ($son_num_mois == '12') {
+                    $dec++;
+                    $m_dec += $item->getMontant();
+                }
+            }
+        }
+        foreach($all_client as $c){
+            $sa_created_at = $item->getCreatedAt();
+            $sa_created_at_mois = $sa_created_at->format('m-Y');
+            $son_num_mois =  $sa_created_at->format('m');
+            $sa_created_at_annee = $sa_created_at->format('Y');
+            if($sa_created_at_annee < $ppa){
+                $ppa = $sa_created_at_annee;
+            }
+        }
+        array_push($tab_client_mois, $jan, $fev, $mars, $avr, $mai, $juin, $jul, $aou, $sep, $oct, $nov, $dec);
+        array_push($tab_client_montant, $m_jan, $m_fev, $m_mars, $m_avr, $m_mai, $m_juin, $m_jul, $m_aou, $m_sep, $m_oct, $m_nov, $m_dec);
+        // liste d'annéé exixtante
+        $annee_actus = $today->format('Y');
+        $tab = [];
+        for($i = $annee_actus; $i >= $ppa; $i--){
+            array_push($tab, $i);
+        }
         
+        //dd($tab);
         return $this->render('page/graph.html.twig', [
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
@@ -562,6 +680,10 @@ class PageController extends AbstractController
             'nouveau' => $this->count_nouveau($repoClient),
             'impaye' => $this->count_impaye($repoClient),
             'attente' => $this->count_attente($repoClient),
+            'tab_client_mois' => $tab_client_mois,
+            'tab_client_montant' => $tab_client_montant,
+            'annee' => $annee,
+            'tab_annee' => $tab,
         ]);
     }
     
@@ -635,6 +757,24 @@ class PageController extends AbstractController
         //dd($n);
         return $n;
         
+    }
+    /**
+     * @Route("/admin/all_pointed/", name="all_pointed")
+     */
+    public function all_pointed(ClientRepository $repoClient)
+    {
+        $clients = $repoClient->findByEtatClient('pointé');
+        return $this->render('page/client_pointed.html.twig', [
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
+            'items' => $clients,
+            'liste' => 'all_pointed',
+        ]);
     }
     public function count_pointed(ClientRepository $repoClient)
     {

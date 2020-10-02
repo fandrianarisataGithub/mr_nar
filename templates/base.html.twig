@@ -124,12 +124,12 @@
                                                                 <i class="fa fa-angle-right"></i> <span>Nouveau client</span>
                                                             </a>
                                                         </li>
-                                                        <li>
+                                                        {# <li>
                                                             <a href="{{ path('client_attente') }}">
                                                                 <b class="badge bg-info pull-right">{{ attente }}</b>
                                                                 <i class="fa fa-angle-right"></i> <span>Client en attente</span>
                                                             </a>
-                                                        </li>
+                                                        </li> #}
                                                         <li>
                                                             <a href="{{ path('client_present') }}">
                                                                 <b class="badge bg-info pull-right">{{ present }}</b>
@@ -305,19 +305,6 @@
             /* pointage */
 
                 // function generate year
-
-            function generateYear() {
-                var today = new Date();
-                //alert(today);
-                var y = today.getFullYear();
-                //alert(y);
-                var html = "<option value = '" + y + "'>" + y + "</option>";
-                for (var index = 2009; index < y + 3; index++) {
-                    html += "<option value = '" + index + "'>" + index + "</option>";
-                }
-                $('#annee_pointage').append(html);
-            }
-            generateYear();
 
             // animation modal 
 

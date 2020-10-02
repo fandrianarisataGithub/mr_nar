@@ -6,6 +6,15 @@
 	<div class="titre_page">
 		<h2>Liste des clients pointés</h2>
 	</div>
+	<div class="titre_page">
+		
+		{% if liste == "all_pointed" %}
+
+			<a href="{{ path('client_pointed') }}" class="btn btn-primary btn-md">Lister tous les clients pointés de ce mois</a>
+		{% else %}
+			<a href="{{ path('all_pointed') }}" class="btn btn-primary btn-md">Lister tous les clients pointés</a>
+		{% endif %}
+	</div>
 
 	<div class="tableau tab_historique">
 		<table class="display" id="tab_client_heb" style="width:100%">

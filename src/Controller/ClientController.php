@@ -292,10 +292,13 @@ class ClientController extends AbstractController
             }
             // avoaka ze en attente
             if ($next_moth <= $sa_date_debut) {
-                $item->setEtatClient('attente');
+                // $item->setEtatClient('attente');
+                $item->setEtatClient('présent');
             }
             // avoaka ze pointé
-            
+            if($ses_p_fait != "vide"){
+                $item->setEtatClient('pointé');
+            }
 
             // ireo ho atao pointage
             if(in_array($today_moth, $sa_liste_p_a_faire)){

@@ -14314,14 +14314,13 @@ span.fa-check {
     font-weight: bold;
 }
 
-#form_tri_annee {
+.form_tri_annee {
     text-align: end;
 }
 
-#form_tri_annee select {
+.form_tri_annee select {
+   display: inline-block;
     width: 200px;
-    float: right;
-    margin-right: 25px;
 }
 
 #info {
@@ -14329,7 +14328,10 @@ span.fa-check {
     justify-content: center;
     align-items: center;
 }
-
+.graph_title{
+    text-align: center;
+    font-size: 18px;
+}
 #info p {
     background: red;
     width: 50%;

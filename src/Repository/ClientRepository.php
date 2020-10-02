@@ -19,9 +19,9 @@ class ClientRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Client::class);
     }
-   /**
-    * @return Client[] Returns an array of Client objects
-    */
+    /**
+     * @return Client[] Returns an array of Client objects 
+     */
     public function chercherTous(User $user)
     {
         return $this->createQueryBuilder('c')
@@ -32,6 +32,19 @@ class ClientRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    /**
+     * @return Client[] Returns an array of Client objects 
+     */
+    public function findByEtatClient($string)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.etat_client = :val')
+            ->setParameter('val', $string)
+            ->orderBy('c.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 
     /**
