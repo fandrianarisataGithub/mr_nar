@@ -41,6 +41,8 @@
 								{{ item.prenom }}
 							{% endif %}</span>
 							<br>
+							<span>Contact : </span><span class="unite">{{ item.phone }}</span>
+							<br>
 							<span>Budget : </span>
 							<span class="unite">{{ item.budget }}</span>
 							<br>
@@ -97,9 +99,6 @@
 								</a>
 							</div>
 							<div>
-								<a href="#" data-id-client = "{{ item.id }}" class="verifier btn btn-primary btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
-									<span class = "fa fa-check-square-o"></span>
-								</a>
 								<a href="{{ path('single_page', {'id_client': item.id }) }}" class="voir btn btn-primary btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
 									<span>Voir</span>
 								</a>

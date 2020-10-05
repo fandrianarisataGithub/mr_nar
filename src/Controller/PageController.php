@@ -118,7 +118,7 @@ class PageController extends AbstractController
     public function client_present(ClientRepository $repoClient, UserRepository $repoUser, PointageRepository $repoPointage)
     {
         $user = new User();
-        $items = $repoClient->countPresent('présent');
+        $items = $repoClient->findAll();
         $users = $repoUser->findAll();
        $total_mj = 0;
        $total_mmj = 0;
@@ -137,9 +137,14 @@ class PageController extends AbstractController
             $total_mmj += $mmj;
             
         }
-
+        $les_clients = $repoClient->findAll();
+        $montant = 0;
+        foreach($les_clients as $c){
+            $montant += $c->getMontant();
+        }
         return $this->render('page/client_present.html.twig', [
             'items' => $items,
+            'montant' => $montant,
             'pointages' => $pointages,
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
@@ -476,6 +481,7 @@ class PageController extends AbstractController
             'nbr_paiement_total' => $nbrMois,
             'nbr_mois_restant' => $nbr_mois_restant,
             "nbr_pointage" => $nbr_p_effectue,
+            "numero_bl" => $client->getNumeroBl(),
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
             'archived' => $this->count_archived($repoClient),
@@ -718,7 +724,7 @@ class PageController extends AbstractController
    
     public function count_present(ClientRepository $repoClient)
     {
-        $tabPresent = $repoClient->countPresent('présent');
+        $tabPresent = $repoClient->findAll();
         $n = count($tabPresent);
         //dd($n);
         return $n;

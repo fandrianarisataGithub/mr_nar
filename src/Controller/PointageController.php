@@ -58,10 +58,9 @@ class PointageController extends AbstractController
             $s = explode("-", $tabPointage[$i]);
             $n = $s[0] - 1;
 
-           $tabPointage[''.$i.''] = $mois[$n]."-".$s[1];
+           $tabPointage[$i] = $mois[$n]."-".$s[1];
             
         }
-       //dd($tabPointage);
         // liste des poinatge eff
         $liste_p_eff = $this->liste_pointage_du_client($client, $repoClient);
       
@@ -104,11 +103,13 @@ class PointageController extends AbstractController
                     $point_eff = $this->liste_pointage_du_client($client, $repoClient);
                     $sonNom_pointage = [];
                     if($point_eff != "vide"){
+                       
                         for ($i = 0; $i < count($point_eff); $i++) {
                             array_push($sonNom_pointage, $point_eff[$i]->getNom());
                         }
                         //dd($sonNom_pointage);
                         if (in_array($nom_pointage, $sonNom_pointage)) {
+                       
                             // efa nahavita an'io izy
                             return $this->render("pointage/autrepointage.html.twig", [
                                 "liste_p_p" => $tabPointage,
@@ -127,21 +128,24 @@ class PointageController extends AbstractController
                             ]);
                         } 
                         else {
-                        
+                            $next = 0;
                             $client->addPointage($pointage1);
                             
                             $n = $client->getNumeroPointage();
                             $n++;
                             $client->setNumeroPointage($n);
                             $n++;
-
+                        
                             if ($n >= count($tabPointage1)) {
-                                // pointé
+                            // pointé
+                                $client->setNomPointageAv($next);
+                                $manager->persist($pointage1);
+                                $manager->persist($client);
+                                $manager->flush();
                             } else {
                                 $next = $tabPointage1[$n];
-                                
                             }
-
+                            
                             $client->setEtatClient('pointé');
                         } 
                     }
@@ -153,7 +157,7 @@ class PointageController extends AbstractController
                         $n++;
 
                         if ($n >= count($tabPointage1)) {
-                            // pointé
+                            
                         } else {
                             
                             $next = $tabPointage1[$n];
@@ -162,12 +166,13 @@ class PointageController extends AbstractController
                         $client->setEtatClient('pointé');
                         
                     }
-                        $client->setNomPointageAv($next);
-                        $manager->persist($pointage1);
-                        $manager->persist($client);
-                        $manager->flush();
-                        return $this->redirectToRoute("autrepointage", ["id_client" => $id_client]);
-                    
+                        
+                    $client->setNomPointageAv($next);
+                    $manager->persist($pointage1);
+                    $manager->persist($client);
+                    $manager->flush();
+                    return $this->redirectToRoute("autrepointage", ["id_client" => $id_client]);
+                
                 
                 
             
@@ -323,7 +328,7 @@ class PointageController extends AbstractController
     }
     public function count_present(ClientRepository $repoClient)
     {
-        $tabPresent = $repoClient->countPresent('présent');
+        $tabPresent = $repoClient->findAll();
         $n = count($tabPresent);
         //dd($n);
         return $n;

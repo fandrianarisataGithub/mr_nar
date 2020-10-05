@@ -108,7 +108,7 @@ class UserController extends AbstractController
 
     public function count_present(ClientRepository $repoClient)
     {
-        $tabPresent = $repoClient->countPresent('présent');
+        $tabPresent = $repoClient->findAll();
         $n = count($tabPresent);
         //dd($n);
         return $n;
