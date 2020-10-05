@@ -77,8 +77,14 @@
 						</td>
 						<td>
 							<span>
+								{% set i = 1 %}
 								{% for p in item.pointages %}
-									<span>{{ p.getNomLit() }} </span>par <span>{{ p.getNomUser() }}</span><br>
+								<span>{{ p.getNom() }} </span> /
+									{% set i = i + 1 %}
+									{% if i % 4 == 0 %}
+										<br>
+									{% endif %}
+									
 								{% endfor %}
 							
 							 </span>

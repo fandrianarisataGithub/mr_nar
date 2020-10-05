@@ -264,11 +264,15 @@ class PointageController extends AbstractController
         // creer le nom_pointage  de pointage
         $error = 0;
         $nom_lit = "";
-           
-        
-        
        
-        $items = $repoClient->countPresent('présent');
+        $clients = $repoClient->findAll();
+        $tab_afficher = [];
+        foreach($clients as $client){
+            $etat = $client->getEtatClient();
+            if($etat != "archivé"){
+               array_push($tab_afficher, $client);
+            }
+        }
        
         $now = new \DateTime();
         $mois_actus = $this->getMoisText($now);
@@ -284,7 +288,7 @@ class PointageController extends AbstractController
         
        // dd($lit);
         return $this->render('pointage/pointage.html.twig', [
-            "items" => $items,
+            "items" => $tab_afficher,
            
             "pointages" => $pointages,
             "error" => $error,
