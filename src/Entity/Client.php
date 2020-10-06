@@ -167,11 +167,7 @@ class Client
      * @Assert\NotBlank
      */
     private $chapitre;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $phone;
+    
 
     public function __construct()
     {

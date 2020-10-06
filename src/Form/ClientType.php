@@ -134,12 +134,7 @@ class ClientType extends AbstractType
                 ],
                 
             ])
-            ->add('phone', Texttype::class, [
-                "attr" => [
-                    "class" => "form-control"
-                ],
-
-            ])
+            
            
         ;
     }

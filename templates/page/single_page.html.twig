@@ -39,9 +39,6 @@
 					<p>
 						Adresse : {{ item.adresse }}
 					</p>
-					<p>
-						contact : {{ item.phone }}
-					</p>
 				</div>
 				<div class="cin_client">
 					<p>
@@ -132,11 +129,8 @@
 		<div class="action_dangeureux">
 			<a href="{{ path('suspendre_client', {'id':item.id}) }}" class="btn btn-danger btn-sm">Suspendre ce client</a>
 			<a href="{{ path('classe_impaye_client', {'id':item.id}) }}" class="btn btn-warning btn-sm">Classer impayé</a>
-		</div>
-		<div class="action_dangeureux">
-			<a href="{{ path('autrepointage', {'id_client': item.id }) }}" data-id-client="{{ item.id }}" class=" btn btn-primary btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+			<a href="{{ path('autrepointage', {'id_client': item.id }) }}" data-id-client="{{ item.id }}" class=" btn btn-primary btn-sm" {% if is_granted("ROLE_ADMIN") %} style="display:inline-block;" {% else %} style="display:none;" {% endif %}>
 				<span>Pointer</span>
-				<span class="fa fa-check"></span>
 			</a>
 		</div>
 	</div>

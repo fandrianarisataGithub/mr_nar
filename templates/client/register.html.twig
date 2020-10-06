@@ -68,12 +68,6 @@
                     'label':"Adresse exacte du client:"
                 }) }}
             </div>
-			 <div class="form-group">
-                {{ form_row(form.phone , {
-                    'label':"Contact rapide:"
-                }) }}
-            </div>
-            
         </div>
         <div class="col-md-4">
 		 	<div class="form-group form_matricule">
@@ -209,9 +203,6 @@
 							<span>Article : </span>
 							<span class="unite">{{ item.article }}</span>
 							<br>
-							<span>Contact : </span>
-							<span class="unite">{{ item.phone }}</span>
-							<br>
 							<span>Date de début : </span>
 							<span>{{ item.getDateDebut() | date('d-m-Y') }}</span>
 							<br>
@@ -233,9 +224,6 @@
 					<td>
 						<sapn class="montant_mens_client">{{ item.getMontantMensuel() }}</sapn>
 						<span style="margin-left:5px;">Ar</span>
-					</td>
-					<td>
-						<sapn class="nbr_versement_client">{{ item.getNbrVersement() }}</sapn>
 					</td>
 					<td>
 						<div class="action">
