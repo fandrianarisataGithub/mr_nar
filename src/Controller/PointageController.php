@@ -66,9 +66,10 @@ class PointageController extends AbstractController
       
         $nouveau = "";
         if (count($request->request) > 0) {
-           $nom_pointage = $request->request->get('pointage');
-           $montant =  $request->request->get('montant_mensuel');
-           $nom_user =  $request->request->get('nom_user');
+            
+            $nom_pointage = $request->request->get('pointage');
+            $montant =  $request->request->get('montant_mensuel');
+            $nom_user =  $request->request->get('nom_user');
             $pointage1 = new Pointage();
             $pointage1->setNom($nom_pointage);
             $sl = explode("-", $nom_pointage);
@@ -79,6 +80,7 @@ class PointageController extends AbstractController
             $pointage1->setCreatedAt(new \Datetime());
            
            if($montant != $client->getMontantMensuel()){
+
                 return $this->render("pointage/autrepointage.html.twig", [
                     "liste_p_p" => $tabPointage,
                     'liste_tsotra' => $listeP_tsotra,
@@ -94,6 +96,7 @@ class PointageController extends AbstractController
                     'attente' => $this->count_attente($repoClient),
                     'erreur2' => "Le montant renseigné est inexact",
                 ]);
+                
            }
                
             else{    
@@ -177,6 +180,7 @@ class PointageController extends AbstractController
                 
             
                 return $this->render("pointage/autrepointage.html.twig", [
+                    
                     "liste_p_p" => $tabPointage,
                     'liste_tsotra' => $listeP_tsotra,
                     "client" => $client,

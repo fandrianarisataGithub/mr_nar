@@ -769,7 +769,24 @@ class PageController extends AbstractController
      */
     public function all_pointed(ClientRepository $repoClient)
     {
-        $clients = $repoClient->findByEtatClient('pointé');
+        $clients = $repoClient->findAll();
+        $today_moth = new \DateTime();
+        $today_moth = $today_moth->format('m-Y');
+        $tabClientPointed = [];
+        foreach($clients as $client){
+            // ses pointages fait
+            $sesPF = $this->liste_pointage_du_client($client, $repoClient);
+            if($sesPF != "vide"){
+                $tab = [];
+                foreach ($sesPF as $s) {
+                    array_push($tab, $s->getNom());
+                }
+                if(in_array($today_moth, $tab)){
+                    array_push($tabClientPointed, $client);
+                }
+            } 
+            
+        }
         return $this->render('page/client_pointed.html.twig', [
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
@@ -778,7 +795,7 @@ class PageController extends AbstractController
             'nouveau' => $this->count_nouveau($repoClient),
             'impaye' => $this->count_impaye($repoClient),
             'attente' => $this->count_attente($repoClient),
-            'items' => $clients,
+            'items' => $tabClientPointed,
             'liste' => 'all_pointed',
         ]);
     }

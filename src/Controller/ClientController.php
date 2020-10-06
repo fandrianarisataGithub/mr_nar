@@ -836,6 +836,8 @@ class ClientController extends AbstractController
             // ses pointages faits
             $ses_p_fait = $this->liste_pointage_du_client($item, $repoClient); // return "vide" si tsisy
             // les liste m-Y de ses pointages fait
+            // son etat
+            $son_etat = $item->getEtatClient();
             
             // avoaka aloha ze nouveau
             if($sa_date_ajout == $today_day){
@@ -846,42 +848,29 @@ class ClientController extends AbstractController
             if($sa_date_fin <= $today){
                 $item->setEtatClient('archivé');
             }
-            // avoaka ze en attente
+            // avoaka ze en attente nakambana tao @ présent
             if ($next_moth <= $sa_date_debut) {
                 // $item->setEtatClient('attente');
                 $item->setEtatClient('présent');
             }
-            // avoaka ze pointé
-            if($ses_p_fait != "vide"){
-                $item->setEtatClient('pointé');
-            }
+           
 
             // ireo ho atao pointage
             if(in_array($today_moth, $sa_liste_p_a_faire)){
                 // io ve ny pointage-ny voalohany
                 if($son_numero_p == -1){
-                    // oviana izy no tokony nanao pointage
-                    if($sa_date_debut <= $today){
-                       
-                       // raha @ty mois ty izy no tokony hanao
-                       if($son_mois_debut == $today_moth){
-                           
-                            $item->setEtatClient('présent');
-                       }
-                       else{
-                           // jerena le decalage
-                           // fahafiry @ moid de pointage à faire-ny ty mois ty 
-                           $indice = array_search($today_moth, $sa_liste_p_a_faire);
-                           if($indice>=2){
-                                // impayé
-                                //dd("nisy impayé");
-                                $item->setEtatClient('impayé');
-                           }
-                           else{
-                                //dd("nisy suspendu");
-                                $item->setEtatClient('suspendu');
-                           }
-                       }
+                   
+                    // tokony nanao ve izy t@ 3 mois lasa
+                    if(in_array($last_3moth, $sa_liste_p_a_faire)){
+                        // si oui
+                        $item->setEtatClient('impayé');
+                    }
+                    else{
+                        // ny mois te aloha 
+                        if (in_array($last_moth, $sa_liste_p_a_faire)) {
+                            // si oui
+                            $item->setEtatClient('suspendu');
+                        }
                     }
                     
                 }
@@ -893,60 +882,52 @@ class ClientController extends AbstractController
                     foreach($ses_p_fait as $spf){
                         array_push($tab, $spf->getNom());
                     }
-                    // fahafiry @ pointage-ny ty mois ty 
-                    $key = array_search($today_moth, $sa_liste_p_a_faire);
-                    if($key>=2){
-                        //dd('misy key >=2');
-                        // raha efa nanao in-telo izy
-                        // nandoha ve izy t@ 3 volana lasa 
-                        // tokony nanao ve lo izy t@io 3 mois io 
-                        //dd($last_3moth);
-                        if(in_array($last_3moth, $sa_liste_p_a_faire)){
-                            // raha tokony nanao izy 
-                            //dd("tokony nanao izy t@ 3 mois");
-                            // nahavita ve izy
-                            if(!in_array($last_3moth, $tab)){
-                                // raha tsy nahavita
-                                $item->setEtatClient("impayé");
-                            }
-                            else{
-                                
-                                // raha nahavita 
-                                // nahavita ve izy t@mois teo aloha 
-                                if (!in_array($last_moth, $tab)) {
-                                   
-                                    // raha tsy nahavita
-                                    $item->setEtatClient("suspendu");
+                    // tokony nanao ve izy t@ 3 mois lasa
+                    if (in_array($last_3moth, $sa_liste_p_a_faire)) {
+                       // si oui
+                       if(in_array($last_3moth, $tab)){
+                            // si oui 
+                            // tokony hanao ve izy t@ mois farany
+                            if (in_array($last_moth, $sa_liste_p_a_faire)) {
+                                // si oui
+                                if(in_array($last_moth, $tab)){
+                                    // si oui 
+                                    $item->setEtatClient('pointé');
                                 }
                                 else{
-                                    $item->setEtatClient("pointé");
+                                    $item->setEtatClient('suspendu');
                                 }
+                            }
+                            else{
+                                $item->setEtatClient('archivé');
+                            }
+                       }
+                       else{
+                            $item->setEtatClient('impayé');
+                       }
+                    } 
+                    else {
+                        // tokony hanao ve izy t@ mois farany
+                        if (in_array($last_moth, $sa_liste_p_a_faire)) {
+                            // si oui
+                            if (in_array($last_moth, $tab)) {
+                                // si oui 
+                                $item->setEtatClient('pointé');
+                            } else {
+                                $item->setEtatClient('suspendu');
                             }
                         }
                         else{
-                            
-                            // raha tsy tokony nanao izy t@ 3 mois
-                            // nahavita ve izy t@mois teo aloha 
-                            if (!in_array($last_moth, $tab)) {
-                                // raha tsy nahavita
-                                $item->setEtatClient("suspendu");
-                            } else {
-                                $item->setEtatClient("pointé");
+                            //dd($item);
+                            // raha nahavita ny t@ty mois ty izy
+                            if (in_array($today_moth, $tab)) {
+                                // si oui 
+                                $item->setEtatClient('pointé');
                             }
                         }
-                       
                     }
-                    else{
-                        // tsy mbola nahavita pointage + de 2 izy
-                        // nahavita ve izy t@mois teo aloha 
-                        if (!in_array($last_moth, $tab)) {
-                            // raha tsy nahavita
-                           
-                            $item->setEtatClient("suspendu");
-                        } else {
-                            $item->setEtatClient("pointé");
-                        }
-                    }
+                    
+                   
                     
                 }
             }
