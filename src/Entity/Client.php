@@ -14,9 +14,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
- *  @UniqueEntity("matricule", message = "Ce matricule est déjà utilisé")
- * @UniqueEntity("cin",message = "Ce numéro CIN est déjà utilisé")
- * 
+ *  @UniqueEntity("numero_bl", message = "Ce numero BL est déjà utilisé")
  * 
  */
 class Client
