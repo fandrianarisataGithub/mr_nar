@@ -38,22 +38,54 @@
     {{ form_start(form) }}
     <div class ="row">
         <div class="col-md-4">
-            <div class="form-group form_file" 
-				{% if misy == "oui" %}
-					style="display:none;"
-				{% else %}
-					style="display:block;"
-				{% endif %}
-			>
-                {{ form_row(form.createdAt, {
+
+			{% if misy == "non" %}
+				<div class="form-group">
+					 {{ form_row(form.createdAt, {
                     "label" : "Date du jour: "
                 }) }}
+				</div>
+				<div class="form-group form_file">
+					{{ form_row(form.image_1, {
+									'label':"Face avant du CIN:"
+								}) }}
+
+				</div>
+				<div class="form-group form_file">
+					{{ form_row(form.image_2, {
+									'label':"Face arrière du CIN:"
+								}) }}
+				</div>
+
+			{% endif %}
+            <div class="form-group">
+                {{ form_row(form.cin, {
+                    'label':"Numéro CIN:"
+                }) }}
             </div>
-		    <div class="form-group form_matricule">
+			 <div class="form-group">
+                {{ form_row(form.adresse , {
+                    'label':"Adresse exacte du client:"
+                }) }}
+            </div>
+        </div>
+        <div class="col-md-4">
+		 	<div class="form-group form_matricule">
                 {{ form_row(form.matricule, {
                     'label':"Matricule du client:"
                 }) }}
             </div>
+			<div class="form-group">
+                {{ form_row(form.nom, {
+                    'label':"Nom du client:"
+                }) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(form.prenom, {
+                    'label':"Prénom du client (facultatif):"
+                }) }}
+            </div>
+           
 			<div class="form-group ">
                 {{ form_row(form.budget, {
                     'label':"Budget du client:"
@@ -69,52 +101,8 @@
                     'label':"Article du client:"
                 }) }}
             </div>
-            
-        </div>
-        <div class="col-md-4">
-			<div class="form-group">
-                {{ form_row(form.nom, {
-                    'label':"Nom du client:"
-                }) }}
-            </div>
-            <div class="form-group">
-                {{ form_row(form.prenom, {
-                    'label':"Prénom du client (facultatif):"
-                }) }}
-            </div>
-            <div class="form-group">
-                {{ form_row(form.adresse , {
-                    'label':"Adresse exacte du client:"
-                }) }}
-            </div>
-            <div class="form-group">
-                {{ form_row(form.cin, {
-                    'label':"Numéro CIN:"
-                }) }}
-            </div>
-           <div class="form-group form_file" 
-		   			{% if misy == "oui" %}
-					style="display:none;"
-				{% else %}
-					style="display:block;"
-				{% endif %}
-		   >
-				{{ form_row(form.image_1, {
-					'label':"Face avant du CIN:"
-				}) }}
-				
-			</div>
-			<div class="form-group form_file" 
-				{% if misy == "oui" %}
-					style="display:none;"
-				{% else %}
-					style="display:block;"
-				{% endif %}
-			>
-				{{ form_row(form.image_2, {
-					'label':"Face arrière du CIN:"
-				}) }}
-			</div>
+           
+			
         </div>
          <div class="col-md-4">
             <div class="form-group">
@@ -142,6 +130,20 @@
                     "label" : "Date de début du paiement:"
                 }) }}
             </div>
+			{% if is_granted("ROLE_ADMIN") %}
+				<div class="form-group">
+					<label for="">client de : </label>
+					<select name="user_client" id="user_client">
+						{% for u in users %}
+							<option value="{{ u.id }}">{{ u.nom }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			{% endif %}
+			 <div class="form-group">
+               <button type="submit" class="btn btn-primary btn-md">Enregistrer</button>
+            </div>
+
         </div>
     </div>
     {{ form_end(form) }}
@@ -160,19 +162,12 @@
 					<span>Client</span>
 				</th>
 				<th>
-					<span>Numéro BL</span>
-				</th>
-				<th>
 					<span>Montant</span>
 				</th>
 				<th>
 					<span>Montant mensuel</span>
 				</th>
-				<th>
-					<span>Nbr. Versement</span>
-				</th>
-				<th><sapn>Date de debut</sapn></th>
-				<th><sapn>Date de fin</sapn></th>
+				<th><sapn>Actions</sapn></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -182,6 +177,12 @@
 						<span class="date_du_jour">
 							{{ date_du_jour | date('d-m-Y') }}
 						</span>
+						{% if item.verifier == "oui" %}
+								<b class=" check fa fa-check"></b>
+							{% else %}
+								<b class=" check fa "></b>
+							{% endif %}
+							<b class=" check check-hide fa fa-check" style="display:none"></b>
 					</td>
 					<td>
 						<span>Matricule : </span>
@@ -201,10 +202,20 @@
 							<br>
 							<span>Article : </span>
 							<span class="unite">{{ item.article }}</span>
-					</td>
-					<td>
-						<span class="numero_bl">
-							{{ item.getNumeroBl() | raw }}</span>
+							<br>
+							<span>Date de début : </span>
+							<span>{{ item.getDateDebut() | date('d-m-Y') }}</span>
+							<br>
+							<span>Date de fin : </span>
+							<span>{{ item.getDateFin() | date('d-m-Y')}}</span>
+							<br>
+							<span>nombre de versement : </span>
+							<span>{{ item.getNbrVersement() }}</span>
+							<br>
+							<span>Numero BL : </span>
+							<span>{{ item.getNumeroBl() }}</span>
+							
+
 					</td>
 					<td>
 						<sapn class="montant_client">{{ item.montant }}</sapn>
@@ -215,40 +226,56 @@
 						<span style="margin-left:5px;">Ar</span>
 					</td>
 					<td>
-						<sapn class="nbr_versement_client">{{ item.getNbrVersement() }}</sapn>
-					</td>
-					<td>
-						<span class="date_debut">
-							{{ item.getDateDebut() | date('d-m-Y') }}</span>
-					</td>
-					<td>
-						<span class="date_fin">
-							{{ item.getDateFin() | date('d-m-Y') }}</span>
+						<div class="action">
+							<div>
+								<a href="{{ path("edit_client", {"id": item.id }) }}" class="modif btn btn-info btn-xs" {% if is_granted("ROLE_SUPER_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+									<span class="fa fa-edit"></span>
+								</a>
+								<a href="#" data-id-client = "{{ item.id }}" class="suppr btn btn-danger btn-xs" {% if is_granted("ROLE_SUPER_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+									<span class="fa fa-trash-o"></span>
+								</a>
+							</div>
+							<div>
+								<a href="#" data-id-client = "{{ item.id }}" class="verifier btn btn-primary btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+									<span class = "fa fa-check-square-o"></span>
+								</a>
+								<a href="{{ path('single_page', {'id_client': item.id }) }}" class="voir btn btn-primary btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+									<span>Voir</span>
+								</a>
+							</div>
+							<div class="div__pointer">
+									<a href="{{ path('autrepointage', {'id_client': item.id }) }}" data-id-client="{{ item.id }}" class=" btn btn-primary btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+										<span>Pointer</span>
+										<span class="fa fa-check"></span>
+									</a>
+								</div>
+						</div>
 					</td>
 				</tr>
 			{% endfor %}
 		</tbody>
 		<tfoot>
 			<tr>
-				<td colspan="3">
+				<td colspan="2">
 					<b> Montant total: </b>
 				</td>
 				<td style="text-align:start;">
 					<b>{{ mj }}</b><b class="unite">Ar</b>
 				</td>
-				<td colspan="4"></td>
+				<td colspan="3"></td>
+				
 			</tr>
 			<tr>
-				<td colspan="4">
+				<td colspan="3">
 					<b> Montant Mensuel total : </b>
 				</td>
 				<td style="text-align:start;">
 					<b>{{ mmj }}</b><b class="unite">Ar</b>
 				</td>
-				<td colspan="3"></td>
+				<td colspan="2"></td>
 			</tr>
 			<tr>
-				<td colspan="8"></td>
+				<td colspan="5"></td>
 			</tr>
 		</tfoot>
 	</table>
@@ -310,7 +337,26 @@
             });
 
 			new $.fn.dataTable.FixedHeader(table);
-
+			
+			$("tbody").on('click', ".verifier", function(e){
+				e.preventDefault()
+				var id_client = $(this).attr('data-id-client');
+				var tr = $(this).parent().parent().parent().parent();
+				var string = "";
+				$.ajax({
+					url : "/admin/verifier/"+id_client,
+					type : "GET",
+					success : function(response){
+						if(response=="ok"){
+							tr.children('.td-check').children(".check-hide").show();
+						}
+					},
+					error : function(){
+						alert('erreur ajax');
+					}
+					
+				})
+			})
 			
 
 

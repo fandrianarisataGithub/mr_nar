@@ -1,12 +1,10 @@
 {% extends "base.html.twig" %}
-{% block title %}
-	Résultat du recherche
+{% block title %}Client modifié
 {% endblock %}
 {% block body %}
 
-
 	<div class="titre_page">
-		<h2>Résultat du recherche</h2>
+		<h2>Client modifié</h2>
 	</div>
 
 	<div class="tableau tab_historique">
@@ -31,25 +29,35 @@
 				</tr>
 			</thead>
 			<tbody>
-				{% for item in items %}
 					<tr>
 						<td class="td-check">
-							<span>Matricule : </span>
+							<span>Matricule :
+							</span>
 							<span class="unite">{{ item.matricule }}</span>
 							<br>
-							<span>Nom et prénom : </span>
+							<span>Nom et prénom :
+							</span>
 							<span>{{ item.nom }}</span>
-							<span>{% if item.prenom is defined %}
-								{{ item.prenom }}
-							{% endif %}</span>
+							<span>
+								{% if item.prenom is defined %}
+									{{ item.prenom }}
+								{% endif %}
+							</span>
 							<br>
-							<span>Budget : </span>
+							<span>Contact :
+							</span>
+							<span class="unite">{{ item.phone }}</span>
+							<br>
+							<span>Budget :
+							</span>
 							<span class="unite">{{ item.budget }}</span>
 							<br>
-							<span>Chapitre : </span>
+							<span>Chapitre :
+							</span>
 							<span class="unite">{{ item.chapitre }}</span>
 							<br>
-							<span>Article : </span>
+							<span>Article :
+							</span>
 							<span class="unite">{{ item.article }}</span>
 
 							{% if item.verifier == "oui" %}
@@ -64,20 +72,29 @@
 							(<span>{{ item.getUser().username }}</span>)
 						</td>
 						<td>
-							<span>Ajouté le : </span><span class="unite">{{ item.getCreatedAt() | date('d-m-Y') }}</span>
+							<span>Ajouté le :
+							</span>
+							<span class="unite">{{ item.getCreatedAt() | date('d-m-Y') }}</span>
 							<br>
 							<span>N° BL:</span>
 							<span class="unite">{{ item.getNumeroBl() }}</span>
 							<br>
-							<span>MONTANT:</span><b class="unite">{{ item.montant }}</b><b class="unite">Ar</b>
+							<span>MONTANT:</span>
+							<b class="unite">{{ item.montant }}</b>
+							<b class="unite">Ar</b>
 							<br>
-							<span>MONTANT MENS:</span><b class="unite">{{ item.getMontantMensuel() }}</b><b class="unite">Ar</b>
+							<span>MONTANT MENS:</span>
+							<b class="unite">{{ item.getMontantMensuel() }}</b>
+							<b class="unite">Ar</b>
 							<br>
-							<span>NBR VERSEMENT:</span><b class="unite">{{ item.getNbrVersement() }}</b><br>
-							<span>DATE DE DEBUT:</span><span class="unite">{{ item.getDateDebut() | date('Y-m-d') }}</span>
+							<span>NBR VERSEMENT:</span>
+							<b class="unite">{{ item.getNbrVersement() }}</b><br>
+							<span>DATE DE DEBUT:</span>
+							<span class="unite">{{ item.getDateDebut() | date('Y-m-d') }}</span>
 							<br>
-							<span>DATE DE FIN:</span><span class="unite">{{  item.getDatefin() | date('Y-m-d') }}</span>
-							
+							<span>DATE DE FIN:</span>
+							<span class="unite">{{  item.getDatefin() | date('Y-m-d') }}</span>
+
 						</td>
 						<td>
 							<span>
@@ -93,47 +110,42 @@
 							
 							 </span>
 						</td>
-					<td>
-						<div class="action">
-							<div>
-								<a href="{{ path("edit_client", {"id": item.id }) }}" class="modif btn btn-info btn-xs" {% if is_granted("ROLE_SUPER_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
-									<span class="fa fa-edit"></span>
-								</a>
-								<a href="#" data-id-client = "{{ item.id }}" class="suppr btn btn-danger btn-xs" {% if is_granted("ROLE_SUPER_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
-									<span class="fa fa-trash-o"></span>
-								</a>
-							</div>
-							<div>
-								<a href="#" data-id-client = "{{ item.id }}" class="verifier btn btn-primary btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
-									<span class = "fa fa-check-square-o"></span>
-								</a>
-								<a href="{{ path('single_page', {'id_client': item.id }) }}" class="voir btn btn-primary btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
-									<span>Voir</span>
-								</a>
-							</div>
-							<div class="div__pointer">
+						<td>
+							<div class="action">
+								<div>
+									<a href="{{ path("edit_client", {"id": item.id }) }}" class="modif btn btn-info btn-xs" {% if is_granted("ROLE_SUPER_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+										<span class="fa fa-edit"></span>
+									</a>
+									<a href="#" data-id-client="{{ item.id }}" class="suppr btn btn-danger btn-xs" {% if is_granted("ROLE_SUPER_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+										<span class="fa fa-trash-o"></span>
+									</a>
+								</div>
+								<div>
+									<a href="#" data-id-client="{{ item.id }}" class="verifier btn btn-primary btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+										<span class="fa fa-check-square-o"></span>
+									</a>
+									<a href="{{ path('single_page', {'id_client': item.id }) }}" class="voir btn btn-primary btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
+										<span>Voir</span>
+									</a>
+								</div>
+								<div class="div__pointer">
 									<a href="{{ path('autrepointage', {'id_client': item.id }) }}" data-id-client="{{ item.id }}" class=" btn btn-primary btn-xs" {% if is_granted("ROLE_ADMIN") %} style="display:flex;" {% else %} style="display:none;" {% endif %}>
 										<span>Pointer</span>
 										<span class="fa fa-check"></span>
 									</a>
 								</div>
-						</div>
-					</td>
+							</div>
+						</td>
 
-				</tr>
-			{% endfor %} 
-		</tbody>
-		
-		
-	</table>
+					</tr>
+			</tbody>
 
-		<div class="titre_page footer">
-			<h2>
-				<a href="{{ path('imprimer_client_suspendu') }}" class="btn btn-primary">Imprimer la liste</a>
-			</h2>
-		</div>
+
+		</table>
+
 
 	</div>
+
 
 {% endblock %}
 {% block javascripts %}
@@ -171,6 +183,12 @@ var table = $('#tab_client_heb').DataTable({
 }
 }
 },
+"columnDefs": [
+{
+"targets": 'no-sort',
+"orderable": false
+}
+],
 responsive: true,
 scrollY: false, // raha scrollena de asina val ex 400
 scrollX: true,
@@ -180,6 +198,31 @@ autoFill: true
 });
 
 new $.fn.dataTable.FixedHeader(table);
+
+// verification
+
+$("tbody").on('click', ".verifier", function (e) {
+e.preventDefault()
+var id_client = $(this).attr('data-id-client');
+var tr = $(this).parent().parent().parent().parent();
+var string = "";
+$.ajax({
+url: "/admin/verifier/" + id_client,
+type: "GET",
+success: function (response) {
+if (response == "ok") {
+tr.children('.td-check').children(".check-hide").show();
+}
+},
+error: function () {
+alert('erreur ajax');
+}
+
+})
+})
+
+/* pointage */
+
 // function generate year
 
 function generateYear() {
@@ -187,7 +230,7 @@ var today = new Date();
 // alert(today);
 var y = today.getFullYear();
 // alert(y);
-var html = "";
+var html = "<option value = '" + y + "'>" + y + "</option>";
 for (var index = 2009; index < y + 3; index++) {
 html += "<option value = '" + index + "'>" + index + "</option>";
 }
@@ -218,39 +261,25 @@ show_modal();
 $('#add_pointage').click(function (e) {
 e.preventDefault();
 var id_client = $(this).attr('data-id-client');
-var annee = $('#annee_pointage').val();
-var mois = $('#mois_pointage').val();
+var id_pointage = $('#id_pointage').val();
 var montant = $('#montant').val();
 
-// alert('id:'+id_client+'a:'+annee+'m:'+mois+'montant:'+montant)
+// alert('id_client:'+id_client+' id_pointage:'+id_pointage+'montant:'+montant);
 var data = {
-'client_id': id_client,
-'p_mois': mois,
-'p_annee': annee,
-'montant_mensuel': montant
+'pointage_id': id_pointage,
+'montant_mensuel': montant,
+'client_id': id_client
 }
 // ajax
 $.ajax({
-url: "/admin/pointer",
+url: "/admin/pointer_client",
 type: "POST",
 data: data,
-beforeSend: function () {
-$('#info p').text("patienter...");
-},
 success: function (response) {
-if (response != "0") {
-$('#info p').slideDown();
-$('#info p').text(response);
+if (response == "0") {
+window.location.href = "{{ path('pointage') }}";
 } else {
-
-$('#info p').slideDown();
-$('#info p').css('background', "#65bd77");
-$('#info p').text("pointage réussi");
-setTimeout(() => {
-hide_modal();
-window.location.href = "/profile/single_page/" + id_client;
-}, 2000);
-
+alert('Le montant entré n\'est incorrect ')
 }
 },
 error: function () {
@@ -266,6 +295,11 @@ $('.modal_head button').click(function (e) {
 e.preventDefault();
 hide_modal();
 })
+
+
+/* /pointage */
+
+
 });
 	</script>
 {% endblock %}

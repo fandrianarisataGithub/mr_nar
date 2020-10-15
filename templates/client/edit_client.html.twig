@@ -1,0 +1,112 @@
+{% extends "base.html.twig" %}
+{% block title %}
+	Edit client
+{% endblock %}
+{% block body %}
+
+	<div class="titre_page">
+		<a href="{{ path('register_client') }}" class="btn btn-primary btn-md">
+			<span style="margin-right:5px;" class="fa fa-plus"></spanclass="unite">Nouveau client</a>
+	</div>
+
+
+	<div class="titre_page">
+		<h2>Enregistrement de client</h2>
+	</div>
+	{{ form_start(form) }}
+	<div class="row">
+		<div class="col-md-4">
+
+			<div class="form-group">
+				{{ form_row(form.cin, {
+                    'label':"Numéro CIN:"
+                }) }}
+			</div>
+			<div class="form-group">
+				{{ form_row(form.adresse , {
+                    'label':"Adresse exacte du client:"
+                }) }}
+			</div>
+			<div class="form-group">
+				{{ form_row(form.phone , {
+                    'label':"Contact rapide:"
+                }) }}
+			</div>
+
+		</div>
+		<div class="col-md-4">
+			<div class="form-group form_matricule">
+				{{ form_row(form.matricule, {
+                    'label':"Matricule du client:"
+                }) }}
+			</div>
+			<div class="form-group">
+				{{ form_row(form.nom, {
+                    'label':"Nom du client:"
+                }) }}
+			</div>
+			<div class="form-group">
+				{{ form_row(form.prenom, {
+                    'label':"Prénom du client (facultatif):"
+                }) }}
+			</div>
+
+			<div class="form-group ">
+				{{ form_row(form.budget, {
+                    'label':"Budget du client:"
+                }) }}
+			</div>
+			<div class="form-group ">
+				{{ form_row(form.chapitre, {
+                    'label':"Chapitre du client:"
+                }) }}
+			</div>
+			<div class="form-group ">
+				{{ form_row(form.article, {
+                    'label':"Article du client:"
+                }) }}
+			</div>
+
+
+		</div>
+		<div class="col-md-4">
+			<div class="form-group">
+				{{ form_row(form.montant, {
+                    "label" : "Montant total:"
+                }) }}
+			</div>
+			<div class="form-group">
+				{{ form_row(form.montant_mensuel, {
+                    "label" : "Montant mensuel:"
+                }) }}
+			</div>
+			<div class="form-group">
+				{{ form_row(form.nbr_versement, {
+                    "label" : "Nombre de versement:"
+                }) }}
+			</div>
+			<div class="form-group">
+				{{ form_row(form.numero_bl, {
+                    "label" : "Numéro de bon de livraison (BL):"
+                }) }}
+			</div>
+			<div class="form-group">
+				{{ form_row(form.date_debut, {
+                    "label" : "Date de début du paiement:"
+                }) }}
+			</div>
+            <div class="form-group">
+                <label for="">client de : </label>
+                <select name="user_client" id="user_client">
+                    {% for u in users %}
+                        <option value="{{ u.id }}">{{ u.nom }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+		</div>
+	</div>
+	{{ form_end(form) }}
+
+
+</div>
+{% endblock %}

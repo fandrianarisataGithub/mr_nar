@@ -128,18 +128,14 @@ class ClientType extends AbstractType
                 ],
                  'format' => 'dd-MM-yyyy',
             ])
-            ->add('numero_bl', IntegerType::class, [
+            ->add('numero_bl', TextType::class, [
                 "attr" => [
                     "class" => "form-control"
                 ],
                 
             ])
-            ->add('register_client', SubmitType::class, [
-                "attr" => [
-                    "class" => "btn btn-primary",
-                    "id" => "register_client"
-                ]
-            ])
+            
+           
         ;
     }
 

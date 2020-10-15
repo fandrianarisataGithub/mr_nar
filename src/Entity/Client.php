@@ -46,14 +46,14 @@ class Client
     private $cin;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank
+     * @ORM\Column(type="string", length=255)
+     * 
      */
     private $image_1;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\NotBlank
+     * @ORM\Column(type="string", length=255)
+     * 
      */
     private $image_2;
 
@@ -167,6 +167,7 @@ class Client
      * @Assert\NotBlank
      */
     private $chapitre;
+    
 
     public function __construct()
     {
@@ -510,6 +511,18 @@ class Client
     public function setChapitre(string $chapitre): self
     {
         $this->chapitre = $chapitre;
+
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(string $phone): self
+    {
+        $this->phone = $phone;
 
         return $this;
     }

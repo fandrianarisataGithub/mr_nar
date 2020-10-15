@@ -115,8 +115,14 @@
 						</td>
 						<td>
 							<span>
+								{% set i = 1 %}
 								{% for p in item.pointages %}
-									<span>{{ p.getNomLit() }} </span>par <span>{{ p.getNomUser() }}</span><br>
+								<span>{{ p.getNom() }} </span> /
+									{% set i = i + 1 %}
+									{% if i % 4 == 0 %}
+										<br>
+									{% endif %}
+									
 								{% endfor %}
 							
 							 </span>
@@ -154,73 +160,18 @@
 		
 		
 	</table>
+		<div class="div_footer_tab">
+			<div>
+				<div>
+					<span>Montant total : </span><span>{{ montant }}</span><span class="unite">Ar</span>
+				</div>
+			</div>
+		</div>
 		<div class="titre_page footer">
 			<h2>
 				<a href="{{ path('imprimer_client_present') }}" class="btn btn-primary">Imprimer la liste</a>
 			</h2>
 		</div>
-
-		{# modal pointage #}
-			<div id="modal_pointage">
-				<section class="inner_modal">
-					<div class="modal_head">
-						<button class="btn btn-danger">
-							<span class="fa fa-times"></span>
-						</button>
-						<h3>
-							<span>Matricule:</span>
-							<span class="son_matricule">123</span>
-						</h3>
-						<div class="last_etat">
-							<span>Dernier mois de pointage:
-							</span>
-							<span class="last_mois">Fevrier
-							</span>/<span>
-								2020</span>
-						</div>
-					</div>
-					<form action="">
-						<div class="form-group" style="width:50%; margin-left:auto;margin-right:auto;margin-top:10px;">
-						<label for="">Mois de pointage : </label>
-							<select class="form-control" name="" id="id_pointage" >
-								{% for p in pointages %}
-									<option value="{{ p.id }}">{{ p.getNomLit() }}</option>
-								{% endfor %}
-							</select>
-						</div>
-						<div class="form-group btn_action">
-								<div class="form-group">
-									<label>Montant (ariary):</label>
-									<input type="number" class="form-control montant" name="montant" id="montant">
-								</div>
-								<div id="info">
-									<p>Lorem ipsum dolor sit amet consectetur adipis</p>
-								</div>
-								<div class="form-group">
-									<button type="sumbit" data-id-client = "0" id="add_pointage" class="btn btn-primary btn-sm">Enregistrer</button>
-								</div>
-							</div>
-					</form>
-					<div class="block_details">
-						<div class="col-sm-6">
-							<div class="form-group">
-								<label for="">Nombre de mois restant:</label>
-								<p class="details_client">12
-									<span>mois</span>
-								</p>
-							</div>
-						</div>
-						<div class="col-sm-6">
-							<div class="form-group">
-								<label for="">Montant total restant:</label>
-								<p class="details_clientl">12 000<span>Ariary</span>
-								</p>
-							</div>
-						</div>
-					</div>
-				</section>
-			</div>
-
 
 	</div>
 	

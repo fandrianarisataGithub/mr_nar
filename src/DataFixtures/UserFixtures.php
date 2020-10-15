@@ -53,6 +53,7 @@ class UserFixtures extends Fixture
                 $client->setChapitre("0811");
                 $client->setBudget('00');
                 $client->setArticle('110');
+                $client->setPhone("033251114");
                 $client->setNumeroBl(112458);
                 $client->setDateDebut(new \DateTime("2020-".rand(1,12)."-".rand(1,29)));
                 // dateFin
