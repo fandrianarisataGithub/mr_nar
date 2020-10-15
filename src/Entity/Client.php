@@ -115,7 +115,7 @@ class Client
     private $verifier;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      */
     private $numero_bl;
 
@@ -351,12 +351,12 @@ class Client
         return $this;
     }
 
-    public function getNumeroBl(): ?int
+    public function getNumeroBl(): ?string
     {
         return $this->numero_bl;
     }
 
-    public function setNumeroBl(int $numero_bl): self
+    public function setNumeroBl(string $numero_bl): self
     {
         $this->numero_bl = $numero_bl;
 
