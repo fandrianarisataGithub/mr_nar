@@ -205,13 +205,6 @@ class ClientController extends AbstractController
                     "class" => "form-control"
                 ]
             ])
-                ->add('phone', TextType::class, [
-                    "label" => "Contact rapide:",
-                    "attr" => [
-                        "placeholder" => "03...",
-                        "class" => "form-control"
-                    ]
-                ])
             ->add('chapitre', TextType::class, [
                 "label" => "Chapitre du client:",
                 "attr" => [
