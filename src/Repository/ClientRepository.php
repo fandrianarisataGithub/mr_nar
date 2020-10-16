@@ -37,6 +37,19 @@ class ClientRepository extends ServiceEntityRepository
     /**
      * @return Client[] Returns an array of Client objects 
      */
+    public function chercherByMatricule($matricule)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.matricule = :val')
+            ->setParameter('val', $matricule)
+            ->orderBy('c.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Client[] Returns an array of Client objects 
+     */
     public function findByEtatClient($string)
     {
         return $this->createQueryBuilder('c')

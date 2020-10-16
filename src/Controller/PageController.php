@@ -85,17 +85,19 @@ class PageController extends AbstractController
         $client = new Client();
         if(count($request->request)>0){
             $text = $request->request->get('matricule');
-            $result = $repoClient->createQueryBuilder('c')
-            ->where('c.matricule LIKE :text')
-            ->setParameter('text', '%'.$text.'%')
-            ->getQuery()
-            ->getResult();
-           // dd($result);
-            $client = $repoClient->findOneByMatricule($text);
-            if (!$client) {
+            
+            $clients = $repoClient->chercherByMatricule($text);
+            //dd($client);
+            if (!$clients) {
                 return $this->redirectToRoute("search");
             } else {
-                return $this->redirectToRoute("single_page", ["id_client" => $client->getId()]);
+               if(count($clients) > 1){
+                   // makany @ tableau
+                   $result = $clients;
+               }
+               else{
+                    return $this->redirectToRoute("single_page", ["id_client" => $clients[0]->getId()]);
+               }
             }
         }
         
