@@ -38,7 +38,7 @@ class Client
     private $prenom;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      */
     private $cin;
@@ -165,7 +165,7 @@ class Client
      * @Assert\NotBlank
      */
     private $chapitre;
-    
+
 
     public function __construct()
     {
@@ -323,7 +323,7 @@ class Client
         return $this;
     }
 
-    
+
 
     public function getMatricule(): ?string
     {
@@ -524,10 +524,4 @@ class Client
 
         return $this;
     }
-
-   
-
-   
-
-   
 }
