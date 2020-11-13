@@ -46,6 +46,19 @@ class ClientRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    /**
+     * @return Client[] Returns an array of Client objects chercherByDate
+     */
+    public function chercherByDate($date)
+    {
+        // $date2 = $date->modify('+1 hour');
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.createdAt = :val')
+            ->setParameter('val', $date)
+            ->orderBy('c.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 
     /**
      * @return Client[] Returns an array of Client objects 

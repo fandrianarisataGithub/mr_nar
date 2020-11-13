@@ -170,7 +170,7 @@
 
                                                 {% endif %}
                                                 >
-                                                    <a href="#">
+                                                    <a href="{{ path('fichier') }}">
                                                         <i class="fa fa-paperclip icon">
                                                         
                                                         </i> <span>Fichier</span>
@@ -217,22 +217,16 @@
                                         {% endif %}>
                                                 <form action="{{ path('search') }}" method="POST">
                                                     <input type="text" placeholder="Rechercher un matricule" name="matricule">
+                                                    <input type="hidden" name="createdAt" value ="tsisy">
                                                     <button type="submit" class="btn btn-primary btn btn-xs"><i class="fa fa-search"></i></button>
                                                 </form>
-                                                <ul class="result_search">
-                                                    {# <li>
-                                                        <a href="#"><span>mat14</span></a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#"><span>mat14</span></a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#"><span>mat14</span></a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#"><span>mat14</span></a>
-                                                    </li> #}
-                                                </ul>
+                                                <form action="{{ path('search') }}" method="POST" class="form_search_date">
+                                                    <input type="text" placeholder="EX : 05-08-2020" name="createdAt">
+                                                    <input type="hidden" name="matricule" value ="tsisy">
+                                                    <button type="submit" class="btn btn-primary btn btn-xs">
+                                                        <i class="fa fa-search"></i>
+                                                    </button>
+                                                </form>
                                             </div>
                                         <!-- / nav -->
                                     </div>

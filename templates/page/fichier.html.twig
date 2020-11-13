@@ -1,0 +1,410 @@
+{% extends "base.html.twig" %}
+{% block title %}
+    Importation 
+{% endblock %}
+{% block body %}
+    <div class="titre_page">
+        <h2 class="graph_title">Etude graphique pour les clients</h2>
+    </div>
+    <div class="container">
+        <div class="row">
+            <form action="" id = "form_import1" class="import">
+                <div class="form-group">
+                    <label for="fichier1">Importer votre fichier Excel ici</label>
+                    <input type="file" name="fichier1" id="fichier1">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-default" type = "submit">
+                        <span>Importer</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="tableau tab_historique">
+            <table class="display" id="tableau1" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>
+                            <span>NUM PENS</span>
+                        </th>
+                        <th>
+                            <span>NOM</span>
+                        </th>
+                        <th>
+                            <span>ARR SSD</span>
+                        </th>
+                        <th>
+                            <span>DATE</span>
+                        </th>
+                        <th>
+                            <span>BEN</span>
+                        </th>
+                        <th>
+                            <span>ORD</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>                
+                    <tr>
+                        <td>
+                            <span>1A38444</span>
+                        </td>
+                        <td>
+                            <span>RASOANDRASOLO FLORENCIENNE ODETTE</span>
+                        </td>
+                        <td>
+                            <span>1674</span>
+                        </td>
+                        <td>
+                            <span>20/10/2020</span>
+                        </td>
+                        <td>
+                            <span>RABEMANANTSOA PATRICK OLIVIER (AC7)</span>
+                        </td>
+                        <td>
+                            <span>8850 DU 18/09/2020</span>
+                        </td>
+                    </tr>    
+                    <tr>
+                        <td>
+                            <span>1A38444</span>
+                        </td>
+                        <td>
+                            <span>RASOANDRASOLO FLORENCIENNE ODETTE</span>
+                        </td>
+                        <td>
+                            <span>1674</span>
+                        </td>
+                        <td>
+                            <span>20/10/2020</span>
+                        </td>
+                        <td>
+                            <span>RABEMANANTSOA PATRICK OLIVIER (AC7)</span>
+                        </td>
+                        <td>
+                            <span>8850 DU 18/09/2020</span>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {# file 2 #}
+    <div class="container">
+        <div class="row">
+            <form action="" id="form_import2" class="import">
+                <div class="form-group">
+                    <label for="fichier2">Importer votre fichier Excel ici</label>
+                    <input type="file" name="fichier2" id="fichier2">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-default" type="submit">
+                        <span>Importer</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="tableau tab_historique">
+            <table class="display" id="tableau2" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>
+                            <span>NUM PENS</span>
+                        </th>
+                        <th>
+                            <span>NOM</span>
+                        </th>
+                        <th>
+                            <span>RUB</span>
+                        </th>
+                        <th>
+                            <span>MONTANT</span>
+                        </th>
+                        <th>
+                            <span>DATE DEBUT</span>
+                        </th>
+                        <th>
+                            <span>DATE FIN</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span>1A38444</span>
+                        </td>
+                        <td>
+                            <span>RASOANDRASOLO FLORENCIENNE ODETTE</span>
+                        </td>
+                        <td>
+                            <span>700</span>
+                        </td>
+                        <td>
+                            <span>120145,00</span>
+                        </td>
+                        <td>
+                            <span>12/05/2020</span>
+                        </td>
+                        <td>
+                            <span>13/06/2020</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>1A38444</span>
+                        </td>
+                        <td>
+                            <span>RASOANDRASOLO FLORENCIENNE ODETTE</span>
+                        </td>
+                        <td>
+                            <span>700</span>
+                        </td>
+                        <td>
+                            <span>120145,00</span>
+                        </td>
+                        <td>
+                            <span>12/05/2020</span>
+                        </td>
+                        <td>
+                            <span>13/06/2020</span>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {# file 3 #}
+    <div class="container">
+        <div class="row">
+            <form action="" id="form_import3" class="import">
+                <div class="form-group">
+                    <label for="fichier3">Importer votre fichier Excel ici</label>
+                    <input type="file" name="fichier3" id="fichier3">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-default" type="submit">
+                        <span>Importer</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="tableau tab_historique">
+            <table class="display" id="tableau3" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>
+                            <span>NUM PENS</span>
+                        </th>
+                        <th>
+                            <span>CODE RUB</span>
+                        </th>
+                        <th>
+                            <span>BENEF</span>
+                        </th>
+                        <th>
+                            <span>MONTANT</span>
+                        </th>
+                        <th>
+                            <span>DATE FIN</span>
+                        </th>
+                        <th>
+                            <span>NOM</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span>1A38444</span>
+                        </td>
+                        <td>
+                            <span>212</span>
+                        </td>
+                        <td>
+                            <span>RECEVEUR GENERAL D'ANTANANARIVO</span>
+                        </td>
+                        <td>
+                            <span>68499,4</span>
+                        </td>
+                        <td>
+                            <span>30/06/2024</span>
+                        </td>
+                        <td>
+                            <span>RABEARIVELO JUSTIN</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>1A38444</span>
+                        </td>
+                        <td>
+                            <span>212</span>
+                        </td>
+                        <td>
+                            <span>RECEVEUR GENERAL D'ANTANANARIVO</span>
+                        </td>
+                        <td>
+                            <span>68499,4</span>
+                        </td>
+                        <td>
+                            <span>30/06/2024</span>
+                        </td>
+                        <td>
+                            <span>RABEARIVELO JUSTIN</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+	<script>
+
+		 $(document).ready(function() {
+            var table1 = $('#tableau1').DataTable({
+                "language": {
+                    "sEmptyTable": "Aucune donnée disponible dans le tableau",
+                    "sInfo": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
+                    "sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
+                    "sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ",",
+                    "sLengthMenu": "Afficher _MENU_ éléments",
+                    "sLoadingRecords": "Chargement...",
+                    "sProcessing": "Traitement...",
+                    "sSearch": "Rechercher :",
+                    "sZeroRecords": "Aucun élément correspondant trouvé",
+                    "oPaginate": {
+                        "sFirst": "Premier",
+                        "sLast": "Dernier",
+                        "sNext": "Suivant",
+                        "sPrevious": "Précédent"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": activer pour trier la colonne par ordre croissant",
+                        "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
+                    },
+                    "select": {
+                        "rows": {
+                            "_": "%d lignes sélectionnées",
+                            "0": "Aucune ligne sélectionnée",
+                            "1": "1 ligne sélectionnée"
+                        }
+                    }
+				},
+				"columnDefs": [{
+					"targets": 'no-sort',
+					"orderable": false
+				}],		   
+                responsive: true,
+                scrollY: false, // raha scrollena de asina val ex 400
+                scrollX: true,
+                scrollCollapse: true,
+                paging: true,
+                autoFill: true
+            });
+
+            new $.fn.dataTable.FixedHeader(table1);
+
+            // tab 2
+            var table2 = $('#tableau2').DataTable({
+                "language": {
+                    "sEmptyTable": "Aucune donnée disponible dans le tableau",
+                    "sInfo": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
+                    "sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
+                    "sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ",",
+                    "sLengthMenu": "Afficher _MENU_ éléments",
+                    "sLoadingRecords": "Chargement...",
+                    "sProcessing": "Traitement...",
+                    "sSearch": "Rechercher :",
+                    "sZeroRecords": "Aucun élément correspondant trouvé",
+                    "oPaginate": {
+                        "sFirst": "Premier",
+                        "sLast": "Dernier",
+                        "sNext": "Suivant",
+                        "sPrevious": "Précédent"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": activer pour trier la colonne par ordre croissant",
+                        "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
+                    },
+                    "select": {
+                        "rows": {
+                            "_": "%d lignes sélectionnées",
+                            "0": "Aucune ligne sélectionnée",
+                            "1": "1 ligne sélectionnée"
+                        }
+                    }
+				},
+				"columnDefs": [{
+					"targets": 'no-sort',
+					"orderable": false
+				}],	   
+                responsive: true,
+                scrollY: false, // raha scrollena de asina val ex 400
+                scrollX: true,
+                scrollCollapse: true,
+                paging: true,
+                autoFill: true
+            });
+
+            new $.fn.dataTable.FixedHeader(table2);
+
+            // tab 3   
+            // tab 2
+            var table3 = $('#tableau3').DataTable({
+                "language": {
+                    "sEmptyTable": "Aucune donnée disponible dans le tableau",
+                    "sInfo": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
+                    "sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
+                    "sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ",",
+                    "sLengthMenu": "Afficher _MENU_ éléments",
+                    "sLoadingRecords": "Chargement...",
+                    "sProcessing": "Traitement...",
+                    "sSearch": "Rechercher :",
+                    "sZeroRecords": "Aucun élément correspondant trouvé",
+                    "oPaginate": {
+                        "sFirst": "Premier",
+                        "sLast": "Dernier",
+                        "sNext": "Suivant",
+                        "sPrevious": "Précédent"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": activer pour trier la colonne par ordre croissant",
+                        "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
+                    },
+                    "select": {
+                        "rows": {
+                            "_": "%d lignes sélectionnées",
+                            "0": "Aucune ligne sélectionnée",
+                            "1": "1 ligne sélectionnée"
+                        }
+                    }
+				},
+				"columnDefs": [{
+					"targets": 'no-sort',
+					"orderable": false
+				}],	   
+                responsive: true,
+                scrollY: false, // raha scrollena de asina val ex 400
+                scrollX: true,
+                scrollCollapse: true,
+                paging: true,
+                autoFill: true
+            });
+
+            new $.fn.dataTable.FixedHeader(table3);
+
+        });
+	
+	</script>
+{% endblock %}

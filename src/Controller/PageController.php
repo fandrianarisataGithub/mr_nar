@@ -79,26 +79,52 @@ class PageController extends AbstractController
     /**
      * @Route("/admin/search", name = "search")
      */
-    public function search(Request $request, ClientRepository $repoClient)
+    public function search(Request $request, ClientRepository $repoClient, EntityManagerInterface $manager)
     {   
         $result = [];
         $client = new Client();
         if(count($request->request)>0){
-            $text = $request->request->get('matricule');
-            
-            $clients = $repoClient->chercherByMatricule($text);
-            //dd($client);
-            if (!$clients) {
-                return $this->redirectToRoute("search");
-            } else {
-               if(count($clients) > 1){
-                   // makany @ tableau
-                   $result = $clients;
-               }
-               else{
-                    return $this->redirectToRoute("single_page", ["id_client" => $clients[0]->getId()]);
-               }
+            if($request->request->get('matricule') != "tsisy"){
+                $text = $request->request->get('matricule');
+
+                $clients = $repoClient->chercherByMatricule($text);
+                //dd($client);
+                if (!$clients) {
+                    return $this->redirectToRoute("search");
+                } else {
+                    if (count($clients) > 1) {
+                        // makany @ tableau
+                        $result = $clients;
+                    } else {
+                        return $this->redirectToRoute("single_page", ["id_client" => $clients[0]->getId()]);
+                    }
+                }
             }
+            if ($request->request->get('createdAt') != "tsisy") {
+                $text = $request->request->get('createdAt');
+                // avadika 00 daholo le heur @le date
+                $les_clients = $repoClient->findAll();
+                foreach($les_clients as $c){
+                    $date = $c->getCreatedAt();
+                    $date = $date->format("d-m-Y");
+                    $date = date_create($date);
+                    $c->setCreatedAt($date);                    
+                }
+                $manager->flush();
+                $date = date_create($text);
+                $clients = $repoClient->chercherByDate($date);
+                if (!$clients) {
+                    return $this->redirectToRoute("search");
+                } else {
+                    if (count($clients) > 1) {
+                        // makany @ tableau
+                        $result = $clients;
+                    } else {
+                        return $this->redirectToRoute("single_page", ["id_client" => $clients[0]->getId()]);
+                    }
+                }
+            }
+            
         }
         
         return $this->render("page/search.html.twig",[
@@ -678,6 +704,12 @@ class PageController extends AbstractController
         for($i = $annee_actus; $i >= $ppa; $i--){
             array_push($tab, $i);
         }
+        for($i = 0; $i < count($tab_client_montant); $i++){
+            $x = $tab_client_montant[$i];
+            $x = $x / 1000000;
+            $x = floatval($x);
+            $tab_client_montant[$i] = $x;
+        }
         
         //dd($tab);
         return $this->render('page/graph.html.twig', [
@@ -692,6 +724,22 @@ class PageController extends AbstractController
             'tab_client_montant' => $tab_client_montant,
             'annee' => $annee,
             'tab_annee' => $tab,
+        ]);
+    }
+
+    /**
+     * @Route("/admin/fichier", name = "fichier")
+     */
+    public function fichier(ClientRepository $repoClient)
+    {
+        return $this->render('page/fichier.html.twig', [
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
         ]);
     }
     

@@ -1173,6 +1173,8 @@ a {
     text-decoration: none;
 }
 
+
+
 a:hover,
 a:focus {
     color: #2a6496;
@@ -14563,6 +14565,7 @@ body tfoot tr td:last-child {
     display: flex;
     flex-wrap: nowrap;
     justify-content: center;
+    margin-bottom: 15px;
 }
 
 .div__form form input {
@@ -14723,6 +14726,8 @@ div.containers {
         transform: scale(1.4);
     }
 }
+
+
 
 
 /* / mes css*/

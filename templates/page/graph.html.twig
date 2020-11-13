@@ -59,401 +59,360 @@
   <script>
         var ctx1 = document.getElementById('canvas_client').getContext("2d");
 
-        function draw_chart1() {
+            function draw_chart1() {
+                    var gradientfill_1 = ctx1.createLinearGradient(0, 0, 0, 320);
+                    gradientfill_1.addColorStop(0, '#d29e00');
+                    gradientfill_1.addColorStop(1, 'transparent');
+
+                    var gradientfill_2 = ctx1.createLinearGradient(0, 0, 0, 320);
+                    gradientfill_2.addColorStop(0, '#55d8ff');
+                    gradientfill_2.addColorStop(1, 'transparent');
+
+                        var config1 = {
+                            type: 'line',
+                            data: {
+                                datasets: [
+                                {
+                                    label: "Client",
+                                    fill: true,
+                                    backgroundColor: gradientfill_1,
+                                    borderColor: "#d29e00",
+
+                                    /* insertion des données sur l'axe (oy) */
+
+                                    data: [
+                                        {% for i in tab_client_mois %}
+                                            {{ i }},
+                                        {% endfor %}
+                                    ],
+
+                                    /* insertion des données sur l'axe (oy) */
+
+                                    pointStyle: 'circle',
+                                    pointBackgroundColor: "transparent",
+                                    pointBorderWidth: '2',
+                                    radius: '5',
+                                    hoverRadius: '5',
+                                    borderWidth: 2
+
+                                }
+                            ]
+                        },
+                        options: {
+                            legend: {
+                                display: false,
+                                align: 'start',
+                                position: 'bottom'
+
+                            },
+
+                            legendCallback: function (chart) {
+                                var text = [];
+                                text.push('<ul class="my_liste_legend ul_1">');
+                                for (var i = 0; i < chart.data.datasets.length; i++) {
+                                    console.log(chart.data.datasets[i]); // see what's inside the obj.
+                                    text.push('<li>');
+                                    text.push('<span data_leg = "' + i + '" style="background-color:' + chart.data.datasets[i].borderColor + '">' + '</span><b data_leg = "' + i + '">' + chart.data.datasets[i].label + '</b>');
+                                    text.push('</li>');
+                                }
+                                text.push('</ul>');
+                                return text.join("");
+                            },
+                            responsive: true,
+                                title: {
+                                    display: true,
+                                    text: ''
+                                },
+                            tooltips: {
+                                mode: 'index',
+                                intersect: false
+                            },
+                            hover: {
+                                mode: 'nearest',
+                                intersect: true
+                            },
+
+                            scales: {
+
+                                xAxes: [
+                                    {
+                                        type: 'category',
+
+                                        /* insertion des données sur l'axe (ox) */
+
+                                        labels: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"],
+
+                                        /* insertion des données sur l'axe (ox) */
+                                        gridLines: {
+                                            drawOnChartArea: true,
+                                            drawTicks: false,
+                                            color: "#f0f2f4"
+                                        },
+
+                                        ticks: {
+                                            padding: 20 // pour le marge % axe x
+                                        }
+                                    }
+                                ],
+                                yAxes: [
+                                    {
+                                    gridLines: {
+                                        drawOnChartArea: true,
+                                        drawTicks: false,
+                                        color: "#dddfe1"
+                                    },
+                                    ticks: {
+                                        padding: 20, // pour le marge % axe y
+                                        margin: 0,
+                                        min: 0,
+                                        max: 200,
+                                        stepSize: 20,
+                                        callback: function (value) {
+                                            return value + " Clients"
+                                        }
+                                    },
+                                    display: true,
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: ''
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                };
+                    // si on veut ajouter un marge bottom des legendes
+                    // Chart.Legend.prototype.afterFit = function() {
+                    //     this.height = this.height + 150;
+
+                    // };
+                    var myChart1 = new Chart(ctx1, config1);
+                    // pour dire qu'on va utiliser notre propre légende html fenitra
+                    document.getElementById('chart-legends_client').innerHTML = myChart1.generateLegend();
+
+                    // event pour data 1
+
+                    var ev_click = false;
+                    var tab_temp = [];
+                    for (var i = 0; i < myChart1.data.datasets[0].data.length; i++) { // myChart1.data.datasets[0].data[i]= -10;
+                        tab_temp[i] = myChart1.data.datasets[0].data[i];
+                    }
+                    $("#chart-legends_client").on('click', "li span[data_leg=0]", function () {
+
+                        if (ev_click == false) {
+                            $(".ul_1 li span[data_leg=0]").addClass("legende_click");
+                            for (var i = 0; i < myChart1.data.datasets[0].data.length; i++) {
+                                myChart1.data.datasets[0].data[i] = -10;
+                            }
+                            myChart1.update();
+                            ev_click = ! ev_click;
+                            // alert(ev_click) ;
+                        } else {
+                            $(".ul_1 li span[data_leg=0]").removeClass("legende_click");
+                            for (var i = 0; i < myChart1.data.datasets[0].data.length; i++) {
+                            myChart1.data.datasets[0].data[i] = tab_temp[i];
+                        }
+                        myChart1.update();
+                        ev_click = ! ev_click;
+                        // alert(ev_click) ;
+                        }
+                    });
+
+                    // fin event pour data 1
 
 
-        var gradientfill_1 = ctx1.createLinearGradient(0, 0, 0, 320);
-        gradientfill_1.addColorStop(0, '#d29e00');
-        gradientfill_1.addColorStop(1, 'transparent');
+                    // fin chart 1
 
-        var gradientfill_2 = ctx1.createLinearGradient(0, 0, 0, 320);
-        gradientfill_2.addColorStop(0, '#55d8ff');
-        gradientfill_2.addColorStop(1, 'transparent');
+                    return myChart1;
+            }
 
-        var config1 = {
-        type: 'line',
-        data: {
-        datasets: [
-        {
-        label: "Client",
-        fill: true,
-        backgroundColor: gradientfill_1,
-        borderColor: "#d29e00",
+            // debut chart  2
+            var ctx2 = document.getElementById('canvas_montant').getContext("2d");
 
-        /* insertion des données sur l'axe (oy) */
+            function draw_chart2() {
+                var gradientfill_1 = ctx2.createLinearGradient(0, 0, 0, 320);
+                gradientfill_1.addColorStop(0, '#d29e00');
+                gradientfill_1.addColorStop(1, 'transparent');
 
-        data: [
-            {% for i in tab_client_mois %}
-                {{ i }},
-            {% endfor %}
-        ],
+                var gradientfill_2 = ctx2.createLinearGradient(0, 0, 0, 320);
+                gradientfill_2.addColorStop(0, '#55d8ff');
+                gradientfill_2.addColorStop(1, 'transparent');
 
-        /* insertion des données sur l'axe (oy) */
+                var config2 = {
+                    type: 'line',
+                    data: {
+                        datasets: [
+                            {
+                                label: "Chiffre d'affaire",
+                                fill: true,
+                                backgroundColor: gradientfill_2,
+                                borderColor: "#55d8ff",
 
-        pointStyle: 'circle',
-        pointBackgroundColor: "transparent",
-        pointBorderWidth: '2',
-        radius: '5',
-        hoverRadius: '5',
-        borderWidth: 2
+                                /* insertion des données sur l'axe (oy) */
 
-        }
-        ]
-        },
-        options: {
-        legend: {
-        display: false,
-        align: 'start',
-        position: 'bottom'
+                                data: [
+                                    {% for i in tab_client_montant %}
+                                        {{ i }},
+                                    {% endfor %}
+                                ],
 
-        },
+                                /* insertion des données sur l'axe (oy) */
 
-        legendCallback: function (chart) {
-        var text = [];
-        text.push('<ul class="my_liste_legend ul_1">');
-        for (var i = 0; i < chart.data.datasets.length; i++) {
-        console.log(chart.data.datasets[i]); // see what's inside the obj.
-        text.push('<li>');
-        text.push('<span data_leg = "' + i + '" style="background-color:' + chart.data.datasets[i].borderColor + '">' + '</span><b data_leg = "' + i + '">' + chart.data.datasets[i].label + '</b>');
-        text.push('</li>');
-        }
-        text.push('</ul>');
-        return text.join("");
-        },
-        responsive: true,
-        title: {
-        display: true,
-        text: ''
-        },
-        tooltips: {
-        mode: 'index',
-        intersect: false
-        },
-        hover: {
-        mode: 'nearest',
-        intersect: true
-        },
+                                pointStyle: 'circle',
+                                pointBackgroundColor: "transparent",
+                                pointBorderWidth: '2',
+                                radius: '5',
+                                hoverRadius: '5',
+                                borderWidth: 2
+                            }
+                        ]
+                    },
+                    options: {
+                        legend: {
+                            display: false,
+                            align: 'start',
+                            position: 'bottom'
 
-        scales: {
+                        },
 
-        xAxes: [
-        {
-        type: 'category',
+                        legendCallback: function (chart) {
+                            var text = [];
+                            text.push('<ul class="my_liste_legend ul_2">');
+                            for (var i = 0; i < chart.data.datasets.length; i++) {
+                                console.log(chart.data.datasets[i]); // see what's inside the obj.
+                                text.push('<li>');
+                                text.push('<span data_leg = "x' + i + '" style="background-color:' + chart.data.datasets[i].borderColor + '">' + '</span><b data_leg = "' + i + '">' + chart.data.datasets[i].label + '</b>');
+                                text.push('</li>');
+                            }
+                            text.push('</ul>');
+                            return text.join("");
+                        },
+                        responsive: true,
+                        title: {
+                            display: true,
+                            text: ''
+                        },
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        hover: {
+                            mode: 'nearest',
+                            intersect: true
+                        },
 
-        /* insertion des données sur l'axe (ox) */
+                        scales: {
 
-        labels: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sept",
-        "Oct",
-        "Nov",
-        "Dec"
-        ],
+                        xAxes: [
+                            {
+                                type: 'category',
 
-        /* insertion des données sur l'axe (ox) */
-        gridLines: {
-        drawOnChartArea: true,
-        drawTicks: false,
-        color: "#f0f2f4"
-        },
+                                /* insertion des données sur l'axe (ox) */
 
-        ticks: {
-        padding: 20 // pour le marge % axe x
-        }
-        }
-        ],
-        yAxes: [
-        {
-        gridLines: {
-        drawOnChartArea: true,
-        drawTicks: false,
-        color: "#dddfe1"
-        },
-        ticks: {
-        padding: 20, // pour le marge % axe y
-        margin: 0,
-        min: 0,
-        max: 100,
-        stepSize: 5,
-        callback: function (value) {
-        return value + " Clients"
-        }
-        },
-        display: true,
-        scaleLabel: {
-        display: true,
-        labelString: ''
-        }
-        }
-        ]
-        }
-        }
+                                labels: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"],
 
+                                /* / insertion des données sur l'axe (ox) */
+
+                                gridLines: {
+                                    drawOnChartArea: true,
+                                    drawTicks: false,
+                                    color: "#f0f2f4"
+                                },
+
+                                ticks: {
+                                    padding: 20 // pour le marge % axe x
+                                }
+                            }
+                        ],
+                        yAxes: [
+                        {
+                            gridLines: {
+                                drawOnChartArea: true,
+                                drawTicks: false,
+                                color: "#dddfe1"
+                            },
+                            ticks: {
+                                padding: 20, // pour le marge % axe y
+                                min: 0,
+                                max: 50,
+                                stepSize: 5,
+                                callback: function (value) {
+                                    return value + " Million Ar"
+                                }
+                            },
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: ''
+                            }
+                        }
+                    ]
+                }
+            }
         };
-        // si on veut ajouter un marge bottom des legendes
-        // Chart.Legend.prototype.afterFit = function() {
-        //     this.height = this.height + 150;
+        
+            var myChart2 = new Chart(ctx2, config2);
+            // pour dire qu'on va utiliser notre propre légende html fenitra
+            document.getElementById('chart-legends_montant').innerHTML = myChart2.generateLegend();
+            // legende 2
 
-        // };
-        var myChart1 = new Chart(ctx1, config1);
-        // pour dire qu'on va utiliser notre propre légende html fenitra
-        document.getElementById('chart-legends_client').innerHTML = myChart1.generateLegend();
+            var ev_click2 = false;
+            var tab_temp2 = [];
+            for (var i = 0; i < myChart2.data.datasets[0].data.length; i++) { // myChart2.data.datasets[0].data[i]= -10;
+                tab_temp2[i] = myChart2.data.datasets[0].data[i];
+            }
+            $("#chart-legends_montant").on('click', "li span[data_leg=x0]", function () {
 
-        // event pour data 1
+                if (ev_click2 == false) {
+                    $(".ul_2 li span[data_leg=x0]").addClass("legende_click");
+                    for (var i = 0; i < myChart2.data.datasets[0].data.length; i++) {
+                        myChart2.data.datasets[0].data[i] = -10;
+                    }
+                    myChart2.update();
+                    ev_click2 = ! ev_click2;
+                    // alert(ev_click2) ;
+                } else {
+                    $(".ul_2 li span[data_leg=x0]").removeClass("legende_click");
+                    for (var i = 0; i < myChart2.data.datasets[0].data.length; i++) {
+                        myChart2.data.datasets[0].data[i] = tab_temp2[i];
+                    }
+                    myChart2.update();
+                    ev_click2 = ! ev_click2;
+                    // alert(ev_click2) ;
+                }
+            });
 
-        var ev_click = false;
-        var tab_temp = [];
-        for (var i = 0; i < myChart1.data.datasets[0].data.length; i++) { // myChart1.data.datasets[0].data[i]= -10;
-        tab_temp[i] = myChart1.data.datasets[0].data[i];
-        }
-        $("#chart-legends_client").on('click', "li span[data_leg=0]", function () {
-
-        if (ev_click == false) {
-        $(".ul_1 li span[data_leg=0]").addClass("legende_click");
-        for (var i = 0; i < myChart1.data.datasets[0].data.length; i++) {
-        myChart1.data.datasets[0].data[i] = -10;
-        }
-        myChart1.update();
-        ev_click = ! ev_click;
-        // alert(ev_click) ;
-        } else {
-        $(".ul_1 li span[data_leg=0]").removeClass("legende_click");
-        for (var i = 0; i < myChart1.data.datasets[0].data.length; i++) {
-        myChart1.data.datasets[0].data[i] = tab_temp[i];
-        }
-        myChart1.update();
-        ev_click = ! ev_click;
-        // alert(ev_click) ;
-        }
-        });
-
-        // fin event pour data 1
-
-
-        // fin chart 1
-
-        return myChart1;
-        }
-
-        // debut chart  2
-        var ctx2 = document.getElementById('canvas_montant').getContext("2d");
-
-        function draw_chart2() {
-
-
-        var gradientfill_1 = ctx2.createLinearGradient(0, 0, 0, 320);
-        gradientfill_1.addColorStop(0, '#d29e00');
-        gradientfill_1.addColorStop(1, 'transparent');
-
-        var gradientfill_2 = ctx2.createLinearGradient(0, 0, 0, 320);
-        gradientfill_2.addColorStop(0, '#55d8ff');
-        gradientfill_2.addColorStop(1, 'transparent');
-
-        var config2 = {
-        type: 'line',
-        data: {
-        datasets: [
-        {
-        label: "Chiffre d'affaire",
-        fill: true,
-        backgroundColor: gradientfill_2,
-        borderColor: "#55d8ff",
-
-        /* insertion des données sur l'axe (oy) */
-
-        data: [
-           {% for i in tab_client_montant %}
-               {{ i }},
-           {% endfor %}
-        ],
-
-        /* insertion des données sur l'axe (oy) */
-
-        pointStyle: 'circle',
-        pointBackgroundColor: "transparent",
-        pointBorderWidth: '2',
-        radius: '5',
-        hoverRadius: '5',
-        borderWidth: 2
-        }
-        ]
-        },
-        options: {
-        legend: {
-        display: false,
-        align: 'start',
-        position: 'bottom'
-
-        },
-
-        legendCallback: function (chart) {
-        var text = [];
-        text.push('<ul class="my_liste_legend ul_2">');
-        for (var i = 0; i < chart.data.datasets.length; i++) {
-        console.log(chart.data.datasets[i]); // see what's inside the obj.
-        text.push('<li>');
-        text.push('<span data_leg = "x' + i + '" style="background-color:' + chart.data.datasets[i].borderColor + '">' + '</span><b data_leg = "' + i + '">' + chart.data.datasets[i].label + '</b>');
-        text.push('</li>');
-        }
-        text.push('</ul>');
-        return text.join("");
-        },
-        responsive: true,
-        title: {
-        display: true,
-        text: ''
-        },
-        tooltips: {
-        mode: 'index',
-        intersect: false
-        },
-        hover: {
-        mode: 'nearest',
-        intersect: true
-        },
-
-        scales: {
-
-        xAxes: [
-        {
-        type: 'category',
-
-        /* insertion des données sur l'axe (ox) */
-
-        labels: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sept",
-        "Oct",
-        "Nov",
-        "Dec"
-        ],
-
-        /* / insertion des données sur l'axe (ox) */
-
-        gridLines: {
-        drawOnChartArea: true,
-        drawTicks: false,
-        color: "#f0f2f4"
-        },
-
-        ticks: {
-        padding: 20 // pour le marge % axe x
-        }
-        }
-        ],
-        yAxes: [
-        {
-        gridLines: {
-        drawOnChartArea: true,
-        drawTicks: false,
-        color: "#dddfe1"
-        },
-        ticks: {
-        padding: 20, // pour le marge % axe y
-        min: 10000000,
-        max: 100000000,
-        stepSize: 10000000,
-        callback: function (value) {
-        return value + " Ar"
-        }
-        },
-        display: true,
-        scaleLabel: {
-        display: true,
-        labelString: ''
-        }
-        }
-        ]
-        }
-        }
-
-        };
-        // si on veut ajouter un marge bottom des legendes
-        // Chart.Legend.prototype.afterFit = function() {
-        //     this.height = this.height + 150;
-
-        // };
-        var myChart2 = new Chart(ctx2, config2);
-        // pour dire qu'on va utiliser notre propre légende html fenitra
-        document.getElementById('chart-legends_montant').innerHTML = myChart2.generateLegend();
-
-
-        // legende 2
-
-        var ev_click2 = false;
-        var tab_temp2 = [];
-        for (var i = 0; i < myChart2.data.datasets[0].data.length; i++) { // myChart2.data.datasets[0].data[i]= -10;
-        tab_temp2[i] = myChart2.data.datasets[0].data[i];
-        }
-        $("#chart-legends_montant").on('click', "li span[data_leg=x0]", function () {
-
-        if (ev_click2 == false) {
-        $(".ul_2 li span[data_leg=x0]").addClass("legende_click");
-        for (var i = 0; i < myChart2.data.datasets[0].data.length; i++) {
-        myChart2.data.datasets[0].data[i] = -10;
-        }
-        myChart2.update();
-        ev_click2 = ! ev_click2;
-        // alert(ev_click2) ;
-        } else {
-        $(".ul_2 li span[data_leg=x0]").removeClass("legende_click");
-        for (var i = 0; i < myChart2.data.datasets[0].data.length; i++) {
-        myChart2.data.datasets[0].data[i] = tab_temp2[i];
-        }
-        myChart2.update();
-        ev_click2 = ! ev_click2;
-        // alert(ev_click2) ;
-        }
-        });
-
-        // fin legende 2
-
-        return myChart2;
+            // fin legende 2
+            return myChart2;
         }
         // fin chart 2
 
-        
+        // responsive pour les chart 
 
-// responsive pour les chart 
+        function add_resp_heb(myChart1, myChart2) {
+            myChart1.options.scales.yAxes[0].ticks.fontSize = 7;
+            myChart1.options.scales.yAxes[0].ticks.padding = 10;
+            myChart1.options.scales.yAxes[0].ticks.stepSize = 20;
+            myChart1.options.scales.xAxes[0].ticks.stepSize = 0;
+            myChart1.options.scales.xAxes[0].ticks.fontSize = 8;
 
-    function add_resp_heb(myChart1, myChart2) {
-        myChart1.options.scales.yAxes[0].ticks.fontSize = 7;
-        myChart1.options.scales.yAxes[0].ticks.padding = 10;
-        myChart1.options.scales.yAxes[0].ticks.stepSize = 20;
-        myChart1.options.scales.xAxes[0].ticks.stepSize = 0;
-        myChart1.options.scales.xAxes[0].ticks.fontSize = 8;
+            myChart2.options.scales.yAxes[0].ticks.fontSize = 7;
+            myChart2.options.scales.yAxes[0].ticks.padding = 10;
+            myChart2.options.scales.yAxes[0].ticks.stepSize = 20;
+            myChart2.options.scales.xAxes[0].ticks.stepSize = 0;
+            myChart2.options.scales.xAxes[0].ticks.fontSize = 8;
 
-        myChart2.options.scales.yAxes[0].ticks.fontSize = 7;
-        myChart2.options.scales.yAxes[0].ticks.padding = 10;
-        myChart2.options.scales.yAxes[0].ticks.stepSize = 20;
-        myChart2.options.scales.xAxes[0].ticks.stepSize = 0;
-        myChart2.options.scales.xAxes[0].ticks.fontSize = 8;
-
-        for (var i = myChart1.data.datasets.length - 1; i >= 0; i--) {
-            myChart1.data.datasets[i].radius = '3';
+            for (var i = myChart1.data.datasets.length - 1; i >= 0; i--) {
+                myChart1.data.datasets[i].radius = '3';
+            }
+            myChart1.update();
+            myChart2.options.scales.yAxes[0].ticks.fontSize = 7;
+            myChart2.options.scales.xAxes[0].ticks.fontSize = 7;
+            for (var i = myChart2.data.datasets.length - 1; i >= 0; i--) {
+                myChart2.data.datasets[i].radius = '3';
+            }
+            myChart2.update();  
         }
-        myChart1.update();
-        myChart2.options.scales.yAxes[0].ticks.fontSize = 7;
-        myChart2.options.scales.xAxes[0].ticks.fontSize = 7;
-        for (var i = myChart2.data.datasets.length - 1; i >= 0; i--) {
-            myChart2.data.datasets[i].radius = '3';
-        }
-        myChart2.update();  
-    }
 
         $(document).ready(function () {
             var w = $(window).width();
