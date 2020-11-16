@@ -14727,6 +14727,47 @@ div.containers {
     }
 }
 
+/* import */
+
+form.import{
+    background: #41586e;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px;
+}
+form.import div label{
+    color: #fff;
+    margin-bottom: 15px;
+}
+form.import .error{
+    width: 100%;
+    background :  rgba(219,91,7, 0.5) ;
+    padding-left : 15px;
+    display : flex;
+    justify-content : center;
+    align-items : center;
+    margin-bottom: 15px;
+    display: none;
+}
+form.import .error p{
+    color: #fff !important;
+    position: relative;
+    top: 5px;
+}
+form.import div button.btn-default{
+    background: #4cc0c1;
+    border-color: transparent;
+    color: #fff !important;
+}
+.tableau.tab_historique{
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+/* finimport*/
+
 
 
 
