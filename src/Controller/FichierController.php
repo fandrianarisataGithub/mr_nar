@@ -3,6 +3,7 @@
     namespace App\Controller;
 
 use App\Entity\Client;
+use App\Form\ImportType;
 use App\Repository\ClientRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,30 +19,9 @@ class FichierController extends AbstractController
      * @return void
      */
     public function fichier1(Request $request, ClientRepository $repoClient)
-    {
-        if($request->request->count() > 0){
-            $fichier = $request->request->get('fichier1');
-            $originalFilename1 = pathinfo($fichier->getClientOriginalName(), PATHINFO_FILENAME);
-            $safeFilename1 = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename1);
-            $newFilename1 = $safeFilename1 . '.' . $fichier->guessExtension();
-            if ($fichier->guessExtension()) {
-                // on supprime tous les données présent
-
-                $fileType = \PhpOffice\PhpSpreadsheet\IOFactory::identify($fichier->getRealPath()); // d'après dd($fichier)
-                //dd($fileType);
-                $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($fileType); // ty le taloha
-                $spreadsheet = $reader->load($fichier->getRealPath()); // le nom temporaire
-                //$data = $spreadsheet->getActiveSheet()->toArray();
-
-                if ($spreadsheet->getSheetByName("FOURNISSEURS")) {
-                    
-                    $data = $spreadsheet->getSheetByName("FOURNISSEURS")->toArray();
-                    dd($data);
-                    $error_fichier = 0;
-                   
-                }
-            }
-        }
+    {   
+        $form_import = $this->createForm(FichierType::class);
+        $form_import->handleRequest($request);
         return $this->render('page/fichier.html.twig', [
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
@@ -50,6 +30,7 @@ class FichierController extends AbstractController
             'nouveau' => $this->count_nouveau($repoClient),
             'impaye' => $this->count_impaye($repoClient),
             'attente' => $this->count_attente($repoClient),
+            'form_import' => $form_import->createView(),
         ]);
     }
 

@@ -14738,6 +14738,16 @@ form.import{
     align-items: center;
     margin-bottom: 25px;
 }
+form.import .form-group:first-child{
+    border: 1px solid rgba(255,255,255,0.8);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding : 15px;
+    width: 100%;
+}
 form.import div label{
     color: #fff;
     margin-bottom: 15px;
