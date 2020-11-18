@@ -8,6 +8,7 @@ use App\Form\FichierType1;
 use App\Form\FichierType2;
 use App\Form\FichierType3;
 use App\Repository\ClientRepository;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
