@@ -97,7 +97,10 @@ class ClientController extends AbstractController
                 if (!$client->getId()) {
                     $client->setUser($user);
                     $client->setVerifier("non");
-                    $client->setCreatedAt(new \DateTime());
+                    $todayt = new \DateTime();
+                    $today_sf = $todayt->format('d-m-Y');
+                    $todayt = date_create($today_sf);
+                    $client->setCreatedAt($todayt);
                     $client->setImage1($newFilename1);
                     $client->setImage2($newFilename2);
                     $client->setEtatClient("nouveau");

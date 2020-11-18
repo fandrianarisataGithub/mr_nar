@@ -120,14 +120,14 @@ class ClientType extends AbstractType
                 ],
                 'format' => 'dd-MM-yyyy', 
             ])
-            ->add('createdAt', DateType::class, [
-                "label" => "Date du jour: ",
-                'widget' => 'choice',
-                'placeholder' => [
-                    'year' => 'Année', 'month' => 'Mois', 'day' => 'Jour',
-                ],
-                 'format' => 'dd-MM-yyyy',
-            ])
+            // ->add('createdAt', DateType::class, [
+            //     "label" => "Date du jour: ",
+            //     'widget' => 'choice',
+            //     'placeholder' => [
+            //         'year' => 'Année', 'month' => 'Mois', 'day' => 'Jour',
+            //     ],
+            //      'format' => 'dd-MM-yyyy',
+            // ])
             ->add('numero_bl', TextType::class, [
                 "attr" => [
                     "class" => "form-control"
