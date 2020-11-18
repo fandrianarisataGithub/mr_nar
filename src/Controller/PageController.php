@@ -9,12 +9,15 @@ use App\Entity\User;
 use App\Entity\Client;
 use App\Form\UserType;
 use App\Entity\Pointage;
+use App\Form\FichierType1;
+use App\Form\FichierType2;
+use App\Form\FichierType3;
 use App\Repository\UserRepository;
 use App\Repository\ClientRepository;
 use App\Repository\PointageRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 // Include Dompdf required namespaces
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -730,8 +733,17 @@ class PageController extends AbstractController
     /**
      * @Route("/admin/fichier", name = "fichier")
      */
-    public function fichier(ClientRepository $repoClient)
+    public function fichier(Request $request, ClientRepository $repoClient)
     {
+
+        $form_import1 = $this->createForm(FichierType1::class);
+        $form_import1->handleRequest($request);
+
+        $form_import2 = $this->createForm(FichierType2::class);
+        $form_import2->handleRequest($request);
+
+        $form_import3 = $this->createForm(FichierType3::class);
+        $form_import3->handleRequest($request);
         return $this->render('page/fichier.html.twig', [
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
@@ -740,6 +752,9 @@ class PageController extends AbstractController
             'nouveau' => $this->count_nouveau($repoClient),
             'impaye' => $this->count_impaye($repoClient),
             'attente' => $this->count_attente($repoClient),
+            'form_import1' => $form_import1->createView(),
+            'form_import2' => $form_import2->createView(),
+            'form_import3' => $form_import3->createView(),
         ]);
     }
     

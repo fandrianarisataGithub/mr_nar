@@ -4,15 +4,14 @@
 {% endblock %}
 {% block body %}
     <div class="titre_page">
-        <h2 class="graph_title">Etude graphique pour les clients</h2>
+        <h2 class="graph_title">Verification des entrées</h2>
     </div>
     <div class="container">
         <div class="row">
-            {{ form_start(form_import) }}
+            {{ form_start(form_import1, {'action' : path('fichier1'),'attr' : {'class' : 'import'}}) }}
                 <div class="form-group">
-                    <label for="fichier1">Importer votre fichier Excel ici</label>
-                    {# <input type="file" name="fichier1" id="fichier1"> #}
-                    {{ form_row(form_import.fichier, {'attr' :{
+                    
+                    {{ form_row(form_import1.fichier, { 'label' : "importer votre fichier",'attr' :{
                         'id' : 'fichier1'
                     } }) }}
                 </div>
@@ -22,7 +21,7 @@
                         <span>Importer</span>
                     </button>
                 </div>
-            {{ form_end(form_import) }}
+            {{ form_end(form_import1) }}
         </div>
         <div class="tableau tab_historique">
             <table class="display" id="tableau1" style="width:100%">
@@ -48,48 +47,32 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody>                
-                    <tr>
-                        <td>
-                            <span>1A38444</span>
-                        </td>
-                        <td>
-                            <span>RASOANDRASOLO FLORENCIENNE ODETTE</span>
-                        </td>
-                        <td>
-                            <span>1674</span>
-                        </td>
-                        <td>
-                            <span>20/10/2020</span>
-                        </td>
-                        <td>
-                            <span>RABEMANANTSOA PATRICK OLIVIER (AC7)</span>
-                        </td>
-                        <td>
-                            <span>8850 DU 18/09/2020</span>
-                        </td>
-                    </tr>    
-                    <tr>
-                        <td>
-                            <span>1A38444</span>
-                        </td>
-                        <td>
-                            <span>RASOANDRASOLO FLORENCIENNE ODETTE</span>
-                        </td>
-                        <td>
-                            <span>1674</span>
-                        </td>
-                        <td>
-                            <span>20/10/2020</span>
-                        </td>
-                        <td>
-                            <span>RABEMANANTSOA PATRICK OLIVIER (AC7)</span>
-                        </td>
-                        <td>
-                            <span>8850 DU 18/09/2020</span>
-                        </td>
-                    </tr>
+                <tbody> 
+                    {% if d_aff1 is defined %}
+                        {% for item in d_aff1 %}
+                            <tr>
+                                <td>
+                                    <span>{{ item[0] | raw }}</span>
+                                </td>
+                                <td>
+                                    <span>{{ item[1] | raw }}</span>
+                                </td>
+                                <td>
+                                    <span>{{ item[2] | raw }}</span>
+                                </td>
+                                <td>
+                                    <span>{{ item[3] | raw }}</span>
+                                </td>
+                                <td>
+                                    <span>{{ item[4] | raw }}</span>
+                                </td>
+                                <td>
+                                    <span>{{ item[5] | raw }}</span>
+                                </td>
+                            </tr>
 
+                        {% endfor %}
+                    {% endif %}               
                 </tbody>
             </table>
         </div>
@@ -98,18 +81,21 @@
     {# file 2 #}
     <div class="container">
         <div class="row">
-            <form action="" id="form_import2" class="import">
-                <div class="form-group">
-                    <label for="fichier2">Importer votre fichier Excel ici</label>
-                    <input type="file" name="fichier2" id="fichier2">
+            {{ form_start(form_import2, {'action' : path('fichier2'), 'attr' : {'class' : 'import'}}) }}
+                <div
+                    class="form-group">
+                    {{ form_row(form_import2.fichier, { 'label' : "importer votre fichier",'attr' :{
+                                        'id' : 'fichier2'
+                                    } }) }}
                 </div>
+
                 <div class="error"><p>Erreur bli bla</p></div>
                 <div class="form-group">
                     <button class="btn btn-default" type="submit">
                         <span>Importer</span>
                     </button>
                 </div>
-            </form>
+            {{ form_end(form_import2) }}
         </div>
         <div class="tableau tab_historique">
             <table class="display" id="tableau2" style="width:100%">
@@ -136,47 +122,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>
-                            <span>1A38444</span>
-                        </td>
-                        <td>
-                            <span>RASOANDRASOLO FLORENCIENNE ODETTE</span>
-                        </td>
-                        <td>
-                            <span>700</span>
-                        </td>
-                        <td>
-                            <span>120145,00</span>
-                        </td>
-                        <td>
-                            <span>12/05/2020</span>
-                        </td>
-                        <td>
-                            <span>13/06/2020</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span>1A38444</span>
-                        </td>
-                        <td>
-                            <span>RASOANDRASOLO FLORENCIENNE ODETTE</span>
-                        </td>
-                        <td>
-                            <span>700</span>
-                        </td>
-                        <td>
-                            <span>120145,00</span>
-                        </td>
-                        <td>
-                            <span>12/05/2020</span>
-                        </td>
-                        <td>
-                            <span>13/06/2020</span>
-                        </td>
-                    </tr>
-
+                    {% if d_aff2 is defined %}
+                        {% for item in d_aff2 %}
+                            <tr>
+                                <td>
+                                    <span>{{ item[0] | raw }}</span>
+                                </td>
+                                <td>
+                                    <span>{{ item[1] | raw }}</span>
+                                </td>
+                                <td>
+                                    <span>{{ item[2] | raw }}</span>
+                                </td>
+                                <td>
+                                    <span>{{ item[3] | raw }}</span>
+                                </td>
+                                <td>
+                                    <span>{{ item[4] | raw }}</span>
+                                </td>
+                                <td>
+                                    <span>{{ item[5] | raw }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
                 </tbody>
             </table>
         </div>
@@ -184,10 +153,12 @@
     {# file 3 #}
     <div class="container">
         <div class="row">
-            <form action="" id="form_import3" class="import">
-                <div class="form-group">
-                    <label for="fichier3">Importer votre fichier Excel ici</label>
-                    <input type="file" name="fichier3" id="fichier3">
+           {{ form_start(form_import3, {'action' : path('fichier3') ,'attr' : {'class' : 'import'}}) }}
+                <div
+                    class="form-group">
+                    {{ form_row(form_import3.fichier, { 'label' : "importer votre fichier",'attr' :{
+                                        'id' : 'fichier3'
+                                    } }) }}
                 </div>
                 <div class="error"><p>Erreur bli bla</p></div>
                 <div class="form-group">
@@ -195,7 +166,7 @@
                         <span>Importer</span>
                     </button>
                 </div>
-            </form>
+            {{ form_end(form_import3) }}
         </div>
         <div class="tableau tab_historique">
             <table class="display" id="tableau3" style="width:100%">
@@ -222,46 +193,31 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>
-                            <span>1A38444</span>
-                        </td>
-                        <td>
-                            <span>212</span>
-                        </td>
-                        <td>
-                            <span>RECEVEUR GENERAL D'ANTANANARIVO</span>
-                        </td>
-                        <td>
-                            <span>68499,4</span>
-                        </td>
-                        <td>
-                            <span>30/06/2024</span>
-                        </td>
-                        <td>
-                            <span>RABEARIVELO JUSTIN</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span>1A38444</span>
-                        </td>
-                        <td>
-                            <span>212</span>
-                        </td>
-                        <td>
-                            <span>RECEVEUR GENERAL D'ANTANANARIVO</span>
-                        </td>
-                        <td>
-                            <span>68499,4</span>
-                        </td>
-                        <td>
-                            <span>30/06/2024</span>
-                        </td>
-                        <td>
-                            <span>RABEARIVELO JUSTIN</span>
-                        </td>
-                    </tr>
+                    {% if d_aff3 is defined %}
+                        {% for item in d_aff3 %}
+                            <tr>
+                                <td>
+                                    <span>{{ item[0] | raw }}</span>
+                                </td>
+                                <td>
+                                    <span>{{ item[1] | raw }}</span>
+                                </td>
+                                <td>
+                                    <span>{{ item[2] | raw }}</span>
+                                </td>
+                                <td>
+                                    <span>{{ item[3] | raw }}</span>
+                                </td>
+                                <td>
+                                    <span>{{ item[4] | raw }}</span>
+                                </td>
+                                <td>
+                                    <span>{{ item[5] | raw }}</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+
                 </tbody>
             </table>
         </div>

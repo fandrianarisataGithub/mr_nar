@@ -4,6 +4,9 @@
 
 use App\Entity\Client;
 use App\Form\ImportType;
+use App\Form\FichierType1;
+use App\Form\FichierType2;
+use App\Form\FichierType3;
 use App\Repository\ClientRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,9 +22,32 @@ class FichierController extends AbstractController
      * @return void
      */
     public function fichier1(Request $request, ClientRepository $repoClient)
-    {   
-        $form_import = $this->createForm(FichierType::class);
-        $form_import->handleRequest($request);
+    {
+        $form_import1 = $this->createForm(FichierType1::class);
+        $form_import1->handleRequest($request);
+        if($form_import1->isSubmitted() && $form_import1->isValid()){
+            $fichier = $form_import1->get('fichier')->getData();
+            $originalFilename1 = pathinfo($fichier->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeFilename1 = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename1);
+            $newFilename1 = $safeFilename1 . '.' . $fichier->guessExtension();
+            $fileType = \PhpOffice\PhpSpreadsheet\IOFactory::identify($fichier->getRealPath()); // d'après dd($fichier)
+            $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($fileType); // ty le taloha
+            /* $sheetname = "FOURNISSEURS";
+            $reader->setLoadSheetsOnly($sheetname);*/
+            $spreadsheet = $reader->load($fichier->getRealPath()); // le nom temporaire
+            $data = $spreadsheet->getActiveSheet()->toArray();
+            $d_aff = [];
+            for($i = 1; $i < count($data); $i++){
+                array_push($d_aff, $data[$i]);
+            }
+            //dd($d_aff);
+        }
+
+        $form_import2 = $this->createForm(FichierType2::class);
+        $form_import2->handleRequest($request);
+
+        $form_import3 = $this->createForm(FichierType3::class);
+        $form_import3->handleRequest($request);
         return $this->render('page/fichier.html.twig', [
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
@@ -30,7 +56,112 @@ class FichierController extends AbstractController
             'nouveau' => $this->count_nouveau($repoClient),
             'impaye' => $this->count_impaye($repoClient),
             'attente' => $this->count_attente($repoClient),
-            'form_import' => $form_import->createView(),
+            'form_import1' => $form_import1->createView(),
+            'form_import2' => $form_import2->createView(),
+            'form_import3' => $form_import3->createView(),
+            'd_aff1' => $d_aff,
+           
+        ]);
+    }
+
+    /**
+     * @Route("/admin/upload/fichier2", name = "fichier2")
+     *
+     * @param Request $request
+     * @param ClientRepository $repoClient
+     * @return void
+     */
+    public function fichier2(Request $request, ClientRepository $repoClient)
+    {   
+        
+        $form_import2 = $this->createForm(FichierType2::class);
+        $form_import2->handleRequest($request);
+        if ($form_import2->isSubmitted() && $form_import2->isValid()) {
+            $fichier = $form_import2->get('fichier')->getData();
+            $originalFilename1 = pathinfo($fichier->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeFilename1 = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename1);
+            $newFilename1 = $safeFilename1 . '.' . $fichier->guessExtension();
+            $fileType = \PhpOffice\PhpSpreadsheet\IOFactory::identify($fichier->getRealPath()); // d'après dd($fichier)
+            $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($fileType); // ty le taloha
+            /* $sheetname = "FOURNISSEURS";
+            $reader->setLoadSheetsOnly($sheetname);*/
+            $spreadsheet = $reader->load($fichier->getRealPath()); // le nom temporaire
+            $data = $spreadsheet->getActiveSheet()->toArray();
+            $d_aff = [];
+            for ($i = 1; $i < count($data); $i++) {
+                array_push($d_aff, $data[$i]);
+            }
+            //dd($d_aff);
+        }
+
+        $form_import1 = $this->createForm(FichierType1::class);
+        $form_import1->handleRequest($request);
+
+        $form_import3 = $this->createForm(FichierType3::class);
+        $form_import3->handleRequest($request);
+        return $this->render('page/fichier.html.twig', [
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
+            'form_import1' => $form_import1->createView(),
+            'form_import2' => $form_import2->createView(),
+            'form_import3' => $form_import3->createView(),
+            'd_aff2' => $d_aff,
+
+        ]);
+    }
+
+    /**
+     * @Route("/admin/upload/fichier3", name = "fichier3")
+     *
+     * @param Request $request
+     * @param ClientRepository $repoClient
+     * @return void
+     */
+    public function fichier3(Request $request, ClientRepository $repoClient)
+    {
+        $form_import3 = $this->createForm(FichierType3::class);
+        $form_import3->handleRequest($request);
+        if ($form_import3->isSubmitted() && $form_import3->isValid()) {
+            $fichier = $form_import3->get('fichier')->getData();
+            $originalFilename1 = pathinfo($fichier->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeFilename1 = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename1);
+            $newFilename1 = $safeFilename1 . '.' . $fichier->guessExtension();
+            $fileType = \PhpOffice\PhpSpreadsheet\IOFactory::identify($fichier->getRealPath()); // d'après dd($fichier)
+            $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($fileType); // ty le taloha
+            /* $sheetname = "FOURNISSEURS";
+            $reader->setLoadSheetsOnly($sheetname);*/
+            $spreadsheet = $reader->load($fichier->getRealPath()); // le nom temporaire
+            $data = $spreadsheet->getActiveSheet()->toArray();
+            $d_aff = [];
+            for ($i = 1; $i < count($data); $i++) {
+                array_push($d_aff, $data[$i]);
+            }
+            //dd($d_aff);
+        }
+
+        $form_import1 = $this->createForm(FichierType1::class);
+        $form_import1->handleRequest($request);
+
+        $form_import2 = $this->createForm(FichierType2::class);
+        $form_import2->handleRequest($request);
+        return $this->render('page/fichier.html.twig', [
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
+            'form_import1' => $form_import1->createView(),
+            'form_import2' => $form_import2->createView(),
+            'form_import3' => $form_import3->createView(),
+            'd_aff3' => $d_aff,
+
         ]);
     }
 
