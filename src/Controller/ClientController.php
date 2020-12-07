@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Client;
 use App\Entity\Pointage;
 use App\Form\ClientType;
+use App\ClientServices\MyService;
 use App\Repository\UserRepository;
 use App\Repository\ClientRepository;
 use App\Repository\PointageRepository;
@@ -36,6 +37,8 @@ class ClientController extends AbstractController
      */
     public function register_client(Client $client = null, Request $request, ClientRepository $repoClient, UserRepository $repos, EntityManagerInterface $manager, SessionInterface $session)
     {
+        //dd($clientS->showPointageMonths("2020-07-30",20));
+
 
         $this->triage_principal($repoClient, $manager);
         $misy = "oui";

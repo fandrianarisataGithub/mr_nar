@@ -3,12 +3,17 @@
     namespace App\Controller;
 
 use App\Entity\Client;
+use App\Entity\Fichier1;
+use App\Entity\Fichier2;
+use App\Entity\Fichier3;
 use App\Form\ImportType;
 use App\Form\FichierType1;
 use App\Form\FichierType2;
 use App\Form\FichierType3;
+use App\ClientServices\MyService;
 use App\Repository\ClientRepository;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,10 +27,12 @@ class FichierController extends AbstractController
      * @param ClientRepository $repoClient
      * @return void
      */
-    public function fichier1(Request $request, ClientRepository $repoClient)
+    public function fichier1(Request $request, ClientRepository $repoClient, EntityManagerInterface $manager)
     {
         $form_import1 = $this->createForm(FichierType1::class);
         $form_import1->handleRequest($request);
+        $repoF1 = $this->getDoctrine()->getRepository(Fichier1::class);
+        $d_aff = [];
         if($form_import1->isSubmitted() && $form_import1->isValid()){
             $fichier = $form_import1->get('fichier')->getData();
             $originalFilename1 = pathinfo($fichier->getClientOriginalName(), PATHINFO_FILENAME);
@@ -37,11 +44,24 @@ class FichierController extends AbstractController
             $reader->setLoadSheetsOnly($sheetname);*/
             $spreadsheet = $reader->load($fichier->getRealPath()); // le nom temporaire
             $data = $spreadsheet->getActiveSheet()->toArray();
-            $d_aff = [];
             for($i = 1; $i < count($data); $i++){
                 array_push($d_aff, $data[$i]);
+                $num_pens = $data[$i][0];
+                $nom = $data[$i][1];
+                $arr_ssd = $data[$i][2];
+                $date = $data[$i][3];
+                $ben = $data[$i][4];
+                $ord = $data[$i][5];
+                $fichier1 = new Fichier1();
+                $fichier1->setNumPens($num_pens);
+                $fichier1->setNom($nom);
+                $fichier1->setArrSsd($arr_ssd);
+                $fichier1->setDate($date);
+                $fichier1->setBen($ben);
+                $fichier1->setOrd($ord);
+                $manager->persist($fichier1);
             }
-            //dd($d_aff);
+            $manager->flush();
         }
 
         $form_import2 = $this->createForm(FichierType2::class);
@@ -60,7 +80,7 @@ class FichierController extends AbstractController
             'form_import1' => $form_import1->createView(),
             'form_import2' => $form_import2->createView(),
             'form_import3' => $form_import3->createView(),
-            'd_aff1' => $d_aff,
+            'd_aff1' => $repoF1->findAll(),
            
         ]);
     }
@@ -72,11 +92,13 @@ class FichierController extends AbstractController
      * @param ClientRepository $repoClient
      * @return void
      */
-    public function fichier2(Request $request, ClientRepository $repoClient)
+    public function fichier2(Request $request, ClientRepository $repoClient, EntityManagerInterface $manager, MyService $service)
     {   
         
         $form_import2 = $this->createForm(FichierType2::class);
         $form_import2->handleRequest($request);
+        $repoF2 = $this->getDoctrine()->getRepository(Fichier2::class);
+        $d_aff = [];
         if ($form_import2->isSubmitted() && $form_import2->isValid()) {
             $fichier = $form_import2->get('fichier')->getData();
             $originalFilename1 = pathinfo($fichier->getClientOriginalName(), PATHINFO_FILENAME);
@@ -88,11 +110,26 @@ class FichierController extends AbstractController
             $reader->setLoadSheetsOnly($sheetname);*/
             $spreadsheet = $reader->load($fichier->getRealPath()); // le nom temporaire
             $data = $spreadsheet->getActiveSheet()->toArray();
-            $d_aff = [];
+                     
             for ($i = 1; $i < count($data); $i++) {
                 array_push($d_aff, $data[$i]);
+                $num_pens = $data[$i][0];
+                $nom = $data[$i][1];
+                $rub = $data[$i][2];
+                $montant = $data[$i][3];
+                $montant = $service->getAmount($montant);
+                $date_debut = $data[$i][4];
+                $date_fin = $data[$i][5];
+                $fichier2 = new Fichier2();
+                $fichier2->setNumPens($num_pens);
+                $fichier2->setNom($nom);
+                $fichier2->setRub($rub);
+                $fichier2->setDateDebut($date_debut);
+                $fichier2->setDateFin($date_fin);
+                $fichier2->setMontant($montant);
+                $manager->persist($fichier2);
             }
-            //dd($d_aff);
+            $manager->flush();
         }
 
         $form_import1 = $this->createForm(FichierType1::class);
@@ -111,7 +148,7 @@ class FichierController extends AbstractController
             'form_import1' => $form_import1->createView(),
             'form_import2' => $form_import2->createView(),
             'form_import3' => $form_import3->createView(),
-            'd_aff2' => $d_aff,
+            'd_aff2' => $repoF2->findAll(),
 
         ]);
     }
@@ -123,10 +160,12 @@ class FichierController extends AbstractController
      * @param ClientRepository $repoClient
      * @return void
      */
-    public function fichier3(Request $request, ClientRepository $repoClient)
+    public function fichier3(Request $request, ClientRepository $repoClient, EntityManagerInterface $manager, MyService $service)
     {
         $form_import3 = $this->createForm(FichierType3::class);
         $form_import3->handleRequest($request);
+        $repoF3 = $this->getDoctrine()->getRepository(Fichier3::class);
+        $d_aff = [];
         if ($form_import3->isSubmitted() && $form_import3->isValid()) {
             $fichier = $form_import3->get('fichier')->getData();
             $originalFilename1 = pathinfo($fichier->getClientOriginalName(), PATHINFO_FILENAME);
@@ -138,11 +177,25 @@ class FichierController extends AbstractController
             $reader->setLoadSheetsOnly($sheetname);*/
             $spreadsheet = $reader->load($fichier->getRealPath()); // le nom temporaire
             $data = $spreadsheet->getActiveSheet()->toArray();
-            $d_aff = [];
             for ($i = 1; $i < count($data); $i++) {
                 array_push($d_aff, $data[$i]);
+                $num_pens = $data[$i][0];
+                $code_rub = $data[$i][1];
+                $ben = $data[$i][2];
+                $montant = $data[$i][3];
+                $montant = $service->getAmount($montant);
+                $date_fin = $data[$i][4];
+                $nom = $data[$i][5];
+                $fichier3 = new Fichier3();
+                $fichier3->setNumPens($num_pens);
+                $fichier3->setNom($nom);
+                $fichier3->setCodeRub($code_rub);
+                $fichier3->setDateFin($date_fin);
+                $fichier3->setMontant($montant);
+                $fichier3->setBen($ben);
+                $manager->persist($fichier3);
             }
-            //dd($d_aff);
+            $manager->flush();
         }
 
         $form_import1 = $this->createForm(FichierType1::class);
@@ -161,7 +214,7 @@ class FichierController extends AbstractController
             'form_import1' => $form_import1->createView(),
             'form_import2' => $form_import2->createView(),
             'form_import3' => $form_import3->createView(),
-            'd_aff3' => $d_aff,
+            'd_aff3' => $repoF3->findAll(),
 
         ]);
     }

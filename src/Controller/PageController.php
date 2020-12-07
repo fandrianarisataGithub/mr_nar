@@ -8,15 +8,21 @@ use Dompdf\Options;
 use App\Entity\User;
 use App\Entity\Client;
 use App\Form\UserType;
+use App\Entity\Fichier1;
+use App\Entity\Fichier2;
+use App\Entity\Fichier3;
 use App\Entity\Pointage;
 use App\Form\FichierType1;
 use App\Form\FichierType2;
 use App\Form\FichierType3;
 use App\Repository\UserRepository;
+// Include Dompdf required namespaces
 use App\Repository\ClientRepository;
+use App\Repository\Fichier1Repository;
+use App\Repository\Fichier2Repository;
+use App\Repository\Fichier3Repository;
 use App\Repository\PointageRepository;
 use Doctrine\ORM\EntityManagerInterface;
-// Include Dompdf required namespaces
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -733,7 +739,7 @@ class PageController extends AbstractController
     /**
      * @Route("/admin/fichier", name = "fichier")
      */
-    public function fichier(Request $request, ClientRepository $repoClient)
+    public function fichier(Request $request, ClientRepository $repoClient, Fichier1Repository $repoF1, Fichier2Repository $repoF2, Fichier3Repository $repoF3)
     {
 
         $form_import1 = $this->createForm(FichierType1::class);
@@ -744,6 +750,7 @@ class PageController extends AbstractController
 
         $form_import3 = $this->createForm(FichierType3::class);
         $form_import3->handleRequest($request);
+        
         return $this->render('page/fichier.html.twig', [
             'present' => $this->count_present($repoClient),
             'suspendu' => $this->count_suspendu($repoClient),
@@ -755,6 +762,9 @@ class PageController extends AbstractController
             'form_import1' => $form_import1->createView(),
             'form_import2' => $form_import2->createView(),
             'form_import3' => $form_import3->createView(),
+            'd_aff1' => $repoF1->findAll(),
+            'd_aff2' => $repoF2->findAll(),
+            'd_aff3' => $repoF3->findAll(),
         ]);
     }
     

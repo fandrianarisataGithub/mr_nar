@@ -52,22 +52,22 @@
                         {% for item in d_aff1 %}
                             <tr>
                                 <td>
-                                    <span>{{ item[0] | raw }}</span>
+                                    <span>{{ item.getNumPens() | raw }}</span>
                                 </td>
                                 <td>
-                                    <span>{{ item[1] | raw }}</span>
+                                    <span>{{ item.getNom() | raw }}</span>
                                 </td>
                                 <td>
-                                    <span>{{ item[2] | raw }}</span>
+                                    <span>{{ item.getArrSsd() | raw }}</span>
                                 </td>
                                 <td>
-                                    <span>{{ item[3] | raw }}</span>
+                                    <span>{{ item.getDate() | raw }}</span>
                                 </td>
                                 <td>
-                                    <span>{{ item[4] | raw }}</span>
+                                    <span>{{ item.getBen() | raw }}</span>
                                 </td>
                                 <td>
-                                    <span>{{ item[5] | raw }}</span>
+                                    <span>{{ item.getOrd() | raw }}</span>
                                 </td>
                             </tr>
 
@@ -126,22 +126,22 @@
                         {% for item in d_aff2 %}
                             <tr>
                                 <td>
-                                    <span>{{ item[0] | raw }}</span>
+                                    <span>{{ item.getNumPens() | raw }}</span>
                                 </td>
                                 <td>
-                                    <span>{{ item[1] | raw }}</span>
+                                    <span>{{ item.getNom() | raw }}</span>
                                 </td>
                                 <td>
-                                    <span>{{ item[2] | raw }}</span>
+                                    <span>{{ item.getRub() | raw }}</span>
                                 </td>
                                 <td>
-                                    <span>{{ item[3] | raw }}</span>
+                                    <span>{{ item.getMontant() | raw }}</span>
                                 </td>
                                 <td>
-                                    <span>{{ item[4] | raw }}</span>
+                                    <span>{{ item.getDateDebut() | raw }}</span>
                                 </td>
                                 <td>
-                                    <span>{{ item[5] | raw }}</span>
+                                    <span>{{ item.getDateFin() | raw }}</span>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -197,22 +197,22 @@
                         {% for item in d_aff3 %}
                             <tr>
                                 <td>
-                                    <span>{{ item[0] | raw }}</span>
+                                    <span>{{ item.getNumPens() | raw }}</span>
                                 </td>
                                 <td>
-                                    <span>{{ item[1] | raw }}</span>
+                                    <span>{{ item.getCodeRub() | raw }}</span>
                                 </td>
                                 <td>
-                                    <span>{{ item[2] | raw }}</span>
+                                    <span>{{ item.getBen() | raw }}</span>
                                 </td>
                                 <td>
-                                    <span>{{ item[3] | raw }}</span>
+                                    <span>{{ item.getMontant() | raw }}</span>
                                 </td>
                                 <td>
-                                    <span>{{ item[4] | raw }}</span>
+                                    <span>{{ item.getDateFin() | raw }}</span>
                                 </td>
                                 <td>
-                                    <span>{{ item[5] | raw }}</span>
+                                    <span>{{ item.getNom() | raw }}</span>
                                 </td>
                             </tr>
                         {% endfor %}

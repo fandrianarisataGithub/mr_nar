@@ -452,28 +452,24 @@ class Client
     }
     public function tab_mois()
     {
-        $now = $this->getDateDebut();
-        $n = $this->getNbrVersement();
-        $tab = [$now];
-        // dd($tab);
-        $tab_s = [];
-
-        for ($i = 1; $i < $n; $i++) {
-            $date = date_create($now->format("Y-m-d"));
-            date_add($date, date_interval_create_from_date_string($i . ' months'));
-            array_push($tab, $date);
+        $date1 = $this->date_debut->format("Y-m-d");
+        $date2 = strtotime("+" . $this->nbr_versement . " months", strtotime($date1));
+        $date2 = date("Y-m-d", $date2);
+        $start    = new \DateTime($date1);
+        $start->modify('first day of this month');
+        $end      = new \DateTime($date2);
+        $end->modify('first day of next month');
+        $interval = \DateInterval::createFromDateString('1 month');
+        $period   = new \DatePeriod($start, $interval, $end);
+        $tab = [];
+        foreach ($period as $dt) {
+            array_push($tab, $dt->format("m-Y"));
         }
-        //dd($tab);
-        for ($i = 0; $i < count($tab); $i++) {
-            $s = $tab[$i]->format('d-m-Y');
-            $t = explode("-", $s);
-            $mois = $t[1] . "-" . $t[2];
-            array_push($tab_s, $mois);
+        $string = $tab[0];
+        for ($i = 1; $i < count($tab); $i++) {
+            $string .= "__" . $tab[$i];
         }
-        $string = $tab_s[0];
-        for ($i = 1; $i < count($tab_s); $i++) {
-            $string .= "__" . $tab_s[$i];
-        }
+        //dd($string);
         return $string;
     }
 
