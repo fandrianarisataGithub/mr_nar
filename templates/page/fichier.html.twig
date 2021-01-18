@@ -6,6 +6,14 @@
     <div class="titre_page">
         <h2 class="graph_title">Verification des entrées</h2>
     </div>
+    <div class="container form_search_upload">
+       <div>
+             <form action="">
+                <input type="text" placeholder="Rechercher ">
+                <button type="submit" class="btn btn-primary"><span class="fa fa-searche"></span></button>
+            </form>
+       </div>
+    </div>
     <div class="container">
         <div class="row">
             {{ form_start(form_import1, {'action' : path('fichier1'),'attr' : {'class' : 'import'}}) }}
