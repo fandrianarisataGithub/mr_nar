@@ -302,7 +302,13 @@ class ClientController extends AbstractController
         if($form_edit->isSubmitted() && $form_edit->isValid()){
             if($client){
                 $client->setUser($user);
-               // dd($client);
+                $s = $client->tab_mois();
+                $client->setTabPointage($s);
+                $dd = $form_edit->get('date_debut')->getData();
+                $date_fp = $dd->format('m-Y');
+                $client->setNomPointageAv($date_fp);
+                // dd($form_edit->getData());
+                // dd($client);
                 $manager->flush();
                 return $this->redirectToRoute('select', ['id' => $client->getId()]);
                 //return $this->redirect($_SERVER['HTTP_REFERER']);
