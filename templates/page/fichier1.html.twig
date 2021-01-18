@@ -1,0 +1,132 @@
+{% extends "base.html.twig" %}
+{% block title %}
+    Importation 
+{% endblock %}
+{% block body %}
+   
+    <div class="container form_add_file">
+        <div class="row">
+            {{ form_start(form_import1, {'action' : path('fichier1'),'attr' : {'class' : 'import'}}) }}
+                <div class="form-group">
+                    
+                    {{ form_row(form_import1.fichier, { 'label' : "importer votre fichier",'attr' :{
+                        'id' : 'fichier1'
+                    } }) }}
+                </div>
+                <div class="error"><p>Erreur bli bla</p></div>
+                <div class="form-group">
+                    <button class="btn btn-default" type = "submit">
+                        <span>Importer</span>
+                    </button>
+                </div>
+            {{ form_end(form_import1) }}
+        </div>
+        <div class="tableau tab_historique">
+            <table class="display" id="tableau1" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>
+                            <span>NUM PENS</span>
+                        </th>
+                        <th>
+                            <span>NOM</span>
+                        </th>
+                        <th>
+                            <span>ARR SSD</span>
+                        </th>
+                        <th>
+                            <span>DATE</span>
+                        </th>
+                        <th>
+                            <span>BEN</span>
+                        </th>
+                        <th>
+                            <span>ORD</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody> 
+                    {% if d_aff1 is defined %}
+                        {% for item in d_aff1 %}
+                            <tr>
+                                <td>
+                                    <span>{{ item.getNumPens() | raw }}</span>
+                                </td>
+                                <td>
+                                    <span>{{ item.getNom() | raw }}</span>
+                                </td>
+                                <td>
+                                    <span>{{ item.getArrSsd() | raw }}</span>
+                                </td>
+                                <td>
+                                    <span>{{ item.getDate() | raw }}</span>
+                                </td>
+                                <td>
+                                    <span>{{ item.getBen() | raw }}</span>
+                                </td>
+                                <td>
+                                    <span>{{ item.getOrd() | raw }}</span>
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+                    {% endif %}               
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+	<script>
+
+		 $(document).ready(function() {
+            var table1 = $('#tableau1').DataTable({
+                "language": {
+                    "sEmptyTable": "Aucune donnée disponible dans le tableau",
+                    "sInfo": "Affichage de l'élément _START_ à _END_ sur _TOTAL_ éléments",
+                    "sInfoEmpty": "Affichage de l'élément 0 à 0 sur 0 élément",
+                    "sInfoFiltered": "(filtré à partir de _MAX_ éléments au total)",
+                    "sInfoPostFix": "",
+                    "sInfoThousands": ",",
+                    "sLengthMenu": "Afficher _MENU_ éléments",
+                    "sLoadingRecords": "Chargement...",
+                    "sProcessing": "Traitement...",
+                    "sSearch": "Rechercher :",
+                    "sZeroRecords": "Aucun élément correspondant trouvé",
+                    "oPaginate": {
+                        "sFirst": "Premier",
+                        "sLast": "Dernier",
+                        "sNext": "Suivant",
+                        "sPrevious": "Précédent"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": activer pour trier la colonne par ordre croissant",
+                        "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
+                    },
+                    "select": {
+                        "rows": {
+                            "_": "%d lignes sélectionnées",
+                            "0": "Aucune ligne sélectionnée",
+                            "1": "1 ligne sélectionnée"
+                        }
+                    }
+				},
+				"columnDefs": [{
+					"targets": 'no-sort',
+					"orderable": false
+				}],		   
+                responsive: true,
+                scrollY: false, // raha scrollena de asina val ex 400
+                scrollX: true,
+                scrollCollapse: true,
+                paging: true,
+                autoFill: true
+            });
+
+            new $.fn.dataTable.FixedHeader(table1);
+
+        });
+	
+	</script>
+{% endblock %}

@@ -14738,6 +14738,9 @@ form.import{
     align-items: center;
     margin-bottom: 25px;
 }
+.form_add_file{
+    margin-top: 100px;
+}
 form.import .form-group:first-child{
     border: 1px solid rgba(255,255,255,0.8);
     text-align: center;

@@ -61,14 +61,36 @@ class FichierController extends AbstractController
                 $fichier1->setOrd($ord);
                 $manager->persist($fichier1);
             }
-            $repo = $this->getDoctrine()->getRepository(Fichier1::class);
-            $items = $repo->findAll();
+            
+            $items = $repoF1->findAll();
             foreach ($items as $item) {
                 $manager->remove($item);
             }
             $manager->flush();
-            return $this->redirectToRoute("fichier");
+            //return $this->redirectToRoute("fichier");
+            return $this->render('page/fichier1.html.twig', [
+                'present' => $this->count_present($repoClient),
+                'suspendu' => $this->count_suspendu($repoClient),
+                'archived' => $this->count_archived($repoClient),
+                'pointed' => $this->count_pointed($repoClient),
+                'nouveau' => $this->count_nouveau($repoClient),
+                'impaye' => $this->count_impaye($repoClient),
+                'attente' => $this->count_attente($repoClient),
+                'form_import1' => $form_import1->createView(),
+                'd_aff1' => $repoF1->findAll(),
+            ]);
         }
+        return $this->render('page/fichier1.html.twig', [
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
+            'form_import1' => $form_import1->createView(),
+            'd_aff1' => $repoF1->findAll(),
+        ]);
     }
 
     /**
@@ -115,14 +137,35 @@ class FichierController extends AbstractController
                 $fichier2->setMontant($montant);
                 $manager->persist($fichier2);
             }
-            $repo = $this->getDoctrine()->getRepository(Fichier2::class);
-            $items = $repo->findAll();
+            
+            $items = $repoF2->findAll();
             foreach ($items as $item) {
                 $manager->remove($item);
             }
             $manager->flush();
-            return $this->redirectToRoute("fichier");
+            return $this->render('page/fichier2.html.twig', [
+                'present' => $this->count_present($repoClient),
+                'suspendu' => $this->count_suspendu($repoClient),
+                'archived' => $this->count_archived($repoClient),
+                'pointed' => $this->count_pointed($repoClient),
+                'nouveau' => $this->count_nouveau($repoClient),
+                'impaye' => $this->count_impaye($repoClient),
+                'attente' => $this->count_attente($repoClient),
+                'form_import1' => $form_import2->createView(),
+                'd_aff1' => $repoF2->findAll(),
+            ]);
         }
+        return $this->render('page/fichier2.html.twig', [
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
+            'form_import1' => $form_import2->createView(),
+            'd_aff1' => $repoF2->findAll(),
+        ]);
     }
 
     /**
@@ -167,14 +210,35 @@ class FichierController extends AbstractController
                 $fichier3->setBen($ben);
                 $manager->persist($fichier3);
             }
-            $repo = $this->getDoctrine()->getRepository(Fichier3::class);
-            $items = $repo->findAll();
+           
+            $items = $repoF3->findAll();
             foreach($items as $item){
                 $manager->remove($item);
             }
             $manager->flush();
-            return $this->redirectToRoute("fichier");
+            return $this->render('page/fichier2.html.twig', [
+                'present' => $this->count_present($repoClient),
+                'suspendu' => $this->count_suspendu($repoClient),
+                'archived' => $this->count_archived($repoClient),
+                'pointed' => $this->count_pointed($repoClient),
+                'nouveau' => $this->count_nouveau($repoClient),
+                'impaye' => $this->count_impaye($repoClient),
+                'attente' => $this->count_attente($repoClient),
+                'form_import1' => $form_import3->createView(),
+                'd_aff1' => $repoF3->findAll(),
+            ]);
         }
+        return $this->render('page/fichier2.html.twig', [
+            'present' => $this->count_present($repoClient),
+            'suspendu' => $this->count_suspendu($repoClient),
+            'archived' => $this->count_archived($repoClient),
+            'pointed' => $this->count_pointed($repoClient),
+            'nouveau' => $this->count_nouveau($repoClient),
+            'impaye' => $this->count_impaye($repoClient),
+            'attente' => $this->count_attente($repoClient),
+            'form_import1' => $form_import3->createView(),
+            'd_aff1' => $repoF3->findAll(),
+        ]);
     }
 
     public function count_present(ClientRepository $repoClient)

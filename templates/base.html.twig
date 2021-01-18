@@ -124,12 +124,6 @@
                                                                 <i class="fa fa-angle-right"></i> <span>Nouveau client</span>
                                                             </a>
                                                         </li>
-                                                        {# <li>
-                                                            <a href="{{ path('client_attente') }}">
-                                                                <b class="badge bg-info pull-right">{{ attente }}</b>
-                                                                <i class="fa fa-angle-right"></i> <span>Client en attente</span>
-                                                            </a>
-                                                        </li> #}
                                                         <li>
                                                             <a href="{{ path('client_present') }}">
                                                                 <b class="badge bg-info pull-right">{{ present }}</b>
@@ -170,11 +164,34 @@
 
                                                 {% endif %}
                                                 >
-                                                    <a href="{{ path('fichier') }}">
-                                                        <i class="fa fa-paperclip icon">
-                                                        
-                                                        </i> <span>Fichier</span>
+                                                    <a href="#uikit">
+                                                        <i class="fa  fa-paperclip"></i>
+                                                        <span class="pull-right">
+                                                            <i class="fa fa-angle-down text"></i>
+                                                            <i class="fa fa-angle-up text-active"></i>
+                                                        </span>
+                                                        <span>Fichier</span>
                                                     </a>
+                                                    <ul class="nav lt">
+                                                        <li>
+                                                            <a href="{{ path('fichier1') }}">
+                                                                <i class="fa fa-file-o"></i>
+                                                                <span>Fichier 1</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{ path('fichier2') }}">
+                                                                <i class="fa fa-file-o"></i>
+                                                                <span>Fichier 2</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{ path('fichier3') }}">
+                                                                <i class="fa fa-file-o"></i>
+                                                                <span>Fichier 3</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
                                                 </li>
                                                 <li {% if is_granted('ROLE_ADMIN') %}
                                                     style = "display:block;"
